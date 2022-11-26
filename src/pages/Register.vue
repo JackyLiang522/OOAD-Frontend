@@ -10,12 +10,14 @@
         size="large"
         v-model="userInfo.email"
         placeholder="请输入账号"
+        clearable
     />
     <el-input
         class="middle"
         size="large"
         v-model="userInfo.user_name"
         placeholder="请输入昵称"
+        clearable
     />
     <el-input
         class="middle"
@@ -25,6 +27,7 @@
         autocomplete="off"
         placeholder="请输入密码"
         show-password
+        clearable
     />
     <el-input
         class="middle"
@@ -34,6 +37,7 @@
         autocomplete="off"
         placeholder="请再次输入密码"
         show-password
+        clearable
     />
     <el-radio-group v-model="userInfo.is_teacher" class="bottom">
       <el-radio :label="false" size="large">我是学生</el-radio>
@@ -75,6 +79,7 @@ export default {
       userInfo.email = ''
       userInfo.password = ''
       userInfo.password_again = ''
+      userInfo.user_name = ''
     }
 
     function register() {

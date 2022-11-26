@@ -5,7 +5,7 @@
       :style="{boxShadow:`var(${'--el-box-shadow'})`}"
   >
     <p id="login-title">登录</p>
-    <el-input class="top" size="large" v-model="userInfo.email" placeholder="请输入邮箱"/>
+    <el-input class="top" size="large" v-model="userInfo.email" placeholder="请输入邮箱" clearable/>
     <el-input
         class="middle"
         size="large"
@@ -13,6 +13,7 @@
         type="password"
         placeholder="请输入密码"
         show-password
+        clearable
     />
     <router-link to="/register" class="ask-register">没有账号？点此注册</router-link>
     <br>
