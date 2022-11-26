@@ -5,11 +5,11 @@
       :style="{boxShadow:`var(${'--el-box-shadow'})`}"
   >
     <p id="login-title">登录</p>
-    <el-input class="email-input" size="large" v-model="account" placeholder="请输入邮箱"/>
+    <el-input class="top" size="large" v-model="userInfo.email" placeholder="请输入邮箱"/>
     <el-input
-        class="password-input"
+        class="middle"
         size="large"
-        v-model="password"
+        v-model="userInfo.password"
         type="password"
         placeholder="请输入密码"
         show-password
@@ -22,10 +22,11 @@
 </template>
 
 <script>
-import {onBeforeUnmount, reactive, ref, toRef} from "vue";
+import {onBeforeUnmount, reactive} from "vue";
 import {ElMessage} from 'element-plus'
 
 import axios from "axios";
+import store from "@/store";
 
 export default {
   name: "Login",
@@ -40,33 +41,60 @@ export default {
       userInfo.password = ''
     }
 
-    function login() {
-      if (checkInfo()) {
-        alert('登录成功')
+    async function login() {
+      if(!userInfo.email || !userInfo.password){
+        showWarning("请输入所有信息")
+        return
+      }
+
+      let response = ''
+      await checkInfo().then((data) => response = data, err => response = err.message)
+      if (response === 'succeed') {
+        showSuccess("登录成功")
       } else {
-        ElMessage({
-          showClose: true,
-          message: '用户名或密码错误',
-          type: 'error',
-          duration: 2000,
-        })
+        showError(response)
       }
     }
 
+    function showError(msg) {
+      ElMessage({
+        showClose: true,
+        message: msg,
+        type: 'error',
+        duration: 2000,
+      })
+    }
+
+    function showWarning(msg) {
+      ElMessage({
+        showClose: true,
+        message: msg,
+        type: 'warning',
+      })
+    }
+
+    function showSuccess(msg) {
+      ElMessage({
+        showClose: true,
+        message: msg,
+        type: 'success',
+      })
+    }
+
     async function checkInfo() {
-      console.log('http://10.26.123.10:8888/login?email=' + userInfo.email + '&password=' + userInfo.password)
-      await axios.post('http://10.26.123.10:8888/login?email=' + userInfo.email + '&password=' + userInfo.password).then(
+      let response = ''
+      await axios.post(`https://${store.state.host}/login?email=${userInfo.email}&password=${userInfo.password}`).then(
           response => {
             if (response.data.code === 1) {
-              this.$router.push('/course')
-              return true
+              response = 'succeed'
             } else {
-              return false
+              response = 'not-exist'
             }
           },
           err => {
-            alert(err)
+            response = err.message
           })
+      return response
     }
 
     document.body.setAttribute('style', 'background:rgba(159,197,248,0.78)')
@@ -76,8 +104,7 @@ export default {
     })
 
     return {
-      email: toRef(userInfo, 'email'),
-      password: toRef(userInfo, 'password'),
+      userInfo,
       clearInfo,
       login,
 
@@ -105,11 +132,11 @@ export default {
   letter-spacing: 10px;
 }
 
-.email-input {
+.top {
   margin: 20px 0 40px 0;
 }
 
-.password-input {
+.middle {
   margin: 0 0 60px 0;
 }
 

@@ -8,7 +8,7 @@ import Register from "@/pages/Register";
 import router from "@/router/login";
 
 export default {
-  name: 'login',
+  name: 'loginApp',
   components: {
     Register,
     Login,

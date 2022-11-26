@@ -5,51 +5,53 @@
       :style="{boxShadow:`var(${'--el-box-shadow'})`}"
   >
     <p id="login-title">注册</p>
-    <el-form
-        ref="ruleFormRef"
-        :model="userInfo"
-        status-icon
-        :rules="rules"
-        label-width="120px"
-        class="demo-ruleForm"
-    >
-      <el-input
-          class="email-input"
-          size="large"
-          v-model="userInfo.email"
-          placeholder="请输入账号"
-      />
-      <el-input
-          class="password-input"
-          size="large"
-          v-model="userInfo.password"
-          type="password"
-          autocomplete="off"
-          placeholder="请输入密码"
-          show-password
-      />
-      <el-input
-          class="password-input-again"
-          size="large"
-          v-model="userInfo.password_again"
-          type="password"
-          autocomplete="off"
-          placeholder="请再次输入密码"
-          show-password
-      />
-      <router-link to="/login" class="ask-login">已有账号？点此登录</router-link>
-      <br>
-      <el-button class="login-button" type="primary" @click="register(ruleFormRef)">注册</el-button>
-      <el-button class="login-button" @click="clearInfo(ruleFormRef)">清空</el-button>
-    </el-form>
+    <el-input
+        class="top"
+        size="large"
+        v-model="userInfo.email"
+        placeholder="请输入账号"
+    />
+    <el-input
+        class="middle"
+        size="large"
+        v-model="userInfo.user_name"
+        placeholder="请输入昵称"
+    />
+    <el-input
+        class="middle"
+        size="large"
+        v-model="userInfo.password"
+        type="password"
+        autocomplete="off"
+        placeholder="请输入密码"
+        show-password
+    />
+    <el-input
+        class="middle"
+        size="large"
+        v-model="userInfo.password_again"
+        type="password"
+        autocomplete="off"
+        placeholder="请再次输入密码"
+        show-password
+    />
+    <el-radio-group v-model="userInfo.is_teacher" class="bottom">
+      <el-radio :label="false" size="large">我是学生</el-radio>
+      <el-radio :label="true" size="large">我是教师</el-radio>
+    </el-radio-group>
+    <br>
+    <router-link to="/login" class="ask-login">已有账号？点此登录</router-link>
+    <br>
+    <el-button class="login-button" type="primary" @click="register">注册</el-button>
+    <el-button class="login-button" @click="clearInfo">清空</el-button>
   </div>
 </template>
 
-<script lang="ts">
-import {onBeforeUnmount, reactive, ref} from "vue";
+<script>
+import {onBeforeUnmount, reactive} from "vue";
 import {ElMessage} from 'element-plus'
-import type {FormInstance} from "element-plus";
 import axios from "axios";
+import store from "@/store";
 
 
 export default {
@@ -65,7 +67,10 @@ export default {
       email: '',
       password: '',
       password_again: '',
+      user_name: '',
+      is_teacher: false
     })
+
     function clearInfo() {
       userInfo.email = ''
       userInfo.password = ''
@@ -73,85 +78,69 @@ export default {
     }
 
     function register() {
-      if (true) {
-        alert('注册成功')
-      } else {
-        ElMessage({
-          showClose: true,
-          message: '用户名或密码不符合规范',
-          type: 'error',
-          duration: 2000,
-        })
+      if (!userInfo.email || !userInfo.password || !userInfo.password_again || !userInfo.user_name) {
+        showWarning("请输入所有信息")
+        return;
       }
+      if (userInfo.password !== userInfo.password_again) {
+        showWarning("两次密码输入不同")
+        return
+      }
+      if (submitInfo()) {
+        showSuccess("注册成功")
+      } else {
+        showError('用户名或密码不符合规范')
+      }
+    }
+
+    function showError(msg) {
+      ElMessage({
+        showClose: true,
+        message: msg,
+        type: 'error',
+        duration: 2000,
+      })
+    }
+
+    function showWarning(msg) {
+      ElMessage({
+        showClose: true,
+        message: msg,
+        type: 'warning',
+      })
+    }
+
+    function showSuccess(msg) {
+      ElMessage({
+        showClose: true,
+        message: msg,
+        type: 'success',
+      })
     }
 
     async function submitInfo() {
-      let isSucceed = false
-      await axios
-          .post(`http://10.26.123.10:8888/login?username=${userInfo.email}&password=${userInfo.password}`)
-          .then((response) => {
+      let response = ''
+      await axios.post(`https://${store.state.host}/register?email=${userInfo.email}&password=${userInfo.password}
+      &userName=${userInfo.user_name}&isTeacher=${userInfo.is_teacher}`).then(
+          response => {
             if (response.data.code === 1) {
-              this.$router.push('/course')
-              isSucceed = true
+              response = 'succeed'
             } else {
-              isSucceed = false
+              response = 'not-exist'
             }
-          }, err => {
-            alert(err)
-            isSucceed = false
+          },
+          err => {
+            response = err.message
           })
-      return isSucceed
+      return response
     }
-
-    const ruleFormRef = ref<FormInstance>()
-    const validateEmail = (rule: any, value: any, callback: any) => {
-      if (value === '') {
-        callback(new Error('Please input the password'))
-      } else {
-        callback()
-      }
-    }
-
-    const validatePass = (rule: any, value: any, callback: any) => {
-      if (value === '') {
-        callback(new Error('Please input the password'))
-      } else {
-        if (userInfo.password !== '') {
-          if (!ruleFormRef.value) return
-          ruleFormRef.value.validateField('checkPass', () => null)
-        }
-        callback()
-      }
-    }
-
-    const validatePass2 = (rule: any, value: any, callback: any) => {
-      if (value === '') {
-        callback(new Error('Please input the password again'))
-      } else if (value !== userInfo.password) {
-        callback(new Error("Two inputs don't match!"))
-      } else {
-        callback()
-      }
-    }
-
-    const rules = reactive({
-      email: [{validator: validateEmail, trigger: 'blur'}],
-      password: [{validator: validatePass, trigger: 'blur'}],
-      checkPassword: [{validator: validatePass2, trigger: 'blur'}],
-    })
-
-
-
 
     return {
       userInfo,
       clearInfo,
-      register,
-      rules,
-      ruleFormRef
+      register
     }
   }
-
 }
 </script>
 
@@ -163,7 +152,7 @@ export default {
   transform: translate(-50%, -50%);
   text-align: center;
   width: 250px;
-  height: 500px;
+  height: 520px;
   padding: 10px 40px 10px 40px;
   background-color: white;
 }
@@ -173,26 +162,25 @@ export default {
   letter-spacing: 10px;
 }
 
-.email-input {
-  margin: 20px 0 35px 0;
+.top {
+  margin: 0 0 20px 0;
 }
 
-.password-input {
-  margin: 0 0 0 0;
+.middle {
+  margin: 0 0 20px 0;
 }
 
-.password-input-again {
-  margin: 35px 0 50px 0;
+.bottom {
+  margin: 0 0 10px 0;
 }
 
 .ask-login {
-  line-height: 30px;
   text-align: center;
   font-size: 10px;
 }
 
 .login-button {
-  margin: 30px 20px 20px 0;
+  margin: 30px 20px 20px 20px;
 
 }
 </style>
