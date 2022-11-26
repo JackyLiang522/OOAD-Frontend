@@ -31,7 +31,7 @@ export default {
   name: "Login",
   setup() {
     let userInfo = reactive({
-      account: '',
+      email: '',
       password: '',
     })
 
@@ -54,8 +54,8 @@ export default {
     }
 
     async function checkInfo() {
-      console.log('http://10.26.123.10:8888/login?email=' + userInfo.account + '&password=' + userInfo.password)
-      await axios.post('http://10.26.123.10:8888/login?email=' + userInfo.account + '&password=' + userInfo.password).then(
+      console.log('http://10.26.123.10:8888/login?email=' + userInfo.email + '&password=' + userInfo.password)
+      await axios.post('http://10.26.123.10:8888/login?email=' + userInfo.email + '&password=' + userInfo.password).then(
           response => {
             if (response.data.code === 1) {
               this.$router.push('/course')
@@ -76,7 +76,7 @@ export default {
     })
 
     return {
-      account: toRef(userInfo, 'account'),
+      email: toRef(userInfo, 'account'),
       password: toRef(userInfo, 'password'),
       clearInfo,
       login,

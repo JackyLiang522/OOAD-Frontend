@@ -31,7 +31,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {onBeforeUnmount, reactive, ref, toRef} from "vue";
 import {ElMessage} from 'element-plus'
 import type {FormInstance} from "element-plus";
@@ -41,7 +41,7 @@ export default {
   name: "Register",
   setup() {
     let userInfo = reactive({
-      account: '',
+      email: '',
       password: '',
       password_again: '',
     })
@@ -93,7 +93,7 @@ export default {
     })
 
     return {
-      account: toRef(userInfo, 'account'),
+      email: toRef(userInfo, 'email'),
       password: toRef(userInfo, 'password'),
       password_again: toRef(userInfo, 'password_again'),
       clearInfo,
