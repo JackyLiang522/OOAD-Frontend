@@ -5,49 +5,67 @@
       :style="{boxShadow:`var(${'--el-box-shadow'})`}"
   >
     <p id="login-title">注册</p>
-    <el-input class="account-input" size="large" v-model="account" placeholder="请输入账号"/>
-    <el-input
-        class="password-input"
-        size="large"
-        v-model="password"
-        type="password"
-        autocomplete="off"
-        placeholder="请输入密码"
-        show-password
-    />
-    <el-input
-        class="password-input-again"
-        size="large"
-        v-model="password_again"
-        type="password"
-        autocomplete="off"
-        placeholder="请再次输入密码"
-        show-password
-    />
-    <router-link to="/login" class="ask-login">已有账号？点此登录</router-link>
-    <br>
-    <el-button class="login-button" type="primary" @click="register">注册</el-button>
-    <el-button class="login-button" @click="clearInfo">清空</el-button>
+    <el-form
+        ref="ruleFormRef"
+        :model="userInfo"
+        status-icon
+        :rules="rules"
+        label-width="120px"
+        class="demo-ruleForm"
+    >
+      <el-input
+          class="email-input"
+          size="large"
+          v-model="userInfo.email"
+          placeholder="请输入账号"
+      />
+      <el-input
+          class="password-input"
+          size="large"
+          v-model="userInfo.password"
+          type="password"
+          autocomplete="off"
+          placeholder="请输入密码"
+          show-password
+      />
+      <el-input
+          class="password-input-again"
+          size="large"
+          v-model="userInfo.password_again"
+          type="password"
+          autocomplete="off"
+          placeholder="请再次输入密码"
+          show-password
+      />
+      <router-link to="/login" class="ask-login">已有账号？点此登录</router-link>
+      <br>
+      <el-button class="login-button" type="primary" @click="register(ruleFormRef)">注册</el-button>
+      <el-button class="login-button" @click="clearInfo(ruleFormRef)">清空</el-button>
+    </el-form>
   </div>
 </template>
 
 <script lang="ts">
-import {onBeforeUnmount, reactive, ref, toRef} from "vue";
+import {onBeforeUnmount, reactive, ref} from "vue";
 import {ElMessage} from 'element-plus'
 import type {FormInstance} from "element-plus";
 import axios from "axios";
 
+
 export default {
   name: "Register",
   setup() {
-    let userInfo = reactive({
+    document.body.setAttribute('style', 'background:rgba(159,197,248,0.78)')
+
+    onBeforeUnmount(() => {
+      document.body.removeAttribute('style')
+    })
+
+    const userInfo = reactive({
       email: '',
       password: '',
       password_again: '',
     })
-
-    const ruleFormRef = ref<FormInstance>()
-
     function clearInfo() {
       userInfo.email = ''
       userInfo.password = ''
@@ -55,7 +73,7 @@ export default {
     }
 
     function register() {
-      if (checkInfo()) {
+      if (true) {
         alert('注册成功')
       } else {
         ElMessage({
@@ -67,9 +85,8 @@ export default {
       }
     }
 
-    async function checkInfo() {
+    async function submitInfo() {
       let isSucceed = false
-
       await axios
           .post(`http://10.26.123.10:8888/login?username=${userInfo.email}&password=${userInfo.password}`)
           .then((response) => {
@@ -86,19 +103,52 @@ export default {
       return isSucceed
     }
 
-    document.body.setAttribute('style', 'background:rgba(159,197,248,0.78)')
+    const ruleFormRef = ref<FormInstance>()
+    const validateEmail = (rule: any, value: any, callback: any) => {
+      if (value === '') {
+        callback(new Error('Please input the password'))
+      } else {
+        callback()
+      }
+    }
 
-    onBeforeUnmount(() => {
-      document.body.removeAttribute('style')
+    const validatePass = (rule: any, value: any, callback: any) => {
+      if (value === '') {
+        callback(new Error('Please input the password'))
+      } else {
+        if (userInfo.password !== '') {
+          if (!ruleFormRef.value) return
+          ruleFormRef.value.validateField('checkPass', () => null)
+        }
+        callback()
+      }
+    }
+
+    const validatePass2 = (rule: any, value: any, callback: any) => {
+      if (value === '') {
+        callback(new Error('Please input the password again'))
+      } else if (value !== userInfo.password) {
+        callback(new Error("Two inputs don't match!"))
+      } else {
+        callback()
+      }
+    }
+
+    const rules = reactive({
+      email: [{validator: validateEmail, trigger: 'blur'}],
+      password: [{validator: validatePass, trigger: 'blur'}],
+      checkPassword: [{validator: validatePass2, trigger: 'blur'}],
     })
 
+
+
+
     return {
-      email: toRef(userInfo, 'email'),
-      password: toRef(userInfo, 'password'),
-      password_again: toRef(userInfo, 'password_again'),
+      userInfo,
       clearInfo,
       register,
-
+      rules,
+      ruleFormRef
     }
   }
 
@@ -123,7 +173,7 @@ export default {
   letter-spacing: 10px;
 }
 
-.account-input {
+.email-input {
   margin: 20px 0 35px 0;
 }
 

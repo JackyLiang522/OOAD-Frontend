@@ -5,7 +5,7 @@
       :style="{boxShadow:`var(${'--el-box-shadow'})`}"
   >
     <p id="login-title">登录</p>
-    <el-input class="account-input" size="large" v-model="account" placeholder="请输入邮箱"/>
+    <el-input class="email-input" size="large" v-model="account" placeholder="请输入邮箱"/>
     <el-input
         class="password-input"
         size="large"
@@ -36,7 +36,7 @@ export default {
     })
 
     function clearInfo() {
-      userInfo.account = ''
+      userInfo.email = ''
       userInfo.password = ''
     }
 
@@ -76,7 +76,7 @@ export default {
     })
 
     return {
-      email: toRef(userInfo, 'account'),
+      email: toRef(userInfo, 'email'),
       password: toRef(userInfo, 'password'),
       clearInfo,
       login,
@@ -105,7 +105,7 @@ export default {
   letter-spacing: 10px;
 }
 
-.account-input {
+.email-input {
   margin: 20px 0 40px 0;
 }
 
