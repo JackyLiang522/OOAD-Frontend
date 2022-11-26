@@ -1,19 +1,15 @@
 <template>
-<!--  <Login/>-->
-<!--  <Register/>-->
-  <Home/>
+<router-view/>
 </template>
 
 <script>
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
-import Home from "@/pages/Home";
-import router from "@/router";
+import router from "@/router/login";
 
 export default {
-  name: 'App',
+  name: 'login',
   components: {
-    Home,
     Register,
     Login,
   },

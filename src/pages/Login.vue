@@ -5,7 +5,7 @@
       :style="{boxShadow:`var(${'--el-box-shadow'})`}"
   >
     <p id="login-title">登录</p>
-    <el-input class="account-input" size="large" v-model="account" placeholder="请输入账号"/>
+    <el-input class="account-input" size="large" v-model="account" placeholder="请输入邮箱"/>
     <el-input
         class="password-input"
         size="large"
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {onBeforeUnmount, reactive, toRef} from "vue";
+import {onBeforeUnmount, reactive, ref, toRef} from "vue";
 import {ElMessage} from 'element-plus'
 
 import axios from "axios";

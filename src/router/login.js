@@ -1,7 +1,6 @@
 import {createRouter, createWebHashHistory} from "vue-router";
 import Login from "@/pages/Login";
 import Register from "@/pages/Register";
-import Home from "@/pages/Home";
 
 export default createRouter({
     history:createWebHashHistory(),
@@ -16,7 +15,7 @@ export default createRouter({
         },
         {
             path:'/',
-            component:Home
+            redirect:'/login'
         }
     ]
 })

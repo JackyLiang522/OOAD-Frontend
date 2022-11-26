@@ -11,6 +11,7 @@
         size="large"
         v-model="password"
         type="password"
+        autocomplete="off"
         placeholder="请输入密码"
         show-password
     />
@@ -19,6 +20,7 @@
         size="large"
         v-model="password_again"
         type="password"
+        autocomplete="off"
         placeholder="请再次输入密码"
         show-password
     />
@@ -30,9 +32,9 @@
 </template>
 
 <script>
-import {onBeforeUnmount, reactive, toRef} from "vue";
+import {onBeforeUnmount, reactive, ref, toRef} from "vue";
 import {ElMessage} from 'element-plus'
-
+import type {FormInstance} from "element-plus";
 import axios from "axios";
 
 export default {
@@ -44,8 +46,10 @@ export default {
       password_again: '',
     })
 
+    const ruleFormRef = ref<FormInstance>()
+
     function clearInfo() {
-      userInfo.account = ''
+      userInfo.email = ''
       userInfo.password = ''
       userInfo.password_again = ''
     }
@@ -60,22 +64,26 @@ export default {
           type: 'error',
           duration: 2000,
         })
-        clearInfo()
       }
     }
 
-    function checkInfo() {
-      axios.post('http://10.26.123.10:8888/login?username=' + userInfo.account + '&password=' + userInfo.password).then((response) => {
-        if (response.data.code === 1) {
-          this.$router.push('/course')
-          return true
-        } else {
-          return false
-        }
-      },err=>{
-        alert(err)
-        return false
-      })
+    async function checkInfo() {
+      let isSucceed = false
+
+      await axios
+          .post(`http://10.26.123.10:8888/login?username=${userInfo.email}&password=${userInfo.password}`)
+          .then((response) => {
+            if (response.data.code === 1) {
+              this.$router.push('/course')
+              isSucceed = true
+            } else {
+              isSucceed = false
+            }
+          }, err => {
+            alert(err)
+            isSucceed = false
+          })
+      return isSucceed
     }
 
     document.body.setAttribute('style', 'background:rgba(159,197,248,0.78)')
