@@ -2,12 +2,14 @@
   <el-container>
     <el-header height="60px" style="background-color: black">
       <el-row :gutter="20">
-        <el-col :span="2" style="text-align: right">
+        <el-col :span="2" style="text-align: center">
           <el-image
-              style="width: 50px; height: 50px;margin-top: 5px;"
+              style="width: 30px; height: 30px;margin-top: 5px;"
               src='https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
               fit="cover"
           />
+          <br>
+          <span style="font-size: 10px;color:white;">Course Online</span>
         </el-col>
         <el-divider direction="vertical" border-style=" solid" style="height: 50px;margin-top: 5px;"/>
         <div style="
@@ -37,7 +39,9 @@
       </el-row>
     </el-header>
   </el-container>
-  <router-view/>
+  <div style="width: 70%;position: relative;transform: translateX(21%);margin-top: 20px">
+    <router-view/>
+  </div>
 </template>
 
 <script>

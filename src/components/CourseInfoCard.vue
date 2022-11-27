@@ -13,7 +13,7 @@
 
     <p style="font-size: 20px;font-weight: bold;color: #397ce2;text-align: center;margin: 15px 0 15px 0">高等数学</p>
 
-    <el-scrollbar height="105px">
+    <el-scrollbar height="105px" style="height: 105px">
       <div class="content">
         授课教师：张三
         <br>
@@ -45,5 +45,6 @@
   margin: 0 20px 0 20px;
   line-height: 20px;
   font-size: 15px;
+  padding: 0 0 0 0;
 }
 </style>
