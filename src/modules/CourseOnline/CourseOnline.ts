@@ -15,4 +15,4 @@ app.use(router)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component)
 }
-app.mount('#course_online_app')
+app.mount('#course_online_app')q

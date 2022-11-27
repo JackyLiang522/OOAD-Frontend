@@ -20,7 +20,7 @@
       <CourseInfoCard/>
       <CourseInfoCard/>
     </el-space>
-    <el-pagination layout="prev, pager, next" style="display: flex;justify-content: center;margin-top: 100px" :total="100" />
+    <el-pagination layout="prev, pager, next" style="display: flex;justify-content: center;margin-top: 50px" :total="100" />
 </template>
 
 <script setup>

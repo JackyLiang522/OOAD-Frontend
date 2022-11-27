@@ -31,9 +31,7 @@
         vertical-align: middle;
         height: 60px"
         >
-          <router-link :underline="false" to="/student" style="color:#3a8ee6">
-            <span style="line-height: 60px;">1111111@qq.com</span>
-          </router-link>
+          <span style="line-height: 60px;color: white">1111111@qq.com</span>
           <el-divider direction="vertical" border-style=" solid" style="height: 40px;"/>
           <el-link type="primary" style="font-size: 15px;color: lightgray;font-weight: bold">
             注销
