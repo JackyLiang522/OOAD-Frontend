@@ -4,12 +4,14 @@ import CourseList from "@/modules/StudentCenter/Course/CourseList.vue"
 import Home from "@/pages/Home.vue";
 import Video from "@/pages/Video.vue"
 
+
 // @ts-ignore
 export default createRouter({
     history: createWebHashHistory(),
     routes: [
         {
             path: '/student',
+            component: Student_Center,
             children: [
                 {
                     path: '',
