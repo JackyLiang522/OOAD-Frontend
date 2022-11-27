@@ -48,7 +48,7 @@
 
 <script>
 import router from "@/router/CourseOnline";
-import Student_Center from "@/pages/Student_Center";
+import Student_Center from "@/views/StudentCenter/Student_Center";
 
 export default {
   name: 'course_online',

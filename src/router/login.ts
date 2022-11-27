@@ -1,6 +1,6 @@
 import {createRouter, createWebHashHistory} from "vue-router";
-import Login from "@/pages/Login.vue";
-import Register from "@/pages/Register.vue";
+import Login from "@/views/Login.vue";
+import Register from "@/views/Register.vue";
 
 export default createRouter({
     history: createWebHashHistory(),

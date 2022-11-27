@@ -1,8 +1,8 @@
 import {createRouter, createWebHashHistory} from "vue-router";
-import Student_Center from "@/pages/Student_Center.vue";
-import CourseList from "@/modules/StudentCenter/Course/CourseList.vue"
-import Home from "@/pages/Home.vue";
-import Video from "@/pages/Video.vue"
+import Student_Center from "@/views/StudentCenter/Student_Center.vue";
+import CourseList from "@/views/StudentCenter/Course/CourseList.vue"
+import Home from "@/views/Home.vue";
+import Video from "@/views/Video.vue"
 
 
 // @ts-ignore
