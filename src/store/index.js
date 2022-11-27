@@ -10,7 +10,7 @@ export default createStore({
                 email: null,
                 is_teacher: null,
             },
-            host: 'localhost:8888',
+            host: 'localhost:8080',
         }
     },
 

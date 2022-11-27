@@ -12,8 +12,8 @@ module.exports = defineConfig({
             filename: 'login/login.html'
         },
         'student_center':{
-            entry: 'src/modules/student_center/student_center.js',
-            template: 'src/modules/student_center/student_center.html',
+            entry: 'src/modules/CourseOnline/CourseOnline.js',
+            template: 'src/modules/CourseOnline/CourseOnline.html',
             filename:'index.html'
         }
     },
