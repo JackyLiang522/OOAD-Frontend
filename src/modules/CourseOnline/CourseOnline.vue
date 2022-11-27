@@ -4,13 +4,14 @@
       <el-row :gutter="20">
         <el-col :span="2" style="text-align: center">
           <router-link to="/home">
-          <el-image
-              style="width: 30px; height: 30px;margin-top: 5px;"
-              src='https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-              fit="cover"
-          />
-          <br>
-          <div style="font-size: 10px;color:white; height: 10px">Course Online</div></router-link>
+            <el-image
+                style="width: 30px; height: 30px;margin-top: 5px;"
+                src='https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+                fit="cover"
+            />
+            <br>
+            <div style="font-size: 10px;color:white; height: 10px">Course Online</div>
+          </router-link>
         </el-col>
         <el-divider direction="vertical" border-style=" solid" style="height: 50px;margin-top: 5px;"/>
         <div style="
