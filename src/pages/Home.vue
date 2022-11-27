@@ -1,6 +1,6 @@
 <template>
   <div style="background-color: lightgray;">
-    111
+    1114
   </div>
   <el-input
       class="w-50 m-2"
@@ -10,7 +10,7 @@
   />
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import {Search} from "@element-plus/icons-vue";
 
 
