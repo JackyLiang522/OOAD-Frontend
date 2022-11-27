@@ -1,7 +1,6 @@
 <template>
   <div
       id="login-container"
-      class="inline-flex"
       :style="{boxShadow:`var(${'--el-box-shadow'})`}"
   >
     <p id="login-title">注册</p>

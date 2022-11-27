@@ -1,7 +1,6 @@
 <template>
   <el-container>
     <el-header height="60px" style="background-color: black">
-
       <el-row :gutter="20">
         <el-col :span="2" style="text-align: right">
           <el-image
@@ -37,10 +36,8 @@
         </div>
       </el-row>
     </el-header>
-    <el-main>
-      <router-view/>
-    </el-main>
   </el-container>
+  <router-view/>
 </template>
 
 <script>
