@@ -20,45 +20,43 @@
   </div>
 
   <el-row style="margin:  0 0 0 0">
-    <el-col :span="6"></el-col>
-    <el-col :span="4">
-      <div class="grid-content bg-purple-light">
-        <router-link to="/student/course/detail">
+    <el-col :span="5" :offset="6">
+      <div class="grid-content bg-purple-light" style="text-align: center; ">
+        <router-link to="/video"  style="height: 200%">
           <h4>课程 A</h4></router-link>
-<!--        跳转至课程视频观看url-->
+        <!--        跳转至课程视频观看url-->
       </div>
     </el-col>
-    <el-col :span="4">
+    <el-col :span="5">
       <div class="grid-content bg-purple">
         <router-link to="/student/course/detail">
           <h4 style="text-align: center">课程详情</h4></router-link>
       </div>
     </el-col>
-    <el-col :span="4">
-      <div class="grid-content bg-purple-light"><h5 style="text-align: right">教师: xx </h5></div>
+    <el-col :span="2">
+      <div class="grid-content bg-purple-light"><h5 style="text-align: center">教师: xx </h5></div>
     </el-col>
-    <el-col :span="6"></el-col>
   </el-row>
 
   <el-row style="margin:  0 0 0 0">
-    <el-col :span="6"></el-col>
-    <el-col :span="4">
-      <div class="grid-content bg-purple">
-        <router-link to="/student/course/detail">
+    <el-col :span="5" :offset="6">
+      <div class="grid-content bg-purple-light" style="text-align: center; ">
+        <router-link to="/video"  style="height: 200%">
           <h4>课程 A</h4></router-link>
+        <!--        跳转至课程视频观看url-->
       </div>
     </el-col>
-    <el-col :span="4">
-      <div class="grid-content bg-purple-light">
+    <el-col :span="5">
+      <div class="grid-content bg-purple">
         <router-link to="/student/course/detail">
           <h4 style="text-align: center">课程详情</h4></router-link>
       </div>
     </el-col>
-    <el-col :span="4">
-      <div class="grid-content bg-purple"><h5 style="text-align: right">教师: xx </h5></div>
+    <el-col :span="2">
+      <div class="grid-content bg-purple-light"><h5 style="text-align: center">教师: xx </h5></div>
     </el-col>
-    <el-col :span="6"></el-col>
   </el-row>
+
 
 </template>
 
