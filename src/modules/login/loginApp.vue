@@ -3,8 +3,8 @@
 </template>
 
 <script>
-import Login from "@/views/Login";
-import Register from "@/views/Register";
+import Login from "@/views/Login/Login";
+import Register from "@/views/Login/Register";
 import router from "@/router/login";
 
 export default {
