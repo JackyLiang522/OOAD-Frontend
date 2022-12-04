@@ -34,7 +34,7 @@
       </div>
     </el-col>
     <el-col :span="2">
-      <div class="grid-content bg-purple-light"><h5 style="text-align: center">教师: xx </h5></div>
+      <div class="grid-content bg-purple-dark"><h5 style="text-align: center">教师: xx </h5></div>
     </el-col>
   </el-row>
 
@@ -53,7 +53,7 @@
       </div>
     </el-col>
     <el-col :span="2">
-      <div class="grid-content bg-purple-light"><h5 style="text-align: center">教师: xx </h5></div>
+      <div class="grid-content bg-purple-dark"><h5 style="text-align: center">教师: xx </h5></div>
     </el-col>
   </el-row>
 

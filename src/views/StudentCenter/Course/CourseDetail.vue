@@ -30,23 +30,34 @@
           <el-table-column
               prop="title"
               label="作业标题"
-              width="160%"
-          >
+              width="150">
+            <template #default="scope">
+              <div>
+<!--                <router-link :to="{ name: '/student/course/hw', query: { id: scope.row.id } }">-->
+                <router-link to="/student/course/hw">
+                  {{ scope.row.title }}
+                </router-link>
+
+              </div>
+            </template>
           </el-table-column>
+
           <el-table-column
               prop="state"
               label="状态"
-              width="170%">
+              min-width="150">
           </el-table-column>
+
+
           <el-table-column
               prop="date"
               label="截止日期"
-              width="177%">
+              min-width="150">
           </el-table-column>
           <el-table-column
               prop="score"
               label="分数"
-              width="119%">
+              min-width="150">
           </el-table-column>
         </el-table>
       </div>
@@ -64,18 +75,18 @@
           <el-table-column
               prop="title"
               label="章节"
-              width="250%"
+              width="150"
           >
           </el-table-column>
           <el-table-column
               prop="state"
               label="状态"
-              width="188%">
+              min-width="150">
           </el-table-column>
           <el-table-column
               prop="score"
               label="小测得分"
-              width="188%">
+              min-width="150">
           </el-table-column>
         </el-table>
       </div>
@@ -102,7 +113,7 @@ export default {
           state: '未完成',
           date: '2016-05-02',
           score: '-'
-        }] ,
+        }],
       pgData: [{
         title: '章节一',
         state: '完成',
