@@ -2,6 +2,7 @@ import {createRouter, createWebHashHistory} from "vue-router";
 import Student_Center from "@/views/StudentCenter/Student_Center.vue";
 import CourseList from "@/views/StudentCenter/Course/CourseList.vue"
 import CourseDetail from "@/views/StudentCenter/Course/CourseDetail.vue"
+import Announcement from "@/views/StudentCenter/Course/Announcement.vue"
 import Homework from "@/views/StudentCenter/Course/Homework.vue"
 import Home from "@/views/Home.vue";
 import Video from "@/views/Video_Quiz/Video.vue"
@@ -19,6 +20,9 @@ export default createRouter({
                 {
                     path: '',
                     redirect: '/student/course'
+                },{
+                    path: 'announcement',
+                    component: Announcement
                 },
                 {
                     path: 'course',

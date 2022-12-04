@@ -2,7 +2,7 @@
   <div style="display: flex;justify-content: center;">
     <el-divider content-position="left"
                 style="display: flex;justify-content: center;width: 70%; margin:30px  0 3% 3%"><b>
-      <h3>我的课程</h3>
+      <h2>我的课程</h2>
     </b>
     </el-divider>
   </div>
@@ -19,18 +19,18 @@
     </el-button>
   </div>
 
-  <el-row style="margin:  0 0 0 0">
-    <el-col :span="5" :offset="6">
-      <div class="grid-content bg-purple-light" style="text-align: center; ">
-        <router-link to="/video"  style="height: 200%">
+  <el-row style="margin:  0 0 0 0" align="middle">
+    <el-col :span="5" :offset="6" style="text-align: center;vertical-align: center">
+      <div class="grid-content bg-purple-light" >
+        <router-link to="/video"  style="margin-top: 10px;line-height:inherit;display: block" >
           <h4>课程 A</h4></router-link>
         <!--        跳转至课程视频观看url-->
       </div>
     </el-col>
-    <el-col :span="5">
+    <el-col :span="5" style="text-align: center;vertical-align: center">
       <div class="grid-content bg-purple">
         <router-link to="/student/course/detail">
-          <h4 style="text-align: center">课程详情</h4></router-link>
+          <h4 >课程详情</h4></router-link>
       </div>
     </el-col>
     <el-col :span="2">

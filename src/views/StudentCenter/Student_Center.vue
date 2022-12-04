@@ -11,12 +11,15 @@
           style="height: 100%"
       >
         <el-menu-item index="/student/course" ><h3>课程</h3></el-menu-item>
-        <el-menu-item index="/student/notification"><h3>通知</h3></el-menu-item>
+        <el-menu-item index="/student/announcement"><h3>通知</h3></el-menu-item>
         <el-menu-item index="/student/balance"><h3>余额</h3></el-menu-item>
       </el-menu>
     </el-header>
+    <el-main>
+      <router-view></router-view>
+
+    </el-main>
   </el-container>
-  <router-view></router-view>
 </template>
 
 <script>
