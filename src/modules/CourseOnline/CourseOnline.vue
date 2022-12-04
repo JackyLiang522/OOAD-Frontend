@@ -1,6 +1,6 @@
 <template>
-  <el-container>
-    <el-header height="60px" style="background-color: black">
+  <el-container style="display: flex;flex-direction: column;min-height: 100%;">
+    <el-header height="60px" style="background-color: black;">
       <el-row :gutter="20">
         <el-col :span="2" style="text-align: center">
           <router-link to="/home">
@@ -37,15 +37,22 @@
           </router-link>
           <el-divider direction="vertical" border-style=" solid" style="height: 40px;"/>
           <el-link type="primary" style="font-size: 15px;color: lightgray;font-weight: bold">
-            注销
+            登录
           </el-link>
         </div>
       </el-row>
     </el-header>
+    <!--  </el-container>-->
+    <el-main style="flex: 1">
+      <div style="width: 72%;position: relative;transform: translateX(19.44%);">
+        <router-view/>
+      </div>
+    </el-main>
+    <!--  <el-container>-->
+    <el-footer style="background-color: black;margin-top: 100px;color :white;">
+      <p style="text-align: center">已经到底咯</p>
+    </el-footer>
   </el-container>
-  <div style="width: 70%;position: relative;transform: translateX(21%);margin-top: 20px">
-    <router-view/>
-  </div>
 </template>
 
 <script>

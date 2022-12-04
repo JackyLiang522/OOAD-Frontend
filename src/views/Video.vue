@@ -1,9 +1,14 @@
 <template>
   <div>
     <span style="font-size: 20px;margin:0 100px 0 0">章节1：HelloWorld</span>
-    <span style="text-align: right">
+    <span style="float: right">
       <span style="font-size: 15px;">by 张三</span>
-      <el-button size="default" type="primary" style="margin:0 0 0 20px;width: 130px;vertical-align: middle;">订阅
+      <el-button
+          size="default"
+          type="primary"
+          style="margin:0 0 0 20px;width: 130px;vertical-align: middle;"
+      >
+        订阅
       </el-button>
     </span>
     <br>
@@ -77,11 +82,7 @@
 
   <el-divider/>
 
-  <el-container>
-    <el-footer style="background-color: black;margin-top: 100px;color :white">
-      <p style="text-align: center">已经到底咯</p>
-    </el-footer>
-  </el-container>
+
 </template>
 
 <script lang="ts">
