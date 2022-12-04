@@ -1,12 +1,12 @@
 <template>
   <div style="margin: 0 0 0 30px;">
-    <span style="vertical-align: 45%;margin-right: 5px">钱包余额</span>
+    <span style="vertical-align: 40%;margin-right: 5px">钱包余额</span>
     <el-icon size="30px">
       <CreditCard/>
     </el-icon>
   </div>
 
-  <el-divider style="border-top: solid 3px black;width: auto;margin-top: 0px"/>
+  <el-divider style="border-top: solid 3px black;width: auto;margin-top: 0"/>
 
   <div class="clearfix">
     <span style="float: left;line-height: 30px;font-size: 25px;color: #cb0000;font-weight: bold;margin-left: 20px;">
@@ -93,7 +93,7 @@ export default {
     }
 
     function one_info(record: { value: { change: number; }; change: number; course?: string; remain: number; date: string; }) {
-      let content = ''
+      let content
       if (record.change < 0) {
         content = `-￥${Math.abs(record.change)}：购买${record.course}，余额￥${record.remain}`
       } else {
