@@ -1,24 +1,5 @@
 <template>
-  <div>
-    <span style="font-size: 20px;margin:0 100px 0 0">章节1：HelloWorld</span>
-    <span style="float: right">
-      <span style="font-size: 15px;">by 张三</span>
-      <el-button
-          size="default"
-          type="primary"
-          style="margin:0 0 0 20px;width: 130px;vertical-align: middle;"
-      >
-        订阅
-      </el-button>
-    </span>
-    <br>
-    <div style="height: 20px;margin-top:0;color: gray">
-      <el-icon size="14px" style="margin: 0 0 0 20px;vertical-align: middle">
-        <Warning/>
-      </el-icon>
-      <span style="font-size: 13px"> 未经作者授权禁止转载</span>
-    </div>
-  </div>
+  <Video_Quiz_Header/>
 
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
     <el-col :span="16">
@@ -91,12 +72,15 @@ import {VideoJsPlayer} from 'video.js'
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import Comment from "@/components/Comment.vue";
+import Viedo_Quiz_Header from "@/views/Video_Quiz/Video_Quiz_Header.vue";
+import Video_Quiz_Header from "@/views/Video_Quiz/Video_Quiz_Header.vue";
 
 export default defineComponent({
   name: 'vue-basic-player-example',
   title: 'Basic player (Vue)',
   url: import.meta.url,
   components: {
+    Video_Quiz_Header,
     Comment,
     VideoPlayer
   },
