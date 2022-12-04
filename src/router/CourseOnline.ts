@@ -6,6 +6,7 @@ import Homework from "@/views/StudentCenter/Course/Homework.vue"
 import Home from "@/views/Home.vue";
 import Video from "@/views/Video_Quiz/Video.vue"
 import Quiz from "@/views/Video_Quiz/Quiz.vue";
+import Balance from "@/views/StudentCenter/Course/Balance.vue";
 
 
 // @ts-ignore
@@ -36,8 +37,11 @@ export default createRouter({
                         }, {
                             path: 'hw',
                             component: Homework
-                        }
+                        },
                     ]
+                }, {
+                    path: 'balance',
+                    component: Balance
                 }
             ]
         }, {
@@ -51,7 +55,7 @@ export default createRouter({
             component: Video
         }, {
             path: '/quiz',
-            component:Quiz
+            component: Quiz
         }
     ]
 })
