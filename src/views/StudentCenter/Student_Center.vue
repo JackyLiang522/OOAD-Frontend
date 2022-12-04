@@ -31,6 +31,11 @@ export default {
 }
 </script>
 
+}
 <style scoped>
-
+.el-menu-item {
+  font-size: 19px;
+  font-weight: normal;
+  color: #dbe2ef;
+}
 </style>

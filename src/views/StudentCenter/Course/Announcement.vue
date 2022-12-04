@@ -2,18 +2,17 @@
   <div class="common-layout">
     <el-container>
       <el-header style="height: 70px">
-        <h3 style="margin-left: 1%">课 程 名 称 - 通知</h3>
-        <!--        <el-divider content-position="left"-->
-        <!--                    style="display: flex;justify-content: center;width: 100%;height: 5px; margin:0  0 0 0">-->
-
-        <!--        </el-divider>-->
-        <!--        <hr class="style-one">-->
-        <!--        <hr class="style-two">-->
-
+        <h3 style="margin-right: 5px;">
+          <span style="vertical-align: 22%">课程通知</span>
+          <el-icon size="30px" style="margin-left: 5px">
+            <DataBoard/>
+          </el-icon>
+        </h3>
       </el-header>
       <hr class="style-three" style="margin-bottom: 0px">
       <el-container>
-        <el-aside width="20%">
+
+      <el-aside width="20%">
           <div>
             <el-row class="tac">
 
@@ -103,8 +102,8 @@ export default {
 
 <style scoped>
 .el-menu-item{
-  font-size: 20px;
-  font-weight: 550;
+  font-size: 19px;
+  font-weight: 500;
   color: #dbe2ef;
 }
 /deep/ .el-collapse-item__header{

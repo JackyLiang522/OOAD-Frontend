@@ -1,11 +1,23 @@
 <template>
-  <div style="display: flex;justify-content: center;">
-    <el-divider content-position="left"
-                style="display: flex;justify-content: center;width: 70%; margin:30px  0 3% 3%"><b>
-      <h2>我的课程</h2>
-    </b>
-    </el-divider>
-  </div>
+<!--  <div style="display: flex;justify-content: center;">-->
+<!--    <el-divider content-position="left"-->
+<!--                style="display: flex;justify-content: center;width: 70%; margin:30px  0 3% 3%"><b>-->
+<!--      <h2>我的课程</h2>-->
+<!--    </b>-->
+<!--    </el-divider>-->
+<!--  </div>-->
+  <el-container>
+    <el-header style="height: 70px">
+      <h3 style="margin-right: 5px;">
+        <span style="vertical-align: 22%">我的课程</span>
+        <el-icon size="30px" style="margin-left: 5px">
+          <List/>
+        </el-icon>
+      </h3>
+    </el-header>
+    <hr class="style-three" style="margin-bottom: 30px">
+  </el-container>
+
   <div style="display: flex;justify-content: center;">
 
     <el-input
@@ -70,13 +82,15 @@ export default {
 </script>
 
 <style>
-.el-row {
-  margin-bottom: 20px;
+hr.style-three {
+  width: 100%;
+  margin: 0 auto;
+  border: 0;
+  height: 5px;
+  background: #333;
+  background-image: linear-gradient(to right, #ccc, #333, #ccc);
 }
 
-.el-col {
-  border-radius: 4px;
-}
 
 .bg-purple-dark {
   background: #99a9bf;
@@ -95,8 +109,4 @@ export default {
   min-height: 36px;
 }
 
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
-}
 </style>
