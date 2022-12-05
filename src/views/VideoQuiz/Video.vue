@@ -72,7 +72,7 @@ import {VideoJsPlayer} from 'video.js'
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import Comment from "@/components/Comment.vue";
-import VideoQuizHeader from "@/views/Video_Quiz/VideoQuizHeader.vue";
+import VideoQuizHeader from "@/views/VideoQuiz/VideoQuizHeader.vue";
 
 export default defineComponent({
   name: 'vue-basic-player-example',

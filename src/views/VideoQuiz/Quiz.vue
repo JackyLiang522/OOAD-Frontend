@@ -33,7 +33,7 @@
 
 <script lang="ts">
 import {computed, onBeforeUnmount, ref} from 'vue'
-import Video_Quiz_Header from "@/views/Video_Quiz/VideoQuizHeader.vue";
+import Video_Quiz_Header from "@/views/VideoQuiz/VideoQuizHeader.vue";
 
 export default {
   name: 'Quiz',

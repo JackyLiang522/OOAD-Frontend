@@ -5,8 +5,8 @@ import CourseDetail from "@/views/StudentCenter/Course/CourseDetail.vue"
 import Announcement from "@/views/StudentCenter/Course/Announcement.vue"
 import Homework from "@/views/StudentCenter/Course/Homework.vue"
 import Home from "@/views/Home.vue";
-import Video from "@/views/Video_Quiz/Video.vue"
-import Quiz from "@/views/Video_Quiz/Quiz.vue";
+import Video from "@/views/VideoQuiz/Video.vue"
+import Quiz from "@/views/VideoQuiz/Quiz.vue";
 import Balance from "@/views/StudentCenter/Course/Balance.vue";
 
 
