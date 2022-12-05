@@ -124,8 +124,7 @@ export default {
 
     async function submitInfo() {
       let response = ''
-      await axios.post(`https://${store.state.host}/register?email=${userInfo.email}&password=${userInfo.password}
-      &userName=${userInfo.user_name}&isTeacher=${userInfo.is_teacher}`).then(
+      await axios.post(`http://${store.state.host}/register?email=${userInfo.email}&password=${userInfo.password}&username=${userInfo.user_name}&isTeacher=${userInfo.is_teacher}`).then(
           response => {
             if (response.data.code === 1) {
               response = 'succeed'
