@@ -32,9 +32,8 @@
 </template>
 
 <script lang="ts">
-import {computed, onBeforeUnmount, reactive, ref} from 'vue'
-import Video_Quiz_Header from "@/views/Video_Quiz/Video_Quiz_Header.vue";
-import Vue from "vue";
+import {computed, onBeforeUnmount, ref} from 'vue'
+import Video_Quiz_Header from "@/views/Video_Quiz/VideoQuizHeader.vue";
 
 export default {
   name: 'Quiz',

@@ -126,8 +126,7 @@ hr.style-three {
   margin: 0 auto;
   border: 0;
   height: 5px;
-  background: #333;
-  background-image: linear-gradient(to right, #ccc, #333, #ccc);
+  background: #333 linear-gradient(to right, #ccc, #333, #ccc);
 }
 
 .clearfix:after {

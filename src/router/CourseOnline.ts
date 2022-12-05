@@ -1,5 +1,5 @@
 import {createRouter, createWebHashHistory} from "vue-router";
-import Student_Center from "@/views/StudentCenter/Student_Center.vue";
+import StudentCenter from "@/views/StudentCenter/StudentCenter.vue";
 import CourseList from "@/views/StudentCenter/Course/CourseList.vue"
 import CourseDetail from "@/views/StudentCenter/Course/CourseDetail.vue"
 import Announcement from "@/views/StudentCenter/Course/Announcement.vue"
@@ -16,7 +16,7 @@ export default createRouter({
     routes: [
         {
             path: '/student',
-            component: Student_Center,
+            component: StudentCenter,
             children: [
                 {
                     path: '',

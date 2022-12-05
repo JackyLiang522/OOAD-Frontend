@@ -5,10 +5,10 @@
 <script>
 import Login from "@/views/Login/Login";
 import Register from "@/views/Login/Register";
-import router from "@/router/login";
+import router from "@/router/Login";
 
 export default {
-  name: 'loginApp',
+  name: 'login_app',
   components: {
     Register,
     Login,

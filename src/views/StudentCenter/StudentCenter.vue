@@ -26,14 +26,14 @@
 import router from "@/router/CourseOnline";
 
 export default {
-  name: "Student_Center",
+  name: "StudentCenter",
   router,
 }
 </script>
 
 }
 <style scoped>
-.el-menu-item {
+:deep(.el-menu-item) {
   font-size: 19px;
   font-weight: normal;
   color: #dbe2ef;

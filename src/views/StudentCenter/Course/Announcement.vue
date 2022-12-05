@@ -9,7 +9,7 @@
           </el-icon>
         </h3>
       </el-header>
-      <hr class="style-three" style="margin-bottom: 0px">
+      <hr class="style-three" style="margin-bottom: 0">
       <el-container>
 
       <el-aside width="20%">
@@ -101,12 +101,12 @@ export default {
 </script>
 
 <style scoped>
-.el-menu-item{
+:deep(.el-menu-item){
   font-size: 19px;
   font-weight: 500;
   color: #dbe2ef;
 }
-/deep/ .el-collapse-item__header{
+:deep(.el-collapse-item__header){
   font-size: 18px;
   font-weight: 700;
   color: #364f6b;
@@ -117,7 +117,6 @@ hr.style-three {
   margin: 0 auto;
   border: 0;
   height: 5px;
-  background: #333;
-  background-image: linear-gradient(to right, #ccc, #333, #ccc);
+  background: #333 linear-gradient(to right, #ccc, #333, #ccc);
 }
 </style>

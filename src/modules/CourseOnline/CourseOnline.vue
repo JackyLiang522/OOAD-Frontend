@@ -57,12 +57,12 @@
 
 <script>
 import router from "@/router/CourseOnline";
-import Student_Center from "@/views/StudentCenter/Student_Center";
+import StudentCenter from "@/views/StudentCenter/StudentCenter.vue";
 
 export default {
-  name: 'course_online',
+  name: 'course_online_app',
   components: {
-    Student_Center
+    StudentCenter
   },
   router,
   data() {
