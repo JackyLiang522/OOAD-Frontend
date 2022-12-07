@@ -6,13 +6,8 @@
   <el-divider />
 
   <el-space wrap style="display: flex;justify-content: center;">
-    <ul>
-      <li v-for="course in courses">
-        <CourseInfoCard :courseName="course.courseName" :teacher="course.teacher" :chapterCount="course.chapterCount"
+    <CourseInfoCard v-for="course in courses" :courseId="course.courseId" :courseName="course.courseName" :teacher="course.teacher" :chapterCount="course.chapterCount"
           :price="course.price" :introduction="course.introduction" />
-      </li>
-    </ul>
-
   </el-space>
   <el-pagination layout="prev, pager, next" style="display: flex;justify-content: center;margin-top: 50px"
     :total="100" />
@@ -45,7 +40,4 @@ export default {
 </script>
 
 <style scoped>
-ul {
-  list-style-type: none;
-}
 </style>

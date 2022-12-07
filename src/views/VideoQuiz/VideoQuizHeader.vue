@@ -1,8 +1,8 @@
 <template>
   <div>
-    <span style="font-size: 20px;margin:0 100px 0 0">章节1：HelloWorld</span>
+    <span style="font-size: 20px;margin:0 100px 0 0">章节 {{chapterNumber}}：{{chapterName}}</span>
     <span style="float: right">
-      <span style="font-size: 15px;">by 张三</span>
+      <span style="font-size: 15px;">by {{teacher}}</span>
       <el-button
           size="default"
           type="primary"
@@ -23,6 +23,11 @@
 
 <script>
 export default {
+  props: {
+    teacher: String,
+    chapterNumber: Number,
+    chapterName: String
+  },
   name:'VideoQuizHeader'
 }
 </script>

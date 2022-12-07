@@ -11,7 +11,7 @@
         src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
         fit="contain"/>
 
-    <p style="font-size: 20px;font-weight: bold;color: #397ce2;text-align: center;margin: 15px 0 15px 0">{{courseName}}</p>
+    <p style="font-size: 20px;font-weight: bold;color: #397ce2;text-align: center;margin: 15px 0 15px 0"><router-link :to="'/video?course_id=' + courseId">{{courseName}}</router-link></p>
 
     <el-scrollbar height="105px" style="height: 105px">
       <div class="content">
@@ -34,6 +34,7 @@
 <script>
 export default {
   props: {
+    courseId: Number,
     courseName: String,
     teacher: String,
     chapterCount: Number,

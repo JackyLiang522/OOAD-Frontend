@@ -1,5 +1,5 @@
 <template>
-  <VideoQuizHeader/>
+  <VideoQuizHeader :teacher="teacher" :chapterName="chapters[0].chapterName" :chapterNumber="chapters[0].chapterNumber"/>
 
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
     <el-col :span="16">
@@ -30,12 +30,12 @@
       <el-scrollbar height="340px" style="border: 3px solid gray">
         <div style="margin:10px 20px 0 20px;word-break: break-word;">
           <el-link
-              v-for="i in chapters.length"
+              v-for="chapter in chapters"
               style="margin: 5px 0 5px 0;"
               :underline="false"
-              :href="chapter_hrefs[i]"
+              href="/"
           >
-            {{ chapters[i] }}
+            {{ chapter.chapterName }}
           </el-link>
         </div>
       </el-scrollbar>
@@ -58,7 +58,7 @@
     </el-col>
   </el-row>
 
-  <Comment v-for="content in contents" :content="content"/>
+  <Comment v-for="comment in comments" :username="comment.username" :content="comment.content" :date="comment.date"/>
 
 
   <el-divider/>
@@ -73,6 +73,9 @@ import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import Comment from "@/components/Comment.vue";
 import VideoQuizHeader from "@/views/VideoQuiz/VideoQuizHeader.vue";
+import router from '@/router/CourseOnline'
+import axios from 'axios';
+import store from "@/store";
 
 export default defineComponent({
   name: 'vue-basic-player-example',
@@ -93,79 +96,38 @@ export default defineComponent({
       console.log('Basic player event', log)
     }
 
-    let chapters = [
-      '章节名：这是一个章节的名字',
-      '章节名：这是一个章节的名字',
-      '章节名：这是一个章节的名字',
-      '章节名：这是一个章节的名字',
-      '章节名：这是一个章节的名字',
-      '章节名：这是一个很长很长很长很长很长很长很长很长很长很长很长很长很长的章节的名字',
-      '章节名：这是一个很长很长很长很长很长很长很长很长很长很长很长很长很长的章节的名字',
-      '章节名：这是一个很长很长很长很长很长很长很长很长很长很长很长很长很长的章节的名字',
-      '章节名：这是一个很长很长很长很长很长很长很长很长很长很长很长很长很长的章节的名字',
-      '章节名：这是一个很长很长很长很长很长很长很长很长很长很长很长很长很长的章节的名字',
-      '章节名：这是一个很长很长很长很长很长很长很长很长很长很长很长很长很长的章节的名字',
-      'consist letter and letter and letter and letter and letter and letter and letter and letter and letter and' +
-      'letter and letter',
-      '章节名：这是一个长英文单词longgggggggggggggggggggggggggggggggggggggggggggggggggggggggggg',
-    ]
-
-    let chapter_hrefs = [
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-      '/login#/login',
-    ]
-
     let comment_input = ref('')
-
-    let contents = [
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符' +
-      '中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符中文占位符'
-      ,
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word' +
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word' +
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word' +
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word' +
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word' +
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word' +
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word' +
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word' +
-      'English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word English_Word'
-      ,
-      'a_very_long_wordddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd'
-      ,
-      '一条很短的评论'
-    ]
 
     return {
       player,
       handleMounted,
       handleEvent,
       comment_input,
-      contents,
-      chapters,
-      chapter_hrefs
     }
-  }
+  },
+  data() {
+    return {
+      courseId: 0,
+      teacher: '',
+      chapters: [{chapterId: 0, chapterName: 'Introduction', chapterNumber: 0}],
+      chapter: {chapterId: 0},
+      comments: [{username: 'Bob', content: '114514', date: '2022-10-10 10:10'}],
+      header: false
+    }
+  },
+  async created() {
+    this.courseId = router.currentRoute.value.query.course_id;
+    axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + this.courseId).then((response) => {
+      this.chapters = response.data;
+      this.chapter = this.chapters[0];
+    })
+    axios.get(`http://${store.state.host}/api/course?courseId=` + this.courseId).then((response) => {
+      this.teacher = response.data.teacher;
+    })
+    axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + this.chapter.chapterId).then((response) => {
+      this.comments = response.data;
+    })
+  },
 })
 </script>
 
