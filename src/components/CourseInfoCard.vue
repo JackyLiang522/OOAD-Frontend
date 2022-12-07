@@ -11,17 +11,17 @@
         src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
         fit="contain"/>
 
-    <p style="font-size: 20px;font-weight: bold;color: #397ce2;text-align: center;margin: 15px 0 15px 0">高等数学</p>
+    <p style="font-size: 20px;font-weight: bold;color: #397ce2;text-align: center;margin: 15px 0 15px 0">{{courseName}}</p>
 
     <el-scrollbar height="105px" style="height: 105px">
       <div class="content">
-        授课教师：张三
+        授课教师：{{teacher}}
         <br>
-        章节数量：16
+        章节数量：{{chapterCount}}
         <br>
-        课程价格：0
+        课程价格：{{price}}
         <br>
-        课程简介：XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        课程简介：{{introduction}}
       </div>
     </el-scrollbar>
   </div>
@@ -29,6 +29,18 @@
 </template>
 
 <script setup>
+</script>
+
+<script>
+export default {
+  props: {
+    courseName: String,
+    teacher: String,
+    chapterCount: Number,
+    price: Number,
+    introduction: String
+  }
+}
 </script>
 
 <style scoped>
