@@ -23,7 +23,7 @@
           margin-left: 20px;
           font-weight: bold;"
         >
-          欢迎，学生XXX
+          欢迎，学生 / 教师XXX
         </div>
         <div style="
         position: absolute;
@@ -32,7 +32,8 @@
         vertical-align: middle;
         height: 60px"
         >
-          <router-link :underline="false" to="/student" style="color:#3a8ee6">
+          <router-link :underline="false" to="/teacher" style="color:#3a8ee6">
+<!--          <router-link :underline="false" to="/student" style="color:#3a8ee6">-->
             <span style="line-height: 60px;">1111111@qq.com</span>
           </router-link>
           <el-divider direction="vertical" border-style=" solid" style="height: 40px;"/>
