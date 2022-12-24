@@ -12,6 +12,8 @@ import Home from "@/views/Home.vue";
 import Video from "@/views/VideoQuiz/Video.vue"
 import Quiz from "@/views/VideoQuiz/Quiz.vue";
 import Balance from "@/views/StudentCenter/Balance/Balance.vue";
+import Content from "@/views/TeacherCenter/CourseList/Content.vue";
+import Student from "@/views/TeacherCenter/CourseList/Student.vue";
 
 
 // @ts-ignore
@@ -19,13 +21,25 @@ export default createRouter({
     history: createWebHashHistory(),
     routes: [
         {
+            path: '/',
+            redirect: '/home'
+        }, {
+            path: '/home',
+            component: Home
+        }, {
+            path: '/video',
+            component: Video
+        }, {
+            path: '/quiz',
+            component: Quiz
+        }, {
             path: '/student',
             component: StudentCenter,
             children: [
                 {
                     path: '',
                     redirect: '/student/course'
-                },{
+                }, {
                     path: 'announcement',
                     component: Announcement
                 },
@@ -52,35 +66,43 @@ export default createRouter({
                     component: Balance
                 }
             ]
-        },
-        {
+        }, {
             path: '/teacher',
             component: TeacherCenter,
             children: [
                 {
                     path: '',
-                    redirect: '/teacher/course-list'
-                },{
-                    path: 'create-course',
-                    component: CreateCourse
-                },
-                {
-                    path: 'course-list',
-                    component: TeacherCourseList
+                    redirect: '/teacher/course'
+                }, {
+                    path: 'course',
+                    children: [
+                        {
+                            path: '',
+                            redirect: '/teacher/course/list'
+                        }, {
+                            path: 'create',
+                            component: CreateCourse
+                        }, {
+                            path: 'list',
+                            children: [
+                                {
+                                    path: '',
+                                    component: TeacherCourseList
+                                }, {
+                                    path: 'content',
+                                    component: Content
+                                }, {
+                                    path: 'announcement',
+                                    component: Announcement
+                                }, {
+                                    path: 'student',
+                                    component: Student
+                                }
+                            ]
+                        }
+                    ]
                 }
             ]
-        }, {
-            path: '/',
-            redirect: '/home'
-        }, {
-            path: '/home',
-            component: Home
-        }, {
-            path: '/video',
-            component: Video
-        }, {
-            path: '/quiz',
-            component: Quiz
-        }
+        },
     ]
 })
