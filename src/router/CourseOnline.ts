@@ -1,19 +1,20 @@
 import {createRouter, createWebHashHistory} from "vue-router";
-import TeacherCenter from "@/views/TeacherCenter/TeacherCenter.vue";
-import TeacherCourseList from "@/views/TeacherCenter/CourseList/CourseList.vue";
-import CreateCourse from "@/views/TeacherCenter/CreateCourse/CreateCourse.vue";
+import TeacherCourseList from "@/views/CourseOnline/TeacherCenter/Overview/List/CourseList.vue";
+import CreateCourse from "@/views/CourseOnline/TeacherCenter/Overview/Create/CreateCourse.vue";
 
-import StudentCenter from "@/views/StudentCenter/StudentCenter.vue";
-import StudentCourseList from "@/views/StudentCenter/Course/CourseList.vue"
-import CourseDetail from "@/views/StudentCenter/Course/CourseDetail.vue"
-import Announcement from "@/views/StudentCenter/Announcement/Announcement.vue"
-import Homework from "@/views/StudentCenter/Course/Homework.vue"
-import Home from "@/views/Home.vue";
-import Video from "@/views/VideoQuiz/Video.vue"
-import Quiz from "@/views/VideoQuiz/Quiz.vue";
-import Balance from "@/views/StudentCenter/Balance/Balance.vue";
-import Content from "@/views/TeacherCenter/CourseList/Content.vue";
-import Student from "@/views/TeacherCenter/CourseList/Student.vue";
+import StudentCenter from "@/views/CourseOnline/StudentCenter/StudentCenter.vue";
+import StudentCourseList from "@/views/CourseOnline/StudentCenter/Course/List/CourseList.vue"
+import CourseDetail from "@/views/CourseOnline/StudentCenter/Course/Detail/CourseDetail.vue"
+import Announcement from "@/views/CourseOnline/StudentCenter/Announcement/Announcement.vue"
+import Homework from "@/views/CourseOnline/StudentCenter/Course/Homework/Homework.vue"
+import Home from "@/views/CourseOnline/Home/Home.vue";
+import Video from "@/views/CourseOnline/Video/Video.vue"
+import Quiz from "@/views/CourseOnline/Quiz/Quiz.vue";
+import Balance from "@/views/CourseOnline/StudentCenter/Balance/Balance.vue";
+import Content from "@/views/CourseOnline/TeacherCenter/Detail/Content/Content.vue";
+import Student from "@/views/CourseOnline/TeacherCenter/Detail/Student/Student.vue";
+import OverviewHeader from "@/views/CourseOnline/TeacherCenter/Overview/OverviewHeader.vue";
+import DetailHeader from "@/views/CourseOnline/TeacherCenter/Detail/DetailHeader.vue";
 
 
 // @ts-ignore
@@ -68,37 +69,41 @@ export default createRouter({
             ]
         }, {
             path: '/teacher',
-            component: TeacherCenter,
             children: [
                 {
                     path: '',
-                    redirect: '/teacher/course'
+                    redirect: '/teacher/overview/list'
                 }, {
-                    path: 'course',
+                    path: 'overview',
+                    component: OverviewHeader,
                     children: [
                         {
                             path: '',
-                            redirect: '/teacher/course/list'
+                            redirect: '/teacher/overview/list'
+                        }, {
+                            path: 'list',
+                            component: TeacherCourseList
                         }, {
                             path: 'create',
                             component: CreateCourse
+                        }
+                    ]
+                }, {
+                    path: 'detail',
+                    component: DetailHeader,
+                    children: [
+                        {
+                            path:'',
+                            redirect:'/teacher/detail/content'
+                        },{
+                            path: 'content',
+                            component: Content
                         }, {
-                            path: 'list',
-                            children: [
-                                {
-                                    path: '',
-                                    component: TeacherCourseList
-                                }, {
-                                    path: 'content',
-                                    component: Content
-                                }, {
-                                    path: 'announcement',
-                                    component: Announcement
-                                }, {
-                                    path: 'student',
-                                    component: Student
-                                }
-                            ]
+                            path: 'announcement',
+                            component: Announcement
+                        }, {
+                            path: 'student',
+                            component: Student
                         }
                     ]
                 }

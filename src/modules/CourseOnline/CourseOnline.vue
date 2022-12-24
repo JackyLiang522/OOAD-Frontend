@@ -33,11 +33,15 @@
         height: 60px"
         >
           <router-link :underline="false" to="/teacher" style="color:#3a8ee6">
-<!--          <router-link :underline="false" to="/student" style="color:#3a8ee6">-->
+            <!--          <router-link :underline="false" to="/student" style="color:#3a8ee6">-->
             <span style="line-height: 60px;">1111111@qq.com</span>
           </router-link>
           <el-divider direction="vertical" border-style=" solid" style="height: 40px;"/>
-          <el-link type="primary" style="font-size: 15px;color: lightgray;font-weight: bold">
+          <el-link
+              type="primary"
+              style="font-size: 15px;color: lightgray;font-weight: bold"
+              href="login"
+          >
             登录
           </el-link>
         </div>
@@ -50,7 +54,7 @@
       </div>
     </el-main>
     <!--  <el-container>-->
-    <el-footer style="background-color: black;margin-top: 100px;color :white;">
+    <el-footer style="background-color: black;color :white;">
       <p style="text-align: center">已经到底咯</p>
     </el-footer>
   </el-container>
@@ -58,7 +62,7 @@
 
 <script>
 import router from "@/router/CourseOnline";
-import StudentCenter from "@/views/StudentCenter/StudentCenter.vue";
+import StudentCenter from "@/views/CourseOnline/StudentCenter/StudentCenter.vue";
 
 export default {
   name: 'course_online_app',

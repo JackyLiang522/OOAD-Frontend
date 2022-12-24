@@ -1,5 +1,8 @@
 <template>
-  <VideoQuizHeader :teacher="teacher" :chapterName="chapters[0].chapterName" :chapterNumber="chapters[0].chapterNumber"/>
+  <VideoQuizHeader 
+      :teacher="teacher" 
+      :chapterName="chapters[0].chapterName" 
+      :chapterNumber="chapters[0].chapterNumber"/>
 
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
     <el-col :span="16">
@@ -71,8 +74,8 @@ import {defineComponent, ref, shallowRef} from 'vue'
 import {VideoJsPlayer} from 'video.js'
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
-import Comment from "@/components/Comment.vue";
-import VideoQuizHeader from "@/views/VideoQuiz/VideoQuizHeader.vue";
+import Comment from "@/views/CourseOnline/Video/Comment.vue";
+import VideoQuizHeader from "@/components/VideoQuizHeader.vue";
 import router from '@/router/CourseOnline'
 import axios from 'axios';
 import store from "@/store";

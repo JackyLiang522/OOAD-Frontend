@@ -6371,6 +6371,11 @@
     "ajv" "^6.12.2"
     "ajv-keywords" "^3.4.1"
 
+"screenfull@^6.0.2":
+  "integrity" "sha512-AQdy8s4WhNvUZ6P8F6PB21tSPIYKniic+Ogx0AacBMjKP1GUHN2E9URxQHtCusiwxudnCKkdy4GrHXPPJSkCCw=="
+  "resolved" "https://registry.npmmirror.com/screenfull/-/screenfull-6.0.2.tgz"
+  "version" "6.0.2"
+
 "scss-tokenizer@^0.4.3":
   "integrity" "sha512-raKLgf1LI5QMQnG+RxHz6oK0sL3x3I4FN2UDLqgLOGO8hodECNnNh5BXn7fAyBxrA8zVzdQizQ6XjNJQ+uBwMw=="
   "resolved" "https://registry.npmmirror.com/scss-tokenizer/-/scss-tokenizer-0.4.3.tgz"

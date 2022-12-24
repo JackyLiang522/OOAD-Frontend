@@ -15,7 +15,7 @@
 
 <script setup>
 import {Search} from "@element-plus/icons-vue";
-import CourseInfoCard from "@/components/CourseInfoCard";
+import CourseInfoCard from "@/views/CourseOnline/Home/CourseInfoCard.vue";
 import {ref} from "vue";
 import axios from "axios";
 import store from "@/store";
