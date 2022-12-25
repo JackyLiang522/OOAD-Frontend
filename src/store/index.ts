@@ -6,8 +6,8 @@ export default createStore({
         return {
             userInfo: {
                 is_login: false,
-                user_name: null,
-                email: null,
+                user_name: '',
+                email: '',
                 is_teacher: true,
             },
             host: 'localhost:8081',
