@@ -1,8 +1,12 @@
 <template>
   <h4 style="margin: 0 0 0 10px">{{ `第${chapterInfo.number}章 ${chapterInfo.title}` }}</h4>
-
+  <div style="display: flex;justify-content: center; margin-top: 40px">
+    <div>章节成绩</div>
+  </div>
   <div style="display: flex;justify-content: center">
+
     <el-table
+        id="chapterTable"
         :data="table_data"
         border
         style="width: 700px;margin:20px 20px 0 20px;"
@@ -13,7 +17,7 @@
     >
       <el-table-column prop="name" label="学生姓名" width="200px"/>
       <el-table-column prop="score" label="分数" width="350px"/>
-      
+
       <el-table-column label="编辑" width="150px">
         <el-button
             type="success"
@@ -27,21 +31,24 @@
         </el-button>
       </el-table-column>
     </el-table>
-  </div>
+  </div> <div style="display: flex;justify-content: right;margin-right: 100px">
+      <exportExcel :id="'chapterTable'" :name="'章节成绩'"></exportExcel>
+    </div>
 
-  <div style="display: flex;justify-content: center;margin-top: 20px">
-    <el-button type="primary" plain>
-      导出为
-    </el-button>
-  </div>
 
+
+  <!--    <el-button type="primary" plain>-->
+  <!--      导出为-->
+  <!--    </el-button>-->
 </template>
 
 <script>
 import {reactive} from "vue";
+import ExportExcel from "@/views/CourseOnline/TeacherCenter/Detail/Student/ExportExcel.vue";
 
 export default {
   name: "Grade",
+  components: {ExportExcel},
   props: ['chapterInfo'],
   setup() {
     const table_data = reactive([
