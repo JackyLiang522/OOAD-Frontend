@@ -14,7 +14,6 @@ import Balance from "@/views/CourseOnline/StudentCenter/Balance/Balance.vue";
 import Content from "@/views/CourseOnline/TeacherCenter/Detail/Content/Content.vue";
 import Student from "@/views/CourseOnline/TeacherCenter/Detail/Student/Student.vue";
 import OverviewHeader from "@/views/CourseOnline/TeacherCenter/Overview/OverviewHeader.vue";
-import DetailHeader from "@/views/CourseOnline/TeacherCenter/Detail/DetailHeader.vue";
 
 
 // @ts-ignore
@@ -90,7 +89,6 @@ export default createRouter({
                     ]
                 }, {
                     path: 'detail',
-                    component: DetailHeader,
                     children: [
                         {
                             path:'',
