@@ -19,9 +19,10 @@
     <el-col :span="4">
       <el-scrollbar max-height="400px">
         <el-divider style="margin: 0 0 0 0"/>
-        <div v-for="chapter in chapters" :key="chapter">
-          <el-link style="margin: 10px 10px 10px 10px">
-            {{ chapter }}
+        <div v-for="chapter in chapters" :key="chapter.number">
+          <el-link style="margin: 10px 10px 10px 10px;white-space: pre-wrap;">
+            <span>{{ `第${chapter.number}章\n${chapter.title}` }}</span>
+
           </el-link>
           <el-divider style="margin: 0 0 0 0"/>
         </div>
@@ -31,9 +32,7 @@
     <el-col :offset="1" :span="19">
       <el-tabs>
         <el-tab-pane label="视频">
-          <div style="border: dashed 1px ">
-            <Video/>
-          </div>
+          <Video/>
         </el-tab-pane>
         <el-tab-pane label="作业">
           <Homework/>
@@ -51,7 +50,7 @@
 
 <script lang="ts">
 import {ArrowRight} from "@element-plus/icons-vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import Video from "@/views/CourseOnline/TeacherCenter/Detail/Content/Video.vue";
 import Homework from "@/views/CourseOnline/TeacherCenter/Detail/Content/Homework.vue";
 import Grade from "@/views/CourseOnline/TeacherCenter/Detail/Content/Grade.vue";
@@ -66,7 +65,39 @@ export default {
     }
   },
   setup() {
-    const chapters = ref([1111111, 222222, 333333, 444444, 555555, 666666, 666666, 666666, 666666, 666666, 666666, 666666])
+    const chapters = ref([
+      {
+        number: '111',
+        title: 'name1'
+      }, {
+        number: '222',
+        title: 'name2'
+      }, {
+        number: '222',
+        title: 'name2'
+      }, {
+        number: '222',
+        title: 'name2'
+      }, {
+        number: '222',
+        title: 'name2'
+      }, {
+        number: '222',
+        title: 'name2'
+      }, {
+        number: '222',
+        title: 'name2'
+      }, {
+        number: '222',
+        title: 'name2'
+      }, {
+        number: '222',
+        title: 'name2'
+      }, {
+        number: '222',
+        title: 'name2'
+      }
+    ])
 
     return {
       chapters,
