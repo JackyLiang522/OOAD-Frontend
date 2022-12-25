@@ -13,6 +13,7 @@ import Quiz from "@/views/CourseOnline/Quiz/Quiz.vue";
 import Balance from "@/views/CourseOnline/StudentCenter/Balance/Balance.vue";
 import Content from "@/views/CourseOnline/TeacherCenter/Detail/Content/Content.vue";
 import Student from "@/views/CourseOnline/TeacherCenter/Detail/Student/Student.vue";
+import TeacherAnnouncement from "@/views/CourseOnline/TeacherCenter/Detail/Announcement/Announcement.vue";
 import OverviewHeader from "@/views/CourseOnline/TeacherCenter/Overview/OverviewHeader.vue";
 
 
@@ -98,7 +99,7 @@ export default createRouter({
                             component: Content
                         }, {
                             path: 'announcement',
-                            component: Announcement
+                            component: TeacherAnnouncement
                         }, {
                             path: 'student',
                             component: Student
