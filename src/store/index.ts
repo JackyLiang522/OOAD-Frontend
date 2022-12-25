@@ -5,10 +5,9 @@ export default createStore({
     state() {
         return {
             userInfo: {
-                is_login: false,
+                identity: 'tourist',    //只能是 tourist teacher student admin
                 user_name: '',
                 email: '',
-                is_teacher: true,
             },
             host: 'localhost:8081',
         }
@@ -16,28 +15,24 @@ export default createStore({
 
     // actions中所有函数名字为小写字母+下划线
     actions: {
-        set_userInfo(context, payload){
-        //    payload应该为对象：{ email:111@111, user_name:111, is_teacher:true }
+        set_userInfo(context, payload) {
+            //    payload应该为对象：{ email:111@111, user_name:111, is_teacher:true }
 
-        }
+        },
     },
 
     // mutations中所有函数名字为大写字母+下划线
     mutations: {
-        SET_IS_LOGIN(state, value){
-            state.userInfo.is_login = value
+        SET_IDENTITY(state, payload) {
+            state.userInfo.identity = payload
         },
 
-        SET_EMAIL(state,value){
-            state.userInfo.email = value
+        SET_EMAIL(state, payload) {
+            state.userInfo.email = payload
         },
 
-        SET_USER_NAME(state,value){
-            state.userInfo.user_name = value
+        SET_USER_NAME(state, payload) {
+            state.userInfo.user_name = payload
         },
-
-        SET_IS_TEACHER(state,value){
-            state.userInfo.is_teacher = value
-        }
     }
 })

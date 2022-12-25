@@ -10,6 +10,13 @@
     <el-button class="login-button" type="primary" @click="login">登录</el-button>
     <el-button class="login-button" @click="clearInfo">清空</el-button>
   </div>
+  <div style="display: flex;justify-content: center">
+    <p>测试用按钮：</p>
+    <el-button @click="studentLogin_test">学生登录</el-button>
+    <el-button @click="teacherLogin_test">教师登录</el-button>
+    <el-button @click="adminLogin_test">管理员登录</el-button>
+    <el-button @click="touristLogin_test">游客登录</el-button>
+  </div>
 </template>
 
 <script>
@@ -17,7 +24,8 @@ import {onBeforeUnmount, reactive} from "vue";
 import {ElMessage} from 'element-plus'
 
 import axios from "axios";
-import store from "@/store";
+import {useStore} from "vuex";
+import {useRouter} from "vue-router";
 
 export default {
   name: "Login",
@@ -37,7 +45,7 @@ export default {
         showWarning("请输入所有信息")
         return
       }
-      checkInfo()
+      await checkInfo()
     }
 
     function showError(msg) {
@@ -86,11 +94,56 @@ export default {
       document.body.removeAttribute('style')
     })
 
+    const store = useStore()
+
+    function studentLogin_test() {
+      const student_info = {
+        identity: 'student',
+        email: 'student@example.com',
+        user_name: '林雨航'
+      }
+      localStorage.setItem('user_info', JSON.stringify(student_info))
+      window.location.href = '/#/home'
+    }
+
+    function teacherLogin_test() {
+      const teacher_info = {
+        identity: 'teacher',
+        email: 'teacher@example.com',
+        user_name: '朱悦明'
+      }
+      localStorage.setItem('user_info', JSON.stringify(teacher_info))
+      window.location.href = '/#/home'
+    }
+
+    function adminLogin_test() {
+      const admin_info = {
+        identity: 'admin',
+        email: 'admin@example.com',
+        user_name: '梁家源'
+      }
+      localStorage.setItem('user_info', JSON.stringify(admin_info))
+      window.location.href = '/#/admin'
+    }
+
+    function touristLogin_test() {
+      const tourist_info = {
+        identity: 'tourist',
+        email: 'tourist@example.com',
+        user_name: ''
+      }
+      localStorage.setItem('user_info', JSON.stringify(tourist_info))
+      window.location.href = '/#/home'
+    }
+
     return {
       userInfo,
       clearInfo,
       login,
-
+      studentLogin_test,
+      teacherLogin_test,
+      adminLogin_test,
+      touristLogin_test
     }
   }
 

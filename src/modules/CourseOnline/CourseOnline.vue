@@ -3,7 +3,7 @@
     <el-header height="60px" style="background-color: black;">
       <el-row :gutter="20">
         <el-col :span="2" style="text-align: center">
-          <router-link to="/home">
+          <router-link :to="icon_link">
             <el-image
                 style="width: 30px; height: 30px;margin-top: 5px;"
                 src='https://th.bing.com/th/id/OIP.RlUTXgwQmhZvma5follA8gHaHa?pid=ImgDet&rs=1'
@@ -32,8 +32,7 @@
         vertical-align: middle;
         height: 60px"
         >
-          <router-link :underline="false" to="/teacher" style="color:#3a8ee6">
-            <!--          <router-link :underline="false" to="/student" style="color:#3a8ee6">-->
+          <router-link :underline="false" :to="email_link" style="color:#3a8ee6">
             <span style="line-height: 60px;">
               {{ email_words }}
             </span>
@@ -44,7 +43,7 @@
               style="font-size: 15px;color: lightgray;font-weight: bold"
               href="login#/Login"
           >
-            登录
+            {{ login_words }}
           </el-link>
         </div>
       </el-row>
@@ -66,7 +65,7 @@
 import router from "@/router/CourseOnline";
 import StudentCenter from "@/views/CourseOnline/StudentCenter/StudentCenter.vue";
 import {useStore} from "vuex";
-import {computed} from "vue";
+import {computed, onBeforeMount, onMounted} from "vue";
 
 export default {
   name: 'course_online_app',
@@ -77,34 +76,69 @@ export default {
   data() {
     const store = useStore()
 
-    const is_teacher = store.state.userInfo.is_teacher
-    const user_name = store.state.userInfo.user_name
-    const is_login = store.state.userInfo.is_login
-    const email = store.state.userInfo.email
+    const identity = computed(() => store.state.userInfo.identity)
+    const user_name = computed(() => store.state.userInfo.user_name)
+    const email = computed(() => store.state.userInfo.email)
 
     const welcome_word = computed(() => {
-      if (is_login) {
-        if (is_teacher) {
-          return `欢迎，教师${user_name}`
-        } else {
-          return `欢迎，学生${user_name}`
-        }
-      } else {
+      if (identity.value === 'tourist')
         return '欢迎，游客'
-      }
+      else if (identity.value === 'teacher')
+        return `欢迎，教师${user_name.value}`
+      else if (identity.value === 'student')
+        return `欢迎，学生${user_name.value}`
+      else
+        return `欢迎，管理员${user_name.value}`
     })
 
     const email_words = computed(() => {
-      return store.state.userInfo.is_login ?
-          store.state.userInfo.email :
-          '请登录'
+      if (identity.value === 'tourist')
+        return '请登录'
+      else
+        return email.value
+    })
+
+    const email_link = computed(() => {
+      if (identity.value === 'teacher')
+        return '/teacher/overview/list'
+      else if (identity.value === 'student')
+        return '/student/course/list'
+      else
+        return ''
+    })
+
+    const login_words = computed(() => {
+      if (identity.value === 'tourist')
+        return '登录'
+      else
+        return '切换账号'
+    })
+
+    const icon_link = computed(() => {
+      if (identity.value === 'admin')
+        return ''
+      else
+        return '/home'
+    })
+
+    function test() {
+      console.log(user_name.value)
+    }
+
+    onBeforeMount(() => {
+      const user_info = JSON.parse(localStorage.getItem('user_info'))
+      store.commit('SET_EMAIL', user_info.email)
+      store.commit('SET_USER_NAME', user_info.user_name)
+      store.commit('SET_IDENTITY', user_info.identity)
+      test()
     })
 
     return {
       welcome_word,
       email_words,
-      is_login,
-      is_teacher
+      email_link,
+      login_words,
+      icon_link
     }
   }
 }
