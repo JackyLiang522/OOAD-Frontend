@@ -12,7 +12,7 @@ export default createRouter({
         component: Register
     }, {
         path: '/',
-        redirect: '/login'
+        redirect: '/Login'
     }
     ]
 })

@@ -92,7 +92,7 @@ export default {
         response => {
           if (response.data.code == 1) {
             showSuccess("注册成功")
-            router.push('/login')
+            router.push('/Login')
           } else {
             showError('用户名或密码不符合规范')
           }

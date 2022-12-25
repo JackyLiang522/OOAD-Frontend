@@ -35,14 +35,14 @@
           <router-link :underline="false" to="/teacher" style="color:#3a8ee6">
             <!--          <router-link :underline="false" to="/student" style="color:#3a8ee6">-->
             <span style="line-height: 60px;">
-              {{ email_words}}
+              {{ email_words }}
             </span>
           </router-link>
           <el-divider direction="vertical" border-style=" solid" style="height: 40px;"/>
           <el-link
               type="primary"
               style="font-size: 15px;color: lightgray;font-weight: bold"
-              href="login"
+              href="login#/Login"
           >
             登录
           </el-link>
@@ -77,10 +77,12 @@ export default {
   data() {
     const store = useStore()
 
+    const is_teacher = store.state.userInfo.is_teacher
+    const user_name = store.state.userInfo.user_name
+    const is_login = store.state.userInfo.is_login
+    const email = store.state.userInfo.email
+
     const welcome_word = computed(() => {
-      const is_teacher = store.state.userInfo.is_teacher
-      const user_name = store.state.userInfo.user_name
-      const is_login = store.state.userInfo.is_login
       if (is_login) {
         if (is_teacher) {
           return `欢迎，教师${user_name}`
@@ -91,17 +93,18 @@ export default {
         return '欢迎，游客'
       }
     })
-    
+
     const email_words = computed(() => {
-      return store.state.userInfo.is_login?
-          store.state.userInfo.email:
+      return store.state.userInfo.is_login ?
+          store.state.userInfo.email :
           '请登录'
     })
-    
+
     return {
-      userName: 'xxx',
       welcome_word,
-      email_words
+      email_words,
+      is_login,
+      is_teacher
     }
   }
 }

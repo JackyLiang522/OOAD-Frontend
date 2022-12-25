@@ -6,7 +6,7 @@ import 'element-plus/dist/index.css'
 import router from '@/router/Login'
 import store from '@/store'
 
-import login_app from "@/modules/login/Login.vue";
+import login_app from "@/modules/Login/Login.vue";
 
 const app = createApp(login_app)
 app.use(ElementPlus)

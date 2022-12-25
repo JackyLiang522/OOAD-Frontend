@@ -5,11 +5,11 @@ module.exports = defineConfig({
     pages: {
         'login': {
             // 入口文件，相当于单页面的 main.js
-            entry: 'src/modules/login/Login.ts',
+            entry: 'src/modules/Login/Login.ts',
             // 模板文件
-            template: 'src/modules/login/Login.html',
+            template: 'src/modules/Login/Login.html',
             // 编译后 dist 目录下输出的文件，可以包含子目录
-            filename: 'login/Login.html'
+            filename: 'Login/Login.html'
         },
         'student_center':{
             entry: 'src/modules/CourseOnline/CourseOnline.ts',

@@ -15,6 +15,7 @@ import Content from "@/views/CourseOnline/TeacherCenter/Detail/Content/Content.v
 import Student from "@/views/CourseOnline/TeacherCenter/Detail/Student/Student.vue";
 import TeacherAnnouncement from "@/views/CourseOnline/TeacherCenter/Detail/Announcement/Announcement.vue";
 import OverviewHeader from "@/views/CourseOnline/TeacherCenter/Overview/OverviewHeader.vue";
+import Admin from "@/views/CourseOnline/Admin/Admin.vue";
 
 
 // @ts-ignore
@@ -107,6 +108,9 @@ export default createRouter({
                     ]
                 }
             ]
-        },
+        },{
+        path:'/admin',
+            component: Admin
+        }
     ]
 })
