@@ -1,8 +1,8 @@
 <template>
-  <el-page-header title="返回" @back="$router.push('/teacher/course/list')">
+  <el-page-header title="返回" @back="$router.push('/teacher/overview/list')">
     <template #breadcrumb>
       <el-breadcrumb :separator-icon="ArrowRight()">
-        <el-breadcrumb-item to="/teacher/course/list">
+        <el-breadcrumb-item to="/teacher/overview/list">
           课程列表
         </el-breadcrumb-item>
         <el-breadcrumb-item>课程详情</el-breadcrumb-item>
@@ -16,35 +16,60 @@
   <el-divider/>
 
   <el-row>
-    <el-col :span="5" style="background-color: orange">
-      111
+    <el-col :span="4">
+      <el-scrollbar max-height="400px">
+        <el-divider style="margin: 0 0 0 0"/>
+        <div v-for="chapter in chapters" :key="chapter">
+          <el-link style="margin: 10px 10px 10px 10px">
+            {{ chapter }}
+          </el-link>
+          <el-divider style="margin: 0 0 0 0"/>
+        </div>
+      </el-scrollbar>
     </el-col>
 
-    <el-col :offset="1" :span="18" style="background-color: skyblue">
-      <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-        <el-tab-pane label="User" name="first">User</el-tab-pane>
-        <el-tab-pane label="Config" name="second">Config</el-tab-pane>
-        <el-tab-pane label="Role" name="third">Role</el-tab-pane>
-        <el-tab-pane label="Task" name="fourth">Task</el-tab-pane>
+    <el-col :offset="1" :span="19">
+      <el-tabs>
+        <el-tab-pane label="视频">
+          <div style="border: dashed 1px ">
+            <Video/>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="作业">
+          <Homework/>
+        </el-tab-pane>
+        <el-tab-pane label="分数">
+          <Grade/>
+        </el-tab-pane>
+        <el-tab-pane label="测验">
+          <Quiz/>
+        </el-tab-pane>
       </el-tabs>
     </el-col>
   </el-row>
 </template>
 
-<script>
+<script lang="ts">
 import {ArrowRight} from "@element-plus/icons-vue";
-import {routerKey} from "vue-router";
+import {ref} from "vue";
+import Video from "@/views/CourseOnline/TeacherCenter/Detail/Content/Video.vue";
+import Homework from "@/views/CourseOnline/TeacherCenter/Detail/Content/Homework.vue";
+import Grade from "@/views/CourseOnline/TeacherCenter/Detail/Content/Grade.vue";
+import Quiz from "@/views/CourseOnline/Quiz/Quiz.vue";
 
 export default {
   name: "Content",
-  computed: {
-    routerKey() {
-      return routerKey
-    }
-  },
+  components: {Quiz, Grade, Homework, Video},
   methods: {
     ArrowRight() {
       return ArrowRight
+    }
+  },
+  setup() {
+    const chapters = ref([1111111, 222222, 333333, 444444, 555555, 666666, 666666, 666666, 666666, 666666, 666666, 666666])
+
+    return {
+      chapters,
     }
   }
 }

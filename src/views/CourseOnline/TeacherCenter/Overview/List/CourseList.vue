@@ -33,8 +33,8 @@
 
   <el-row style="margin:  0 0 0 0" align="middle">
     <el-col :span="3" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
-      <div class="grid-content bg-purple-light" >
-        <router-link to="/video"  style="line-height:inherit;display: block;" >
+      <div class="grid-content bg-purple-light">
+        <router-link to="/video" style="line-height:inherit;display: block;">
           <span class="my-h4">课程 A</span></router-link>
         <!--        跳转至课程视频观看url-->
       </div>
@@ -46,13 +46,13 @@
         <div>
           <router-link to="/teacher/detail/content">
             <span class="my-h4">目录</span></router-link>
-          <el-divider direction="vertical" />
+          <el-divider direction="vertical"/>
           <router-link to="/teacher/detail/announcement">
             <span class="my-h4">通知</span></router-link>
-          <el-divider direction="vertical" />
+          <el-divider direction="vertical"/>
           <router-link to="/teacher/detail/student">
             <span class="my-h4">学生</span></router-link>
-          <el-divider direction="vertical" />
+          <el-divider direction="vertical"/>
         </div>
       </div>
     </el-col>
@@ -60,8 +60,8 @@
 
   <el-row style="margin:  0 0 0 0" align="middle">
     <el-col :span="3" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
-      <div class="grid-content bg-purple-light" >
-        <router-link to="/video"  style="line-height:inherit;display: block;" >
+      <div class="grid-content bg-purple-light">
+        <router-link to="/video" style="line-height:inherit;display: block;">
           <span class="my-h4">课程 B</span></router-link>
         <!--        跳转至课程视频观看url-->
       </div>
@@ -73,13 +73,13 @@
         <div>
           <router-link to="/teacher/detail/content">
             <span class="my-h4">目录</span></router-link>
-          <el-divider direction="vertical" />
+          <el-divider direction="vertical"/>
           <router-link to="/teacher/detail/announcement">
             <span class="my-h4">通知</span></router-link>
-          <el-divider direction="vertical" />
+          <el-divider direction="vertical"/>
           <router-link to="/teacher/detail/student">
             <span class="my-h4">学生</span></router-link>
-          <el-divider direction="vertical" />
+          <el-divider direction="vertical"/>
         </div>
       </div>
     </el-col>
@@ -89,11 +89,18 @@
 </template>
 
 <script>
-import router from "@/router/CourseOnline";
+import {Search} from "@element-plus/icons-vue";
+import {ref} from "vue";
 
 export default {
   name: "CourseList",
-  router,
+  setup() {
+    const searchInfo = ref('')
+    return {
+      Search,
+      searchInfo
+    }
+  }
 }
 </script>
 
@@ -105,6 +112,7 @@ export default {
   font-weight: bold;
   font-size: 110%;
 }
+
 hr.style-three {
   width: 100%;
   margin: 0 auto;
