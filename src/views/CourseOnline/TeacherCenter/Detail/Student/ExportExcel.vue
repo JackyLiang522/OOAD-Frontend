@@ -1,5 +1,6 @@
 <template>
-  <el-button type="primary"  :loading="downloadLoading" icon="el-icon-top-right" size="small" @click="exportExcel" style="float: right; margin: 40px  3% 20px 0"  round>导出</el-button>
+  <el-button type="primary"  :loading="downloadLoading" size="middle" @click="exportExcel"
+             style="float: right; margin: 40px  3% 20px 0"  round>导出</el-button>
 </template>
 
 <script>

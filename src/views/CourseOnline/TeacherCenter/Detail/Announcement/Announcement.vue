@@ -84,7 +84,7 @@ export default {
     return {
       form: reactive({
         subject: '样例主题',
-        message: '通知信息内容',
+        message: '信息内容',
         email: false,
       })
     }
