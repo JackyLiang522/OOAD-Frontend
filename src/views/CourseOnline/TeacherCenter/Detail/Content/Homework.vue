@@ -1,19 +1,40 @@
 <template>
-  <h4 style="margin: 0 0 0 0">{{ `第${chapterInfo.number}章` }}</h4>
-  <p>{{ chapterInfo.title }}</p>
+  <h4 style="margin: 0 0 0 10px">{{ `第${chapterInfo.number}章 ${chapterInfo.title}` }}</h4>
 
   <div style="display: flex;justify-content: center">
     <el-table
         :data="table_data"
         border
-        style="width: 700px;margin:0 20px 0 20px;"
+        style="width: 700px;margin:20px 20px 0 20px;"
         height="250px"
         stripe
+        :header-cell-style="{'text-align':'center'}"
+        :cell-style="{'text-align':'center'}"
     >
       <el-table-column prop="title" label="作业标题" width="200px"/>
       <el-table-column prop="deadline" label="截止日期" width="350px"/>
-      <el-table-column label="编辑" width="150px"/>
+      <el-table-column label="编辑" width="150px">
+        <el-button
+            type="success"
+            size="small" round>
+          编辑
+        </el-button>
+        <el-button
+            type="danger"
+            size="small" round>
+          删除
+        </el-button>
+      </el-table-column>
     </el-table>
+  </div>
+
+  <div style="display: flex;justify-content: center;margin-top: 20px">
+    <el-button type="primary" plain>
+      上传新作业
+      <el-icon>
+        <Upload/>
+      </el-icon>
+    </el-button>
   </div>
 </template>
 
@@ -38,8 +59,8 @@ export default {
         title: '如果表格很长',
         deadline: '会自动出现滚动条'
       }, {
-        title: '如果表格很长',
-        deadline: '会自动出现滚动条'
+        title: '右边的一堆按钮',
+        deadline: '还没有加功能'
       }, {
         title: '如果表格很长',
         deadline: '会自动出现滚动条'
@@ -62,7 +83,7 @@ export default {
     ])
 
     return {
-      table_data
+      table_data,
     }
   }
 }
