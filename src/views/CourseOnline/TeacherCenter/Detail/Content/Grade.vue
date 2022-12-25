@@ -5,7 +5,7 @@
     <el-table
         :data="table_data"
         border
-        style="width: 550px;margin:20px 20px 0 20px;"
+        style="width: 700px;margin:20px 20px 0 20px;"
         height="250px"
         stripe
         :header-cell-style="{'text-align':'center'}"
@@ -13,6 +13,19 @@
     >
       <el-table-column prop="name" label="学生姓名" width="200px"/>
       <el-table-column prop="score" label="分数" width="350px"/>
+      
+      <el-table-column label="编辑" width="150px">
+        <el-button
+            type="success"
+            size="small" round>
+          编辑
+        </el-button>
+        <el-button
+            type="danger"
+            size="small" round>
+          删除
+        </el-button>
+      </el-table-column>
     </el-table>
   </div>
 
