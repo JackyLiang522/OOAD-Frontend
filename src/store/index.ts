@@ -8,7 +8,7 @@ export default createStore({
                 is_login: false,
                 user_name: null,
                 email: null,
-                is_teacher: null,
+                is_teacher: true,
             },
             host: 'localhost:8081',
         }
