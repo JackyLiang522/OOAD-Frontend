@@ -1,5 +1,4 @@
 <template>
-  <VideoQuizHeader/>
   <div style="display: flex;justify-content: center">
     <div
         style="height:auto;background-color: white;margin:30px 0 0 0;border: 3px solid black;width: 70%;padding: 0 20px 5px 20px">
@@ -33,11 +32,9 @@
 
 <script lang="ts">
 import {computed, onBeforeUnmount, ref} from 'vue'
-import VideoQuizHeader from "@/components/VideoQuizHeader.vue";
 
 export default {
   name: 'Quiz',
-  components: {VideoQuizHeader},
   setup() {
     const radio_s = ref('')
     const check_s = ref([])

@@ -1,15 +1,17 @@
 <template>
-  <el-button type="primary" @click="hasVideo=!hasVideo">
-    该按钮仅用于测试。当前 hasVideo 为 {{ hasVideo }}
+  <el-button type="primary" @click="has_video=!has_video">
+    该按钮仅用于测试，控制台有输出为正常现象
+    <br/>
+    当前 has_video 为 {{ has_video }}
   </el-button>
   <el-row>
-    <el-col :span="hasVideo?5:24">
-      <h4>{{ `第${chapterInfo.number}章` }}</h4>
+    <el-col :span="has_video?5:24">
+      <h4 style="margin: 0 0 0 0">{{ `第${chapterInfo.number}章` }}</h4>
       <p>{{ chapterInfo.title }}</p>
       <p style="color: gray;font-size: 13px">{{ chapterInfo.intro }}</p>
 
       <el-upload
-          v-if="!hasVideo"
+          v-if="!has_video"
           ref="upload"
           action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
           :limit="1"
@@ -32,7 +34,7 @@
     </el-col>
 
     <el-col :offset="1" :span="18">
-      <video-player v-if="hasVideo"
+      <video-player v-if="has_video"
                     class="video-player vjs-big-play-centered"
                     src="https://vjs.zencdn.net/v/oceans.mp4"
                     poster="https://vjs.zencdn.net/v/oceans.png"
@@ -71,6 +73,7 @@ import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
 export default {
   name: "Video",
   components: {VideoPlayer},
+  props: ['chapterInfo'],
   setup() {
     const player = shallowRef<VideoJsPlayer>()
     const handleMounted = (payload: any) => {
@@ -83,13 +86,8 @@ export default {
 
     let comment_input = ref('')
 
-    const chapterInfo = reactive({
-      number: 1,
-      title: '这里是标题',
-      intro: '这里是章节简介'
-    })
 
-    const hasVideo = ref(false)
+    const has_video = ref(false)
 
     const upload = ref<UploadInstance>()
 
@@ -117,8 +115,7 @@ export default {
       handleMounted,
       handleEvent,
       comment_input,
-      chapterInfo,
-      hasVideo,
+      has_video: has_video,
       handleExceed,
       submitUpload,
       upload,

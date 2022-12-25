@@ -32,16 +32,16 @@
     <el-col :offset="1" :span="19">
       <el-tabs>
         <el-tab-pane label="视频">
-          <Video/>
+          <Video :chapterInfo="chapterInfo"/>
         </el-tab-pane>
         <el-tab-pane label="作业">
-          <Homework/>
+          <Homework :chapterInfo="chapterInfo"/>
         </el-tab-pane>
         <el-tab-pane label="分数">
-          <Grade/>
+          <Grade :chapterInfo="chapterInfo"/>
         </el-tab-pane>
         <el-tab-pane label="测验">
-          <Quiz/>
+          <Quiz :chapterInfo="chapterInfo"/>
         </el-tab-pane>
       </el-tabs>
     </el-col>
@@ -50,11 +50,11 @@
 
 <script lang="ts">
 import {ArrowRight} from "@element-plus/icons-vue";
-import {computed, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import Video from "@/views/CourseOnline/TeacherCenter/Detail/Content/Video.vue";
 import Homework from "@/views/CourseOnline/TeacherCenter/Detail/Content/Homework.vue";
 import Grade from "@/views/CourseOnline/TeacherCenter/Detail/Content/Grade.vue";
-import Quiz from "@/views/CourseOnline/Quiz/Quiz.vue";
+import Quiz from "@/views/CourseOnline/TeacherCenter/Detail/Content/Quiz.vue";
 
 export default {
   name: "Content",
@@ -99,8 +99,15 @@ export default {
       }
     ])
 
+    const chapterInfo = reactive({
+      number: 1,
+      title: '这里是标题',
+      intro: '这里是章节简介'
+    })
+
     return {
       chapters,
+      chapterInfo
     }
   }
 }

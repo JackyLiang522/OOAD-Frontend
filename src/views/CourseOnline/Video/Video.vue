@@ -1,7 +1,7 @@
 <template>
-  <VideoQuizHeader 
-      :teacher="teacher" 
-      :chapterName="chapters[0].chapterName" 
+  <VideoHeader
+      :teacher="teacher"
+      :chapterName="chapters[0].chapterName"
       :chapterNumber="chapters[0].chapterNumber"/>
 
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
@@ -75,7 +75,7 @@ import {VideoJsPlayer} from 'video.js'
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import Comment from "@/views/CourseOnline/Video/Comment.vue";
-import VideoQuizHeader from "@/components/VideoQuizHeader.vue";
+import VideoHeader from "@/views/CourseOnline/Video/VideoHeader.vue";
 import router from '@/router/CourseOnline'
 import axios from 'axios';
 import store from "@/store";
@@ -85,7 +85,7 @@ export default defineComponent({
   title: 'Basic player (Vue)',
   url: import.meta.url,
   components: {
-    VideoQuizHeader,
+    VideoHeader,
     Comment,
     VideoPlayer
   },
