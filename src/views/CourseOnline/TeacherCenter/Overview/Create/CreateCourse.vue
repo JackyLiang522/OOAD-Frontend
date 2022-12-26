@@ -51,6 +51,8 @@
 import {reactive} from "vue";
 import type {UploadFile, UploadFiles, UploadProps, UploadUserFile} from 'element-plus'
 import {ElMessage} from "element-plus";
+import axios from "axios";
+import store from "@/store";
 
 export default {
   name: "CreateCourse",
@@ -89,8 +91,13 @@ export default {
       ElMessage.error('只能上传一个封面')
     }
 
-    function submit() {
-      console.log("submit all information")
+    async function submit() {
+      const teacher = JSON.parse(localStorage.getItem('user_info')!)
+      await axios.post(`http://${store.state.host}/api/course/add?teacher=${teacher.user_name}&name=${course_info.name}&introduction=${course_info.introduction}&price=${course_info.price}`).then(
+        response => {
+          // create course success
+          ElMessage.success('创建成功');
+        })
     }
 
 
