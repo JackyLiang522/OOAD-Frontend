@@ -74,11 +74,33 @@ export default {
     }
 
     async function checkInfo() {
-      await axios.post(`http://${store.state.host}/login?email=${userInfo.email}&password=${userInfo.password}`).then(
+      await axios.post(`http://${store.state.host}/api/client/login?email=${userInfo.email}&password=${userInfo.password}`).then(
           response => {
-            if (response.data.code === 1) {
+            if (response.data) {
               showSuccess("登录成功")
-              window.location.href = 'http://localhost:8080/'
+
+              var user = response.data;
+              // obtain user identity
+              var identity = null;
+              if (user.admin) {
+                identity = 'admin'
+              } else if (user.teacher) {
+                identity = 'teacher'
+              } else {
+                identity = 'student'
+              }
+              const user_info = {
+                id: user.id,
+                identity: identity,
+                email: user.email,
+                user_name: user.name
+              }
+              localStorage.setItem('user_info', JSON.stringify(user_info))
+              if (identity === 'admin') {
+                window.location.href = '/#/admin'
+              } else {
+                window.location.href = '/#/home'
+              }
             } else {
               showError('用户名或密码不符合规范')
             }

@@ -88,9 +88,9 @@ export default {
     }
 
     async function submitInfo() {
-      await axios.post(`http://${store.state.host}/register?email=${userInfo.email}&password=${userInfo.password}&username=${userInfo.user_name}&isTeacher=${userInfo.is_teacher}`).then(
+      await axios.post(`http://${store.state.host}/api/client/register?email=${userInfo.email}&password=${userInfo.password}&username=${userInfo.user_name}&isTeacher=${userInfo.is_teacher}`).then(
         response => {
-          if (response.data.code == 1) {
+          if (response.data) {
             showSuccess("注册成功")
             router.push('/Login')
           } else {
