@@ -2,7 +2,7 @@
   <el-card class="box-card">
     <el-form
         ref="formRef"
-        :model="dynamicValidateForm"
+        :model="dynamicForm"
         label-width="120px"
         class="demo-dynamic"
     >
@@ -12,7 +12,7 @@
         message: '题目描述不能为空',
         trigger: 'blur',
       }">
-        <el-input v-model="form.description" />
+        <el-input v-model="props.description" />
       </el-form-item>
       <el-form-item label="时间限制" :rules="{
         required: true,
@@ -21,24 +21,24 @@
       }">
         <el-col :span="11">
           <el-time-picker
-              v-model="form.timer"
+              v-model="props.timer"
               placeholder="请设置用时"
               style="width: 100%"
           />
         </el-col>
       </el-form-item>
       <el-form-item label="是否多选">
-        <el-switch v-model="form.multiple" />
+        <el-switch v-model="props.multiple" />
       </el-form-item>
       <el-form-item label="正确选项">
-        <el-checkbox-group v-model="form.answers">
-          <el-checkbox v-for="(domain, index) in dynamicValidateForm.options"
+        <el-checkbox-group v-model="props.answers">
+          <el-checkbox v-for="(domain, index) in props.options"
                        :key="domain.key" :label="'选项 ' + (index+1)" name="type" />
         </el-checkbox-group>
       </el-form-item>
 
       <el-form-item
-          v-for="(domain, index) in dynamicValidateForm.options"
+          v-for="(domain, index) in props.options"
           :key="domain.key"
           :label="'选项 ' + (index+1)"
           :prop="'domains.' + index + '.value'"
@@ -67,29 +67,27 @@
 import { reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 
-const form = reactive({
+// const form = reactive({
+//   description: '',
+//   timer: '',
+//   multiple: true,
+//   answers: [],
+// })
+
+const props = defineProps(['options','description','timer','multiple','answers'])
+
+const formRef = ref<FormInstance>()
+const dynamicForm = reactive({
+  options: [
+    {
+      key: 1,
+      value: '',
+    },
+  ],
   description: '',
   timer: '',
   multiple: true,
   answers: [],
-  options: [
-    {
-      key: 1,
-      value: '',
-    },
-  ],
-})
-const formRef = ref<FormInstance>()
-const dynamicValidateForm = reactive<{
-  options: OptionItem[]
-}>({
-  options: [
-    {
-      key: 1,
-      value: '',
-    },
-  ],
-
 })
 
 interface OptionItem {
@@ -98,14 +96,14 @@ interface OptionItem {
 }
 
 const removeDomain = (item: OptionItem) => {
-  const index = dynamicValidateForm.options.indexOf(item)
+  const index = props.options.indexOf(item)
   if (index !== -1) {
-    dynamicValidateForm.options.splice(index, 1)
+    props.options.splice(index, 1)
   }
 }
 
 const addDomain = () => {
-  dynamicValidateForm.options.push({
+  props.options.push({
     key: Date.now(),
     value: '',
   })
