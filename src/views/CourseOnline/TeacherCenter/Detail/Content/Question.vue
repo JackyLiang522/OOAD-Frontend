@@ -2,7 +2,7 @@
   <el-card class="box-card">
     <el-form
         ref="formRef"
-        :model="dynamicValidateForm"
+        :model="form"
         label-width="120px"
         class="demo-dynamic"
     >
@@ -32,13 +32,13 @@
       </el-form-item>
       <el-form-item label="正确选项">
         <el-checkbox-group v-model="form.answers">
-          <el-checkbox v-for="(domain, index) in dynamicValidateForm.options"
+          <el-checkbox v-for="(domain, index) in form.options"
                        :key="domain.key" :label="'选项 ' + (index+1)" name="type" />
         </el-checkbox-group>
       </el-form-item>
 
       <el-form-item
-          v-for="(domain, index) in dynamicValidateForm.options"
+          v-for="(domain, index) in form.options"
           :key="domain.key"
           :label="'选项 ' + (index+1)"
           :prop="'domains.' + index + '.value'"
@@ -67,6 +67,8 @@
 import { reactive, ref } from 'vue'
 import type { FormInstance } from 'element-plus'
 
+
+const formRef = ref<FormInstance>()
 const form = reactive({
   description: '',
   timer: '',
@@ -79,18 +81,6 @@ const form = reactive({
     },
   ],
 })
-const formRef = ref<FormInstance>()
-const dynamicValidateForm = reactive<{
-  options: OptionItem[]
-}>({
-  options: [
-    {
-      key: 1,
-      value: '',
-    },
-  ],
-
-})
 
 interface OptionItem {
   key: number
@@ -98,14 +88,14 @@ interface OptionItem {
 }
 
 const removeDomain = (item: OptionItem) => {
-  const index = dynamicValidateForm.options.indexOf(item)
+  const index = form.options.indexOf(item)
   if (index !== -1) {
-    dynamicValidateForm.options.splice(index, 1)
+    form.options.splice(index, 1)
   }
 }
 
 const addDomain = () => {
-  dynamicValidateForm.options.push({
+  form.options.push({
     key: Date.now(),
     value: '',
   })
