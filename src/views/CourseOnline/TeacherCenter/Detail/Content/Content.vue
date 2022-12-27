@@ -46,6 +46,9 @@
       </el-tabs>
     </el-col>
   </el-row>
+  <el-button type="primary" @click="addChapter" size="large" style="margin-top: 20px;">增加章节</el-button>
+  <el-button type="primary" @click="submitChapter" size="large" style="margin-top: 20px;">提交章节</el-button>
+
 </template>
 
 <script lang="ts">
@@ -62,42 +65,30 @@ export default {
   methods: {
     ArrowRight() {
       return ArrowRight
-    }
+    },
+
   },
   setup() {
     const chapters = ref([
       {
-        number: '111',
+        number: '1',
         title: 'name1'
       }, {
-        number: '222',
+        number: '2',
         title: 'name2'
-      }, {
-        number: '222',
-        title: 'name2'
-      }, {
-        number: '222',
-        title: 'name2'
-      }, {
-        number: '222',
-        title: 'name2'
-      }, {
-        number: '222',
-        title: 'name2'
-      }, {
-        number: '222',
-        title: 'name2'
-      }, {
-        number: '222',
-        title: 'name2'
-      }, {
-        number: '222',
-        title: 'name2'
-      }, {
-        number: '222',
-        title: 'name2'
-      }
+      },
     ])
+    const addChapter = () => {
+      const newChapter = {
+        number: chapters.value.length + 1 + "",
+        title: 'default'
+      };
+      chapters.value.push(newChapter)
+    }
+    
+    const submitChapter = () => {
+      console.log("submit {{chapters}} to back end")
+    }
 
     const chapterInfo = reactive({
       number: 1,
@@ -107,7 +98,9 @@ export default {
 
     return {
       chapters,
-      chapterInfo
+      chapterInfo,
+      addChapter,
+      submitChapter
     }
   }
 }
