@@ -100,12 +100,13 @@ const addDomain = () => {
     value: '',
   })
 }
-
+const emit = defineEmits(['add-question'])
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
       console.log('submit!')
+      emit('add-question', form.description,form.timer,form.multiple,form.answers,form.options)
     } else {
       console.log('error submit!')
       return false

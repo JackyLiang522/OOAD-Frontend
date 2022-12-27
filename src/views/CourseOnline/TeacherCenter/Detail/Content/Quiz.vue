@@ -2,7 +2,7 @@
   <h4 style="margin: 0 0 0 10px">{{ `第${chapterInfo.number}章 ${chapterInfo.title}` }}</h4>
   <el-scrollbar max-height="500px">
     <div >
-      <Question></Question>
+      <Question  @add-question="addQuestion"></Question>
     </div>
 
   </el-scrollbar>
@@ -15,7 +15,27 @@ import Question from '@/views/CourseOnline/TeacherCenter/Detail/Content/Question
 export default {
   name: "Quiz",
   props: ['chapterInfo'],
-  components: {StudentQuiz, Question}
+  components: {StudentQuiz, Question},
+  data() {
+    return {
+      questionList:[],
+    }
+  },
+  methods: {
+    addQuestion(description, timer, multiple, answers, options){
+      alert("add")
+      const newQuestion = {
+        id:new Date().toISOString(),
+        description: description,
+        timer: timer,
+        multiple: multiple,
+        answers: answers,
+        options: options,
+      };
+      this.questionList.push(newQuestion);
+
+    }
+  }
 }
 </script>
 
