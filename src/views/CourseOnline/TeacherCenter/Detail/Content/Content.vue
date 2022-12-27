@@ -19,12 +19,16 @@
     <el-col :span="4">
       <el-scrollbar max-height="400px">
         <el-divider style="margin: 0 0 0 0"/>
-        <div v-for="chapter in chapters" :key="chapter.number">
-          <el-link style="margin: 10px 10px 10px 10px;white-space: pre-wrap;">
+        <div v-for="(chapter,index) in chapters" :key="chapter.number">
+          <el-link @click="changeChapter(index)" style="margin: 10px 10px 10px 10px;white-space: pre-wrap;">
             <span>{{ `第${chapter.number}章\n${chapter.title}` }}</span>
 
           </el-link>
           <el-divider style="margin: 0 0 0 0"/>
+        </div>
+        <div style="display: flex;justify-content: center">
+          <el-button type="primary" @click="addChapter" size="small" style="margin-top: 20px;">增加章节</el-button>
+          <el-button type="primary" @click="submitChapter" size="small" style="margin-top: 20px;">提交章节</el-button>
         </div>
       </el-scrollbar>
     </el-col>
@@ -32,7 +36,7 @@
     <el-col :offset="1" :span="19">
       <el-tabs>
         <el-tab-pane label="视频">
-          <Video :chapterInfo="chapterInfo"/>
+          <Video :chapterInfo="chapterInfo" @change-title="changeTitle"/>
         </el-tab-pane>
         <el-tab-pane label="作业">
           <Homework :chapterInfo="chapterInfo"/>
@@ -46,8 +50,6 @@
       </el-tabs>
     </el-col>
   </el-row>
-  <el-button type="primary" @click="addChapter" size="large" style="margin-top: 20px;">增加章节</el-button>
-  <el-button type="primary" @click="submitChapter" size="large" style="margin-top: 20px;">提交章节</el-button>
 
 </template>
 
@@ -85,22 +87,39 @@ export default {
       };
       chapters.value.push(newChapter)
     }
-    
+
     const submitChapter = () => {
       console.log("submit {{chapters}} to back end")
     }
 
     const chapterInfo = reactive({
-      number: 1,
+      number: '1',
       title: '这里是标题',
-      intro: '这里是章节简介'
     })
+
+    function changeTitle(chapter_number: string, new_title: string) {
+      for (let i = 0; i < chapters.value.length; i++) {
+        const cur = chapters.value[i]
+        if (cur.number === chapter_number) {
+          cur.title = new_title
+          break
+        }
+      }
+      console.log(chapters.value)
+    }
+
+    function changeChapter(index: number) {
+      chapterInfo.number = chapters.value[index].number
+      chapterInfo.title = chapters.value[index].title
+    }
 
     return {
       chapters,
       chapterInfo,
       addChapter,
-      submitChapter
+      submitChapter,
+      changeTitle,
+      changeChapter
     }
   }
 }

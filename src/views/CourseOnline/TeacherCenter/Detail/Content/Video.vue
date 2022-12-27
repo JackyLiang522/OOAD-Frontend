@@ -8,7 +8,7 @@
     <el-col :span="has_video?5:24">
       <h4 style="margin: 0 0 0 0">{{ `第${chapterInfo.number}章` }}</h4>
       <p>{{ chapterInfo.title }}</p>
-      <p style="color: gray;font-size: 13px">{{ chapterInfo.intro }}</p>
+      <el-button style="margin: 0 0 20px 0" @click="handleEditTitle">编辑标题</el-button>
 
       <el-upload
           v-if="!has_video"
@@ -34,7 +34,7 @@
     </el-col>
 
     <el-col :offset="1" :span="18">
-      <video-player v-if="has_video"
+      <video-player v-show="has_video"
                     class="video-player vjs-big-play-centered"
                     src="https://vjs.zencdn.net/v/oceans.mp4"
                     poster="https://vjs.zencdn.net/v/oceans.png"
@@ -54,7 +54,8 @@
                     @canplay="handleEvent($event)"
                     @canplaythrough="handleEvent($event)"
                     @timeupdate="handleEvent(player?.currentTime())"
-                    style="height: 300px;"
+                    :fluid="true"
+                    preload="metadata"
       />
     </el-col>
   </el-row>
@@ -67,14 +68,15 @@ import {reactive, ref, shallowRef} from 'vue'
 import {VideoJsPlayer} from 'video.js'
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
-import {ElMessage, genFileId} from 'element-plus'
+import {ElMessage, genFileId, ElMessageBox} from 'element-plus'
 import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
 
 export default {
   name: "Video",
   components: {VideoPlayer},
   props: ['chapterInfo'],
-  setup() {
+  emits: ['changeTitle'],
+  setup(props: any, context: any) {
     const player = shallowRef<VideoJsPlayer>()
     const handleMounted = (payload: any) => {
       player.value = payload.player
@@ -110,16 +112,29 @@ export default {
       return true
     }
 
+    function handleEditTitle() {
+      ElMessageBox.prompt('请输入新标题', '编辑标题', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+      })
+          .then(({value}) => {
+            context.emit('changeTitle', props.chapterInfo.number, value)
+          })
+          .catch(() => {
+          })
+    }
+
     return {
       player,
       handleMounted,
       handleEvent,
       comment_input,
-      has_video: has_video,
+      has_video,
       handleExceed,
       submitUpload,
       upload,
-      checkType
+      checkType,
+      handleEditTitle
     }
   },
 }

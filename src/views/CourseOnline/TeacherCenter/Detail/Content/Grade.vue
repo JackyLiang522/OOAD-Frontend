@@ -19,22 +19,31 @@
       <el-table-column prop="score" label="分数" width="350px"/>
 
       <el-table-column label="编辑" width="150px">
-        <el-button
-            type="success"
-            size="small" round>
-          编辑
-        </el-button>
-        <el-button
-            type="danger"
-            size="small" round>
-          删除
-        </el-button>
+        <template v-slot="scope">
+          <el-button
+              type="success"
+              size="small"
+              @click="editScore(scope.$index)"
+              round>
+            编辑
+          </el-button>
+          <el-button
+              type="danger"
+              size="small"
+              @click="removeRow(scope.$index)"
+              round>
+            删除
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
-  </div> <div style="display: flex;justify-content: right;margin-right: 100px">
-      <exportExcel :id="'chapterTable'" :name="'章节成绩'"></exportExcel>
-    </div>
-
+  </div>
+  <div style="display: flex;justify-content: right;margin: 20px 50px 0 0">
+    <el-button-group>
+      <el-button type="primary" @click="submitInfo" round>提交变更</el-button>
+      <exportExcel :id="'chapterTable'" :name="'章节成绩'" style="margin:0 0 0 0"></exportExcel>
+    </el-button-group>
+  </div>
 
 
   <!--    <el-button type="primary" plain>-->
@@ -45,6 +54,7 @@
 <script>
 import {reactive} from "vue";
 import ExportExcel from "@/views/CourseOnline/TeacherCenter/Detail/Student/ExportExcel.vue";
+import {ElMessageBox, ElMessage} from "element-plus";
 
 export default {
   name: "Grade",
@@ -106,8 +116,33 @@ export default {
       }
     ])
 
+    const editScore = (index) => {
+      ElMessageBox.prompt('请输入新标题', '编辑标题', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /^([1-9]\d?|100)$/,
+        inputErrorMessage: '只能输入 0 ~ 100 的整数'
+      })
+          .then(({value}) => {
+            table_data[index].score = value
+          })
+          .catch(() => {
+          })
+    }
+
+    function submitInfo() {
+      //   这里把所有东西传给后端
+    }
+
+    function removeRow(index) {
+      table_data.splice(index, 1)
+    }
+
     return {
-      table_data
+      table_data,
+      editScore,
+      submitInfo,
+      removeRow
     }
   }
 }

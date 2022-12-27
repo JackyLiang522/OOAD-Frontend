@@ -5,41 +5,108 @@
     <el-table
         :data="table_data"
         border
-        style="width: 700px;margin:20px 20px 0 20px;"
-        height="250px"
+        style="width: 750px;margin:20px 20px 0 20px;"
         stripe
         :header-cell-style="{'text-align':'center'}"
         :cell-style="{'text-align':'center'}"
     >
       <el-table-column prop="title" label="作业标题" width="200px"/>
-      <el-table-column prop="deadline" label="截止日期" width="350px"/>
+      <el-table-column prop="deadline" label="截止日期" width="200px"/>
+      <el-table-column prop="attachment_url" label="附件" width="200px">
+        <template v-slot="scope">
+          <a :href="table_data[scope.$index].attachment_url">
+            {{ table_data[scope.$index].attachment_name }}
+          </a>
+        </template>
+      </el-table-column>
       <el-table-column label="编辑" width="150px">
-        <el-button
-            type="success"
-            size="small" round>
-          编辑
-        </el-button>
-        <el-button
-            type="danger"
-            size="small" round>
-          删除
-        </el-button>
+        <template v-slot="scope">
+          <el-button
+              type="success"
+              size="small"
+              @click="editRow(scope.$index)"
+              round>
+            编辑
+          </el-button>
+          <el-button
+              type="danger"
+              size="small"
+              @click="removeRow(scope.$index)"
+              round>
+            删除
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
   </div>
 
   <div style="display: flex;justify-content: center;margin-top: 20px">
-    <el-button type="primary" plain>
-      上传新作业
-      <el-icon>
-        <Upload/>
-      </el-icon>
+    <el-button type="primary" @click="addRow">
+      增加新作业
+    </el-button>
+    <el-button type="primary">
+      提交作业变更
     </el-button>
   </div>
+
+  <Teleport to="body">
+    <el-dialog v-model="dialog_visible" title="编辑截止日期" width="500px">
+      <div style="display: flex;justify-content: center">
+        <el-input style="width: 300px;" v-model="new_title" placeholder="请输入作业标题" clearable/>
+      </div>
+      <div style="display: flex;justify-content: center">
+        <el-date-picker
+            v-model="date_time"
+            type="datetime"
+            placeholder="请选择截止时间"
+            format="YYYY/MM/DD hh:mm:ss"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            style="width: 300px;margin-top: 20px"
+        />
+      </div>
+      <div style="display: flex;justify-content: center">
+        <el-input style="width: 300px;margin-top: 20px" v-model="new_attachment_name" placeholder="请输入附件名" clearable/>
+      </div>
+      <div style="display: flex;justify-content: center">
+        <el-upload
+            ref="upload"
+            class="upload-demo"
+            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :limit="1"
+            :on-exceed="handleExceed"
+            :on-success="handleSuccess"
+            :auto-upload="false"
+            list-type="text"
+            style="margin-top: 20px"
+        >
+          <template #trigger>
+            <el-button type="primary">选择文件</el-button>
+          </template>
+          <template #tip>
+            <div class="el-upload__tip" style="color: indianred">
+              <!--              只能上传zip/pdf文件，且不超过20Mb-->
+              <!--              <br/>-->
+              最多上传一份文件，新的提交会覆盖已有提交
+            </div>
+          </template>
+        </el-upload>
+      </div>
+      <template #footer>
+      <span>
+        <el-button @click="dialog_visible = false">取消</el-button>
+        <el-button type="primary" @click="submitEdit">
+          确认
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
+  </Teleport>
+
 </template>
 
 <script lang="ts">
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
+import {ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile} from "element-plus";
 
 export default {
   name: "Homework",
@@ -48,42 +115,96 @@ export default {
     const table_data = reactive([
       {
         title: '标题1',
-        deadline: '这里表示DDL'
+        deadline: '这里表示DDL',
+        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+        attachment_name: 'name1'
       }, {
         title: 'TITLE2',
-        deadline: '后端随便存什么格式都可以'
-      }, {
-        title: 'title3',
-        deadline: '只要以字符串形式返回就行'
-      }, {
-        title: '如果表格很长',
-        deadline: '会自动出现滚动条'
-      }, {
-        title: '右边的一堆按钮',
-        deadline: '还没有加功能'
-      }, {
-        title: '如果表格很长',
-        deadline: '会自动出现滚动条'
-      }, {
-        title: '如果表格很长',
-        deadline: '会自动出现滚动条'
-      }, {
-        title: '如果表格很长',
-        deadline: '会自动出现滚动条'
-      }, {
-        title: '如果表格很长',
-        deadline: '会自动出现滚动条'
-      }, {
-        title: '如果表格很长',
-        deadline: '会自动出现滚动条'
-      }, {
-        title: '如果表格很长',
-        deadline: '会自动出现滚动条'
+        deadline: '后端随便存什么格式都可以',
+        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+        attachment_name: 'name'
       }
     ])
 
+    const dialog_visible = ref(false)
+    const new_deadline = ref('')
+    const edited_index = ref(0)
+    const new_title = ref('')
+
+    function editRow(index: number) {
+      edited_index.value = index
+      dialog_visible.value = true
+      new_deadline.value = table_data[index].deadline
+      new_title.value = table_data[index].title
+      new_attachment_name.value = table_data[index].attachment_name
+    }
+
+    async function submitEdit() {
+      await submitUpload()
+      dialog_visible.value = false
+      const row = table_data[edited_index.value]
+      row.deadline = new_deadline.value
+      row.title = new_title.value
+      row.attachment_name = new_attachment_name.value
+      //   这里把后端得到的文件下载地址传进去
+      //   row.attachment_url = 'xxx/xxx/xxx'
+    }
+
+    function removeRow(index: number) {
+      table_data.splice(index, 1)
+    }
+
+    let upload = ref<UploadInstance>()
+
+    const handleExceed: UploadProps['onExceed'] = (files) => {
+      upload.value!.clearFiles()
+      const file = files[0] as UploadRawFile
+      file.uid = genFileId()
+      upload.value!.handleStart(file)
+      ElMessage({
+        message: '已更新提交.',
+        type: 'success',
+      })
+      // this.$message.warning(`已更新提交`);
+    }
+
+    const handleSuccess = () => {
+      ElMessage({
+        message: '上传成功.',
+        type: 'success',
+      })
+    }
+
+    const submitUpload = () => {
+      upload.value!.submit()
+
+    }
+
+    function addRow() {
+      table_data.push({
+        title: '',
+        deadline: '',
+        attachment_url: '',
+        attachment_name: ''
+      })
+    }
+
+    const new_attachment_name = ref('')
+
     return {
       table_data,
+      editRow: editRow,
+      submitEdit: submitEdit,
+      dialog_visible,
+      date_time: new_deadline,
+      edited_index,
+      new_title,
+      removeRow,
+      handleExceed,
+      handleSuccess,
+      submitUpload,
+      addRow,
+      new_attachment_name
     }
   }
 }
