@@ -31,59 +31,31 @@
     </el-button>
   </div>
 
-  <el-row style="margin:  0 0 0 0" align="middle">
-    <el-col :span="3" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
-      <div class="grid-content bg-purple-light">
-        <router-link to="/video" style="line-height:inherit;display: block;">
-          <span class="my-h4">课程 A</span></router-link>
-        <!--        跳转至课程视频观看url-->
-      </div>
-    </el-col>
-    <el-col :span="9" style="text-align: center;margin-top:20px;vertical-align: center;">
-      <div class="grid-content bg-purple">
-        <!--        <router-link to="/student/course/detail">-->
-        <!--          <h4 >课程详情</h4></router-link>-->
-        <div>
-          <router-link to="/teacher/detail/content">
-            <span class="my-h4">目录</span></router-link>
-          <el-divider direction="vertical"/>
-          <router-link to="/teacher/detail/announcement">
-            <span class="my-h4">通知</span></router-link>
-          <el-divider direction="vertical"/>
-          <router-link to="/teacher/detail/student">
-            <span class="my-h4">学生</span></router-link>
-          <el-divider direction="vertical"/>
+  <div>
+    <el-row v-for="(cls, index) in classes" :key="index" style="margin: 0 0 0 0" align="middle">
+      <el-col :span="3" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
+        <div class="grid-content bg-purple-light">
+          <router-link :to="'/video?course_id=' + cls.id" style="line-height:inherit;display: block;">
+            <span class="my-h4">{{ cls.courseName }}</span></router-link>
         </div>
-      </div>
-    </el-col>
-  </el-row>
-
-  <el-row style="margin:  0 0 0 0" align="middle">
-    <el-col :span="3" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
-      <div class="grid-content bg-purple-light">
-        <router-link to="/video" style="line-height:inherit;display: block;">
-          <span class="my-h4">课程 B</span></router-link>
-        <!--        跳转至课程视频观看url-->
-      </div>
-    </el-col>
-    <el-col :span="9" style="text-align: center;margin-top:20px;vertical-align: center;">
-      <div class="grid-content bg-purple">
-        <!--        <router-link to="/student/course/detail">-->
-        <!--          <h4 >课程详情</h4></router-link>-->
-        <div>
-          <router-link to="/teacher/detail/content">
-            <span class="my-h4">目录</span></router-link>
-          <el-divider direction="vertical"/>
-          <router-link to="/teacher/detail/announcement">
-            <span class="my-h4">通知</span></router-link>
-          <el-divider direction="vertical"/>
-          <router-link to="/teacher/detail/student">
-            <span class="my-h4">学生</span></router-link>
-          <el-divider direction="vertical"/>
+      </el-col>
+      <el-col :span="9" style="text-align: center;margin-top:20px;vertical-align: center;">
+        <div class="grid-content bg-purple">
+          <div>
+            <router-link to="/teacher/detail/content">
+              <span class="my-h4">目录</span></router-link>
+            <el-divider direction="vertical"/>
+            <router-link to="/teacher/detail/announcement">
+              <span class="my-h4">通知</span></router-link>
+            <el-divider direction="vertical"/>
+            <router-link to="/teacher/detail/student">
+              <span class="my-h4">学生</span></router-link>
+            <el-divider direction="vertical"/>
+          </div>
         </div>
-      </div>
-    </el-col>
-  </el-row>
+      </el-col>
+    </el-row>
+  </div>
 
 
 </template>
@@ -91,6 +63,8 @@
 <script>
 import {Search} from "@element-plus/icons-vue";
 import {ref} from "vue";
+import axios from "axios";
+import store from "@/store";
 
 export default {
   name: "CourseList",
@@ -100,6 +74,18 @@ export default {
       Search,
       searchInfo
     }
+  },
+  data() {
+    return {
+      classes: [
+      ],
+      user: JSON.parse(localStorage.getItem("user_info"))
+    }
+  },
+  async created() {
+    axios.get(`http://${store.state.host}/api/course/list_by_teacher?teacherId=${this.user.id}`).then((response) => {
+      this.classes = response.data
+    })
   }
 }
 </script>
