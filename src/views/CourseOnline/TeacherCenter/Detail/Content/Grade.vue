@@ -1,6 +1,6 @@
 <template>
   <h4 style="margin: 0 0 0 10px">{{ `第${chapterInfo.number}章 ${chapterInfo.title}` }}</h4>
-  <div style="display: flex;justify-content: center; margin-top: 40px">
+  <div style="display: flex;justify-content: center; margin-top: 20px">
     <div>章节成绩</div>
   </div>
   <div style="display: flex;justify-content: center">
@@ -15,9 +15,19 @@
         :header-cell-style="{'text-align':'center'}"
         :cell-style="{'text-align':'center'}"
     >
-      <el-table-column prop="name" label="学生姓名" width="200px"/>
-      <el-table-column prop="score" label="分数" width="350px"/>
-
+      <el-table-column prop="name" label="学生姓名" width="150px"/>
+      <el-table-column prop="homework_score" label="作业分数" width="100px"/>
+      <el-table-column prop="quiz_score" label="测验分数" width="100px"/>
+      <el-table-column label="学生作答" width="150px">
+        <template v-slot="scope">
+          <a v-if="table_data[scope.$index]?.attachment_url !== ''" :href="table_data[scope.$index]?.attachment_url">
+            {{ table_data[scope.$index]?.attachment_name }}
+          </a>
+          <a v-else style="color: gray">
+            学生暂未提交
+          </a>
+        </template>
+      </el-table-column>
       <el-table-column label="编辑" width="150px">
         <template v-slot="scope">
           <el-button
@@ -64,60 +74,45 @@ export default {
     const table_data = reactive([
       {
         name: 'Stu 1',
-        score: 10,
+        homework_score: 10,
+        quiz_score: 10,
+        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+        attachment_name: 'name1'
       }, {
-        name: 'stu 2',
-        score: 20,
+        name: 'Stu 2',
+        homework_score: 20,
+        quiz_score: 20,
+        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+        attachment_name: 'name1'
       }, {
-        name: 'stu 3',
-        score: 30
+        name: 'Stu 2',
+        homework_score: 20,
+        quiz_score: 20,
+        attachment_url: '',
+        attachment_name:''
       }, {
-        name: 'stu 3',
-        score: 30
+        name: 'Stu 2',
+        homework_score: 20,
+        quiz_score: 20,
+        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+        attachment_name: 'name1'
       }, {
-        name: 'stu 3',
-        score: 30
+        name: 'Stu 2',
+        homework_score: 20,
+        quiz_score: 20,
+        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+        attachment_name: 'name1'
       }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }, {
-        name: 'stu 3',
-        score: 30
-      }
+        name: 'Stu 2',
+        homework_score: 20,
+        quiz_score: 20,
+        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+        attachment_name: 'name1'
+      },
     ])
 
     const editScore = (index) => {
-      ElMessageBox.prompt('请输入新标题', '编辑标题', {
+      ElMessageBox.prompt('请输入新分数', '编辑分数', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /^([1-9]\d?|100)$/,

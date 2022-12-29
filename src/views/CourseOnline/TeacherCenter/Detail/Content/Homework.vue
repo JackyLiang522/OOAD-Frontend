@@ -41,7 +41,7 @@
   </div>
 
   <div style="display: flex;justify-content: center;margin-top: 20px">
-    <el-button type="primary" @click="addRow">
+    <el-button type="primary" @click="addRow" v-show="table_data.length === 0">
       增加新作业
     </el-button>
     <el-button type="primary">
@@ -65,7 +65,8 @@
         />
       </div>
       <div style="display: flex;justify-content: center">
-        <el-input style="width: 300px;margin-top: 20px" v-model="new_attachment_name" placeholder="请输入附件名" clearable/>
+        <el-input style="width: 300px;margin-top: 20px" v-model="new_attachment_name" placeholder="请输入附件名"
+                  clearable/>
       </div>
       <div style="display: flex;justify-content: center">
         <el-upload
@@ -118,11 +119,6 @@ export default {
         deadline: '这里表示DDL',
         attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
         attachment_name: 'name1'
-      }, {
-        title: 'TITLE2',
-        deadline: '后端随便存什么格式都可以',
-        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-        attachment_name: 'name'
       }
     ])
 

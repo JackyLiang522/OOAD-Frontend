@@ -111,7 +111,7 @@ export default defineComponent({
   data() {
     return {
       courseId: 0,
-      teacher: '',
+      teacher: '陈文雁',
       chapters: [{chapterId: 0, chapterName: 'Introduction', chapterNumber: 0}],
       chapter: {chapterId: 0},
       comments: [{username: 'Bob', content: '114514', date: '2022-10-10 10:10'}],
