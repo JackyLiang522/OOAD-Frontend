@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </template>
     <template #content>
-      <span class="text-large font-600 mr-3"> 高等数学 </span>
+      <span class="text-large font-600 mr-3"> {{ course_name }} </span>
     </template>
   </el-page-header>
 
@@ -60,6 +60,7 @@ import Video from "@/views/CourseOnline/TeacherCenter/Detail/Content/Video.vue";
 import Homework from "@/views/CourseOnline/TeacherCenter/Detail/Content/Homework.vue";
 import Grade from "@/views/CourseOnline/TeacherCenter/Detail/Content/Grade.vue";
 import Quiz from "@/views/CourseOnline/TeacherCenter/Detail/Content/Quiz.vue";
+import {useRoute} from "vue-router";
 
 export default {
   name: "Content",
@@ -71,6 +72,10 @@ export default {
 
   },
   setup() {
+    const route = useRoute()
+    const course_name = route.query.course_name
+    const course_id = route.query.course_id
+
     const chapters = ref([
       {
         number: '1',
@@ -119,7 +124,8 @@ export default {
       addChapter,
       submitChapter,
       changeTitle,
-      changeChapter
+      changeChapter,
+      course_name
     }
   }
 }

@@ -35,21 +35,37 @@
     <el-row v-for="(cls, index) in classes" :key="index" style="margin: 0 0 0 0" align="middle">
       <el-col :span="3" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
         <div class="grid-content bg-purple-light">
-          <router-link :to="'/video?course_id=' + cls.id" style="line-height:inherit;display: block;">
+          <router-link 
+              :to="{
+                path:'/video',
+                query:{
+                  course_id:cls.id
+                }
+              }"
+              style="line-height:inherit;display: block;">
             <span class="my-h4">{{ cls.courseName }}</span></router-link>
         </div>
       </el-col>
       <el-col :span="9" style="text-align: center;margin-top:20px;vertical-align: center;">
         <div class="grid-content bg-purple">
           <div>
-            <router-link to="/teacher/detail/content">
-              <span class="my-h4">目录</span></router-link>
+            <router-link :to="{
+              path:'/teacher/detail/content',
+              query:{
+                course_id:cls.id,
+                course_name:cls.name
+              }
+            }">
+              <span class="my-h4">目录</span>
+            </router-link>
             <el-divider direction="vertical"/>
             <router-link to="/teacher/detail/announcement">
-              <span class="my-h4">通知</span></router-link>
+              <span class="my-h4">通知</span>
+            </router-link>
             <el-divider direction="vertical"/>
             <router-link to="/teacher/detail/student">
-              <span class="my-h4">学生</span></router-link>
+              <span class="my-h4">学生</span>
+            </router-link>
             <el-divider direction="vertical"/>
           </div>
         </div>
@@ -77,8 +93,7 @@ export default {
   },
   data() {
     return {
-      classes: [
-      ],
+      classes: [],
       user: JSON.parse(localStorage.getItem("user_info"))
     }
   },
