@@ -50,49 +50,49 @@
   </div>
 
   <Teleport to="body">
-    <el-dialog v-model="dialog_visible" title="编辑截止日期" width="500px">
+    <el-dialog v-model="dialog_visible" title="编辑截止日期" width="400px">
       <div style="display: flex;justify-content: center">
-        <el-input style="width: 300px;" v-model="new_title" placeholder="请输入作业标题" clearable/>
+        <el-form>
+          <el-form-item label="作业标题">
+            <el-input v-model="new_title" placeholder="请输入作业标题" clearable/>
+          </el-form-item>
+          <el-form-item label="截止时间">
+            <el-date-picker
+                v-model="date_time"
+                type="datetime"
+                placeholder="请选择截止时间"
+                format="YYYY/MM/DD hh:mm:ss"
+                value-format="YYYY-MM-DD HH:mm:ss"
+            />
+          </el-form-item>
+          <el-form-item label="附件名">
+            <el-input v-model="new_attachment_name" placeholder="请输入附件名"
+                      clearable/>
+          </el-form-item>
+          <el-form-item label="附件">
+            <el-upload
+                ref="upload"
+                class="upload-demo"
+                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                :limit="1"
+                :on-exceed="handleExceed"
+                :on-success="handleSuccess"
+                :auto-upload="false"
+                list-type="text"
+            >
+              <template #trigger>
+                <el-button type="primary">选择文件</el-button>
+              </template>
+              <template #tip>
+                <div class="el-upload__tip" style="color: indianred">
+                  最多上传一份文件，新的提交会覆盖已有提交
+                </div>
+              </template>
+            </el-upload>
+          </el-form-item>
+        </el-form>
       </div>
-      <div style="display: flex;justify-content: center">
-        <el-date-picker
-            v-model="date_time"
-            type="datetime"
-            placeholder="请选择截止时间"
-            format="YYYY/MM/DD hh:mm:ss"
-            value-format="YYYY-MM-DD HH:mm:ss"
-            style="width: 300px;margin-top: 20px"
-        />
-      </div>
-      <div style="display: flex;justify-content: center">
-        <el-input style="width: 300px;margin-top: 20px" v-model="new_attachment_name" placeholder="请输入附件名"
-                  clearable/>
-      </div>
-      <div style="display: flex;justify-content: center">
-        <el-upload
-            ref="upload"
-            class="upload-demo"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            :limit="1"
-            :on-exceed="handleExceed"
-            :on-success="handleSuccess"
-            :auto-upload="false"
-            list-type="text"
-            style="margin-top: 20px"
-        >
-          <template #trigger>
-            <el-button type="primary">选择文件</el-button>
-          </template>
-          <template #tip>
-            <div class="el-upload__tip" style="color: indianred">
-              <!--              只能上传zip/pdf文件，且不超过20Mb-->
-              <!--              <br/>-->
-              最多上传一份文件，新的提交会覆盖已有提交
-            </div>
-          </template>
-        </el-upload>
-      </div>
-      <template #footer>
+      <template #footer style="padding: 0 0 0 0">
       <span>
         <el-button @click="dialog_visible = false">取消</el-button>
         <el-button type="primary" @click="submitEdit">

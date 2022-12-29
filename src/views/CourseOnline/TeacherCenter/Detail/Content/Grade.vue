@@ -9,7 +9,7 @@
         id="chapterTable"
         :data="table_data"
         border
-        style="width: 700px;margin:20px 20px 0 20px;"
+        style="width: 650px;margin:20px 20px 0 20px;"
         height="250px"
         stripe
         :header-cell-style="{'text-align':'center'}"
@@ -56,13 +56,33 @@
   </div>
 
 
-  <!--    <el-button type="primary" plain>-->
-  <!--      导出为-->
-  <!--    </el-button>-->
+  <Teleport to="body">
+    <el-dialog v-model="dialog_visible" title="编辑分数" width="500px">
+      <div style="display: flex;justify-content: center">
+        <el-form>
+          <el-form-item label="作业分数">
+            <el-input style="width: 300px;" v-model="new_homework_score" placeholder="请输入作业分数" clearable/>
+          </el-form-item>
+          <el-form-item label="测验分数">
+            <el-input style="width: 300px;" v-model="new_quiz_score" placeholder="请输入作业分数" clearable/>
+          </el-form-item>
+        </el-form>
+      </div>
+
+      <template #footer style="margin: 0 0 0 0">
+      <span>
+        <el-button @click="dialog_visible = false">取消</el-button>
+        <el-button type="primary" @click="submitEdit">
+          确认
+        </el-button>
+      </span>
+      </template>
+    </el-dialog>
+  </Teleport>
 </template>
 
 <script>
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import ExportExcel from "@/views/CourseOnline/TeacherCenter/Detail/Student/ExportExcel.vue";
 import {ElMessageBox, ElMessage} from "element-plus";
 
@@ -89,7 +109,7 @@ export default {
         homework_score: 20,
         quiz_score: 20,
         attachment_url: '',
-        attachment_name:''
+        attachment_name: ''
       }, {
         name: 'Stu 2',
         homework_score: 20,
@@ -111,19 +131,6 @@ export default {
       },
     ])
 
-    const editScore = (index) => {
-      ElMessageBox.prompt('请输入新分数', '编辑分数', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        inputPattern: /^([1-9]\d?|100)$/,
-        inputErrorMessage: '只能输入 0 ~ 100 的整数'
-      })
-          .then(({value}) => {
-            table_data[index].score = value
-          })
-          .catch(() => {
-          })
-    }
 
     function submitInfo() {
       //   这里把所有东西传给后端
@@ -133,11 +140,43 @@ export default {
       table_data.splice(index, 1)
     }
 
+    const dialog_visible = ref(false)
+    const new_homework_score = ref()
+    const new_quiz_score = ref()
+    const edited_index = ref()
+
+    function editScore(index) {
+      edited_index.value = index
+      new_homework_score.value = table_data[index]?.homework_score
+      new_quiz_score.value = table_data[index]?.quiz_score
+      dialog_visible.value = true
+    }
+
+    function submitEdit() {
+      const score_reg = /^([1-9]\d?|100)$/
+      if (score_reg.test(new_homework_score.value) && score_reg.test(new_quiz_score.value)) {
+        const row = table_data[edited_index.value]
+        row.homework_score = new_homework_score.value
+        row.quiz_score = new_quiz_score.value
+        dialog_visible.value = false
+      } else {
+        ElMessage({
+          type: 'error',
+          message: ('分数只能为 0 ~ 100 的整数'),
+          grouping: true
+        })
+      }
+    }
+
     return {
       table_data,
       editScore,
       submitInfo,
-      removeRow
+      removeRow,
+      dialog_visible,
+      new_homework_score,
+      new_quiz_score,
+      submitEdit
     }
   }
 }
