@@ -57,7 +57,7 @@
       />
     </el-col>
     <el-col :span="3">
-      <el-button type="primary" style="height: 100%;width: max(100%,50px);">发布</el-button>
+      <el-button @click="releaseComment" type="primary" style="height: 100%;width: max(100%,50px);">发布</el-button>
     </el-col>
   </el-row>
 
@@ -79,6 +79,7 @@ import VideoHeader from "@/views/CourseOnline/Video/VideoHeader.vue";
 import router from '@/router/CourseOnline'
 import axios from 'axios';
 import store from "@/store";
+import {useStore} from "vuex";
 
 export default defineComponent({
   name: 'vue-basic-player-example',
@@ -101,23 +102,58 @@ export default defineComponent({
 
     let comment_input = ref('')
 
+    const comments = ref([{username: 'Bob', content: '114514', date: '2022-10-10 10:10'}])
+    const store = useStore()
+
+    function releaseComment() {
+      if (comment_input.value === '')
+        return
+      
+      const new_comment = {
+        username: store.state.userInfo.user_name,
+        content: comment_input.value,
+        date: dateFtt("yyyy-MM-dd hh:mm", new Date())
+      }
+
+      // 这里把新评论传给后端
+
+      comment_input.value = ''
+      comments.value.push(new_comment)
+    }
+
+    function dateFtt(fmt: string, date: Date) { //author: meizz   
+      const o = {
+        "M+": date.getMonth() + 1,                 //月份   
+        "d+": date.getDate(),                    //日   
+        "h+": date.getHours(),                   //小时   
+        "m+": date.getMinutes(),                 //分   
+        "s+": date.getSeconds(),                 //秒   
+        "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
+        "S": date.getMilliseconds()             //毫秒   
+      };
+      if (/(y+)/.test(fmt))
+        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
+      for (const k in o)
+        if (new RegExp("(" + k + ")").test(fmt))
+          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+      return fmt;
+    }
+
     return {
       player,
       handleMounted,
       handleEvent,
       comment_input,
-    }
-  },
-  data() {
-    return {
       courseId: 0,
       teacher: '陈文雁',
       chapters: [{chapterId: 0, chapterName: 'Introduction', chapterNumber: 0}],
       chapter: {chapterId: 0},
-      comments: [{username: 'Bob', content: '114514', date: '2022-10-10 10:10'}],
-      header: false
+      comments,
+      header: false,
+      releaseComment
     }
   },
+
   async created() {
     this.courseId = router.currentRoute.value.query.course_id;
     axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + this.courseId).then((response) => {

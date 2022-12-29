@@ -1,4 +1,5 @@
 {
+  "defaultSeverity": "none",
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",

@@ -170,10 +170,10 @@ export default {
             total_score += 100 / total_parts * parts[i]
         }
       }
-      sendBackend()
+      sendBackend(total_score)
     }
 
-    function sendBackend() {
+    function sendBackend(score: number) {
       // 把分数传给后端
     }
 
