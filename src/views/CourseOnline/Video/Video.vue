@@ -1,7 +1,7 @@
 <template>
   <VideoHeader
       :teacher="teacher"
-      :chapterName="chapters[0].chapterName"
+      :chapterName="chapters[0].name"
       :chapterNumber="chapters[0].chapterNumber"/>
 
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
@@ -38,7 +38,7 @@
               :underline="false"
               href="/"
           >
-            {{ chapter.chapterName }}
+            {{ chapter.name }}
           </el-link>
         </div>
       </el-scrollbar>
@@ -147,8 +147,8 @@ export default defineComponent({
       handleEvent,
       comment_input,
       courseId: 0,
-      teacher: '陈文雁',
-      chapters: [{chapterId: 0, chapterName: 'Introduction', chapterNumber: 0}],
+      teacher: '',
+      chapters: [{chapterId: 0, name: 'Introduction', chapterNumber: 0}],
       chapter: {chapterId: 0},
       comments,
       header: false,
@@ -162,7 +162,7 @@ export default defineComponent({
       this.chapters = response.data;
       this.chapter = this.chapters[0];
     })
-    axios.get(`http://${store.state.host}/api/course?courseId=` + this.courseId).then((response) => {
+    axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=` + this.courseId).then((response) => {
       this.teacher = response.data.teacher;
     })
     axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + this.chapter.chapterId).then((response) => {
