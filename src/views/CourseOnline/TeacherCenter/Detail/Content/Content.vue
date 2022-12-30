@@ -113,13 +113,18 @@ export default {
     const store = useStore()
 
     onMounted(() => {
-      axios.get(`http://${store.state.host}/api/chapter/list?courseId=${courseId}`)
-          .then(response => {
-            chapters.value = response.data
-          })
       axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
           .then(response => {
             courseName.value = response.data.courseName
+          })
+
+      axios.get(`http://${store.state.host}/api/chapter/list?courseId=${courseId}`)
+          .then(response => {
+            chapters.value = response.data
+
+            // set display chapter info
+            chapterInfo.number = chapters.value[0].id
+            chapterInfo.title = chapters.value[0].name
           })
     })
 
