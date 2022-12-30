@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </template>
     <template #content>
-      <span class="text-large font-600 mr-3"> {{ course_name }} </span>
+      <span class="text-large font-600 mr-3"> {{ courseName }} </span>
     </template>
   </el-page-header>
 
@@ -19,16 +19,15 @@
     <el-col :span="4">
       <el-scrollbar max-height="400px">
         <el-divider style="margin: 0 0 0 0"/>
-        <div v-for="(chapter,index) in chapters" :key="chapter.number">
+        <div v-for="(chapter, index) in chapters">
           <el-link @click="changeChapter(index)" style="margin: 10px 10px 10px 10px;white-space: pre-wrap;">
-            <span>{{ `第${chapter.number}章\n${chapter.title}` }}</span>
+            <span>{{ `第${index + 1}章\n${chapter.name}` }}</span>
 
           </el-link>
           <el-divider style="margin: 0 0 0 0"/>
         </div>
         <div style="display: flex;justify-content: center">
           <el-button type="primary" @click="addChapter" size="small" style="margin-top: 20px;">增加章节</el-button>
-          <el-button type="primary" @click="submitChapter" size="small" style="margin-top: 20px;">提交章节</el-button>
         </div>
       </el-scrollbar>
     </el-col>
@@ -75,57 +74,52 @@ export default {
   },
   setup() {
     const route = useRoute()
-    const course_name = route.query.course_name
-    const course_id = route.query.course_id
+    const courseId = route.query.course_id
+    const courseName = ref('')
 
     const chapters = ref([
       {
-        number: '1',
-        title: 'name1'
-      }, {
-        number: '2',
-        title: 'name2'
+        id: 0,
+        name: 'name1'
       },
     ])
     const addChapter = () => {
-      const newChapter = {
-        number: chapters.value.length + 1 + "",
-        title: 'default'
-      };
-      chapters.value.push(newChapter)
-    }
-
-    const submitChapter = () => {
-      console.log("submit {{chapters}} to back end")
+      axios.post(`http://${store.state.host}/api/chapter/add?courseId=${courseId}&chapterName=default`)
+          .then(response => {
+            chapters.value.push(response.data)
+          })
     }
 
     const chapterInfo = reactive({
-      number: '1',
+      number: 0,
       title: '这里是标题',
     })
 
-    function changeTitle(chapter_number: string, new_title: string) {
+    function changeTitle(number: number, newTitle: string) {
       for (let i = 0; i < chapters.value.length; i++) {
-        const cur = chapters.value[i]
-        if (cur.number === chapter_number) {
-          cur.title = new_title
+        if (i + 1 === number) {
+          axios.put(`http://${store.state.host}/api/chapter/update?chapterId=${chapters.value[i].id}&chapterName=${newTitle}`)
+          chapters.value[i].name = newTitle
           break
         }
       }
-      console.log(chapters.value)
     }
 
     function changeChapter(index: number) {
-      chapterInfo.number = chapters.value[index].number
-      chapterInfo.title = chapters.value[index].title
+      chapterInfo.number = index + 1
+      chapterInfo.title = chapters.value[index].name
     }
     
     const store = useStore()
 
     onMounted(() => {
-      axios.get(`http://${store.state.host}/api/chapter/list?courseId=${course_id}`)
+      axios.get(`http://${store.state.host}/api/chapter/list?courseId=${courseId}`)
           .then(response => {
             chapters.value = response.data
+          })
+      axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
+          .then(response => {
+            courseName.value = response.data.courseName
           })
     })
 
@@ -133,10 +127,9 @@ export default {
       chapters,
       chapterInfo,
       addChapter,
-      submitChapter,
       changeTitle,
       changeChapter,
-      course_name
+      courseName
     }
   }
 }
