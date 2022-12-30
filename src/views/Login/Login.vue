@@ -47,6 +47,7 @@ export default {
       }
       await checkInfo()
     }
+    
 
     function showError(msg) {
       ElMessage({
@@ -93,7 +94,7 @@ export default {
                 id: user.id,
                 identity: identity,
                 email: user.email,
-                user_name: user.name
+                user_name: user.name,
               }
               localStorage.setItem('user_info', JSON.stringify(user_info))
               if (identity === 'admin') {
