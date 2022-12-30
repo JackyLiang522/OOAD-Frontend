@@ -13,7 +13,7 @@
       <el-upload
           v-if="!has_video"
           ref="upload"
-          action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+          :action="'http://' + host + '/api/upload/video/'"
           :limit="1"
           :on-exceed="handleExceed"
           :auto-upload="false"
@@ -69,6 +69,7 @@ import {VideoJsPlayer} from 'video.js'
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import {ElMessage, genFileId, ElMessageBox} from 'element-plus'
+import store from '@/store'
 import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
 
 export default {
@@ -87,7 +88,7 @@ export default {
     }
 
     let comment_input = ref('')
-
+    const host = store.state.host
 
     const has_video = ref(false)
 
@@ -125,6 +126,7 @@ export default {
     }
 
     return {
+      host,
       player,
       handleMounted,
       handleEvent,
