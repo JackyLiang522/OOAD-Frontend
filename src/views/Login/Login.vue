@@ -47,7 +47,7 @@ export default {
       }
       await checkInfo()
     }
-    
+
 
     function showError(msg) {
       ElMessage({
@@ -123,7 +123,9 @@ export default {
       const student_info = {
         identity: 'student',
         email: 'student@example.com',
-        user_name: '林雨航'
+        user_name: '林雨航',
+        purchased_courses: [],
+        balance: 0
       }
       localStorage.setItem('user_info', JSON.stringify(student_info))
       window.location.href = '/#/home'
@@ -133,7 +135,9 @@ export default {
       const teacher_info = {
         identity: 'teacher',
         email: 'teacher@example.com',
-        user_name: '朱悦明'
+        user_name: '朱悦明',
+        purchased_courses: [],
+        balance: 0
       }
       localStorage.setItem('user_info', JSON.stringify(teacher_info))
       window.location.href = '/#/home'
@@ -143,7 +147,9 @@ export default {
       const admin_info = {
         identity: 'admin',
         email: 'admin@example.com',
-        user_name: '梁家源'
+        user_name: '梁家源',
+        purchased_courses: [],
+        balance: 0
       }
       localStorage.setItem('user_info', JSON.stringify(admin_info))
       window.location.href = '/#/admin'
@@ -153,7 +159,9 @@ export default {
       const tourist_info = {
         identity: 'tourist',
         email: 'tourist@example.com',
-        user_name: ''
+        user_name: '',
+        purchased_courses: [],
+        balance: 0
       }
       localStorage.setItem('user_info', JSON.stringify(tourist_info))
       window.location.href = '/#/home'

@@ -8,7 +8,8 @@ export default createStore({
                 identity: 'tourist',    //只能是 tourist teacher student admin
                 user_name: '',
                 email: '',
-                purchased_courses: []
+                purchased_courses: [],
+                balance: 0
             },
             host: 'localhost:8081',
         }
@@ -39,6 +40,9 @@ export default createStore({
         PURCHASE_COURSE(state, payload) {
             // @ts-ignore
             state.userInfo.purchased_courses.push(payload)
+        },
+        ADD_BALANCE(state, payload) {
+            state.userInfo.balance += payload
         }
     }
 })

@@ -10,14 +10,23 @@
     </el-header>
     <hr class="style-three" style="margin-bottom: 40px">
   </el-container>
-  
+
   <div class="clearfix">
     <span style="float: left;line-height: 30px;font-size: 25px;color: #cb0000;font-weight: bold;margin-left: 20px;">
-      ￥100.00
+      ￥{{ balance }}
     </span>
     <span style="float:right;">
-      <el-input-number :precision="2" :step="0.1" :min="0" style="height: 30px"/>
-      <el-button type="primary" style="height: 30px;margin: 0 20px 0 20px;">充值</el-button>
+      <el-input-number
+          :precision="2"
+          :step="0.1"
+          :min="0"
+          v-model="charge_in"
+          style="height: 30px"/>
+      <el-button
+          type="primary"
+          style="height: 30px;margin: 0 20px 0 20px;"
+          @click="addBalance"
+      >充值</el-button>
     </span>
   </div>
 
@@ -45,48 +54,46 @@
 </template>
 
 <script lang="ts">
-import {computed, reactive} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
+import {useStore} from "vuex";
 
 export default {
   name: "Balance",
   setup() {
-    let records: any = reactive([])
+    let records = reactive([
+      {
+        date: '2022-10-02',
+        behavior: 'recharge',
+        change: 10,
+        remain: 40
+      }, {
+        date: '2022-10-02',
+        behavior: 'recharge',
+        change: 10,
+        remain: 40
+      }, {
+        date: '2022-10-02',
+        behavior: 'recharge',
+        change: 10,
+        remain: 40
+      }, {
+        date: '2022-10-02',
+        behavior: 'recharge',
+        change: 10,
+        remain: 40
+      }, {
+        date: '2022-10-02',
+        behavior: 'recharge',
+        change: 10,
+        remain: 40
+      }, {
+        date: '2022-10-02',
+        behavior: 'recharge',
+        change: 10,
+        remain: 40
+      }
+    ])
 
-    function refresh_records() {
-      records.value = [
-          {
-          date: '2022-10-02',
-          behavior: 'recharge',
-          change: 10,
-          remain: 40
-        }, {
-          date: '2022-10-02',
-          behavior: 'recharge',
-          change: 10,
-          remain: 40
-        }, {
-          date: '2022-10-02',
-          behavior: 'recharge',
-          change: 10,
-          remain: 40
-        }, {
-          date: '2022-10-02',
-          behavior: 'recharge',
-          change: 10,
-          remain: 40
-        }, {
-          date: '2022-10-02',
-          behavior: 'recharge',
-          change: 10,
-          remain: 40
-        }, {
-          date: '2022-10-02',
-          behavior: 'recharge',
-          change: 10,
-          remain: 40
-        }
-      ]
-    }
 
     function one_info(record: { value: { change: number; }; change: number; course?: string; remain: number; date: string; }) {
       let content
@@ -103,18 +110,31 @@ export default {
 
     let show_info = computed(() => {
       let all_info: any = []
-      records.value.forEach((value: any) => {
+      records.forEach((value: any) => {
         all_info.push(one_info(value))
       })
       return all_info
     })
 
-    refresh_records()
-    console.log(records.value)
+
+    const store = useStore()
+    const balance = computed(() => store.state.userInfo.balance)
+    const charge_in = ref(0)
+
+    function addBalance() {
+      const added = charge_in.value
+      charge_in.value = 0
+      // 这里发消息给后端，说充钱了
+
+      store.commit('ADD_BALANCE', added)
+    }
 
     return {
       show_info,
-      records
+      records,
+      balance,
+      addBalance,
+      charge_in
     }
   }
 }
