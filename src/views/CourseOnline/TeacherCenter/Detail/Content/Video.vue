@@ -14,6 +14,7 @@
           v-if="!has_video"
           ref="upload"
           :action="'http://' + host + '/api/upload/video/'"
+          :data="{chapterId: chapterInfo.number}"
           :limit="1"
           :on-exceed="handleExceed"
           :auto-upload="false"
