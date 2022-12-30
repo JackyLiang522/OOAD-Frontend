@@ -55,12 +55,14 @@
 
 <script lang="ts">
 import {ArrowRight} from "@element-plus/icons-vue";
-import {computed, reactive, ref} from "vue";
+import {computed, onMounted, reactive, ref} from "vue";
 import Video from "@/views/CourseOnline/TeacherCenter/Detail/Content/Video.vue";
 import Homework from "@/views/CourseOnline/TeacherCenter/Detail/Content/Homework.vue";
 import Grade from "@/views/CourseOnline/TeacherCenter/Detail/Content/Grade.vue";
 import Quiz from "@/views/CourseOnline/TeacherCenter/Detail/Content/Quiz.vue";
 import {useRoute} from "vue-router";
+import axios from "axios";
+import {useStore} from "vuex";
 
 export default {
   name: "Content",
@@ -117,6 +119,15 @@ export default {
       chapterInfo.number = chapters.value[index].number
       chapterInfo.title = chapters.value[index].title
     }
+    
+    const store = useStore()
+
+    onMounted(() => {
+      axios.get(`http://${store.state.host}/api/chapter/list?courseId=${course_id}`)
+          .then(response => {
+            chapters.value = response.data
+          })
+    })
 
     return {
       chapters,
