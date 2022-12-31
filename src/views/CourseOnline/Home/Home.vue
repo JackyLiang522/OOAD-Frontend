@@ -8,13 +8,14 @@
   <el-space wrap style="display: flex;justify-content: center;">
     <CourseInfoCard
         v-for="course in courses"
-        :courseId="course.courseId"
+        :courseId="course.id"
         :courseName="course.courseName"
         :teacher="course.teacher"
         :chapterCount="course.chapterCount"
         :price="course.price"
         :introduction="course.introduction"
-        :has_purchased="hasPurchase(course.courseId)"
+        :hasPurchased="hasPurchased(course.id)"
+        :purchaseCourse="purchaseCourse"
     />
   </el-space>
   <el-pagination layout="prev, pager, next" style="display: flex;justify-content: center;margin-top: 50px"
@@ -33,39 +34,49 @@ export default {
   methods: {Search},
   components: {CourseInfoCard},
   setup() {
-    const store = useStore()
-
     let searchInfo = ref('')
+    let courses = ref([])
+    let purchasedCourses = ref([])
+    const store = useStore()
+    const userInfo = JSON.parse(localStorage.getItem('user_info'))
 
-    function hasPurchase(courseId) {
-      const purchased_courses = store.state.userInfo.purchased_courses
-      for (let i = 0; i < purchased_courses.length; i++) {
-        const cur_purchased_course = purchased_courses[i]
-        if (cur_purchased_course.courseId === courseId)
-          return true
-      }
-      return false
+    function hasPurchased(courseId) {
+      return purchasedCourses.value.some(item => item.id === courseId)
+    }
+
+    function purchaseCourse(courseId) {
+      axios.post(`http://${store.state.host}/api/course/subscribe?courseId=${courseId}&clientId=${userInfo.id}`).then((response) => {
+        purchasedCourses.value.push(courses.value.find(item => item.id === courseId))
+      })
     }
 
     onMounted(async () => {
-      const store = useStore()
-      await axios.get(`http://${store.state.host}/api/course/list`).then((response) => {
-        this.courses = response.data
-      })
+      const coursesResponse = await axios.get(`http://${store.state.host}/api/course/list`);
+      for (let i = 0; i < coursesResponse.data.length; i++) {
+        const chapterCountResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=${coursesResponse.data[i].id}`);
+        const teacherResponse = await axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=${coursesResponse.data[i].id}`);
+        courses.value.push({
+          id: coursesResponse.data[i].id,
+          courseName: coursesResponse.data[i].courseName,
+          teacher: teacherResponse.data.name,
+          chapterCount: chapterCountResponse.data.length,
+          price: coursesResponse.data[i].price,
+          introduction: coursesResponse.data[i].introduction
+        })
+      }
+      const subscribeResponse = await axios.get(`http://${store.state.host}/api/course/list_subscribed`, {
+          params: {
+            clientId: userInfo.id
+          }
+        })
+      purchasedCourses.value = subscribeResponse.data
     })
 
     return {
-      courses: [
-        {
-          courseName: "Java",
-          teacher: 'Yepang Liu',
-          chapterCount: 12,
-          price: 0,
-          introduction: "Hello World!",
-          courseId: 1,
-        }
-      ],
-      hasPurchase,
+      courses,
+      hasPurchased,
+      purchaseCourse,
+      purchasedCourses,
       searchInfo,
     }
   },
