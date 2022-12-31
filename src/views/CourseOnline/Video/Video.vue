@@ -8,7 +8,7 @@
     <el-col :span="16">
       <video-player
           class="video-player vjs-big-play-centered"
-          src="https://vjs.zencdn.net/v/oceans.mp4"
+          :src="videoSrc"
           poster="https://vjs.zencdn.net/v/oceans.png"
           crossorigin="anonymous"
           playsinline
@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import {defineComponent, ref, shallowRef} from 'vue'
+import {onMounted, ref, shallowRef} from 'vue'
 import {VideoJsPlayer} from "video.js"
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
@@ -81,7 +81,7 @@ import axios from 'axios';
 import store from "@/store";
 import {useStore} from "vuex";
 
-export default defineComponent({
+export default {
   name: 'vue-basic-player-example',
   title: 'Basic player (Vue)',
   url: import.meta.url,
@@ -104,7 +104,10 @@ export default defineComponent({
     const comments = ref([{username: 'Bob', content: '114514', date: '2022-10-10 10:10'}])
     const chapters = ref([{id: 0, name: 'Introduction', chapterNumber: 0}])
     const chapter = ref(chapters.value[0])
+    const courseId = ref(0)
+    const teacher = ref('')
     const store = useStore()
+    const videoSrc = ref('')
 
     function releaseComment() {
       if (comment_input.value === '')
@@ -121,6 +124,23 @@ export default defineComponent({
       comment_input.value = ''
       comments.value.push(new_comment)
     }
+
+    onMounted(async () => {
+      courseId.value = router.currentRoute.value.query.course_id;
+      const chaptersResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + courseId.value)
+      chapters.value = chaptersResponse.data
+      chapter.value = chapters.value[0];
+      videoSrc.value = `http://${store.state.host}/api/upload/video/${chapter.value.id}.mp4`
+      for (let i = 0; i < chapters.value.length; i++) {
+        chapters.value[i].chapterNumber = i + 1;
+      }
+      axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=` + courseId.value).then((response) => {
+        teacher.value = response.data.name;
+      })
+      axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + chapter.value.id).then((response) => {
+        comments.value = response.data;
+      })
+    })
 
   
     function dateFtt(fmt: string, date: Date) { //author: meizz   
@@ -147,32 +167,16 @@ export default defineComponent({
       handleMounted,
       handleEvent,
       comment_input,
-      courseId: 0,
-      teacher: '',
+      courseId,
+      teacher,
       chapters,
       chapter,
       comments,
-      releaseComment
+      releaseComment,
+      videoSrc
     }
-  },
-
-  async created() {
-    this.courseId = router.currentRoute.value.query.course_id;
-    await axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + this.courseId).then((response) => {
-      this.chapters = response.data;
-      this.chapter = this.chapters[0];
-    })
-    for (let i = 0; i < this.chapters.length; i++) {
-      this.chapters[i].chapterNumber = i + 1;
-    }
-    axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=` + this.courseId).then((response) => {
-      this.teacher = response.data.name;
-    })
-    axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + this.chapter.id).then((response) => {
-      this.comments = response.data;
-    })
-  },
-})
+  }
+}
 </script>
 
 <style lang="scss" scoped>
