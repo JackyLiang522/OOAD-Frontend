@@ -1,8 +1,8 @@
 <template>
   <VideoHeader
       :teacher="teacher"
-      :chapterName="chapters[0].name"
-      :chapterNumber="chapters[0].chapterNumber"/>
+      :chapterName="chapter.name"
+      :chapterNumber="chapter.chapterNumber"/>
 
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
     <el-col :span="16">
@@ -36,7 +36,7 @@
               v-for="chapter in chapters"
               style="margin: 5px 0 5px 0;"
               :underline="false"
-              href="/"
+              @click="changeChapter(chapter.id)"
           > {{ chapter.chapterNumber }}.
             {{ chapter.name }}
           </el-link>
@@ -78,7 +78,6 @@ import Comment from "@/views/CourseOnline/Video/Comment.vue";
 import VideoHeader from "@/views/CourseOnline/Video/VideoHeader.vue";
 import router from '@/router/CourseOnline'
 import axios from 'axios';
-import store from "@/store";
 import {useStore} from "vuex";
 
 export default {
@@ -108,6 +107,19 @@ export default {
     const teacher = ref('')
     const store = useStore()
     const videoSrc = ref('')
+
+    function changeChapter(chapterId: number) {
+      for (let i = 0; i < chapters.value.length; i++) {
+        if (chapters.value[i].id === chapterId) {
+          chapter.value = chapters.value[i]
+          videoSrc.value = `http://${store.state.host}/api/upload/video/${chapter.value.id}.mp4`
+          axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + chapter.value.id).then((response) => {
+            comments.value = response.data;
+          })
+          break
+        }
+      }
+    }
 
     function releaseComment() {
       if (comment_input.value === '')
@@ -173,7 +185,8 @@ export default {
       chapter,
       comments,
       releaseComment,
-      videoSrc
+      videoSrc,
+      changeChapter
     }
   }
 }
