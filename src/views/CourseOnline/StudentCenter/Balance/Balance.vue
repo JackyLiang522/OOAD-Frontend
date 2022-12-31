@@ -70,27 +70,27 @@ export default {
       {
         date: '2022-10-02',
         change: 10,
-        remain: 40
+        remain: '40.00'
       }, {
         date: '2022-10-02',
         change: 10,
-        remain: 40
+        remain: '40.00'
       }, {
         date: '2022-10-02',
         change: 10,
-        remain: 40
+        remain: '40.00'
       },  {
         date: '2022-10-02',
         change: 10,
-        remain: 40
+        remain: '40.00'
       }, {
         date: '2022-10-02',
         change: 10,
-        remain: 40
+        remain: '40.00'
       }, {
         date: '2022-22-22',
         change: -10,
-        remain: 30,
+        remain: '30.00',
         course_name: 'Java'
       }
     ])

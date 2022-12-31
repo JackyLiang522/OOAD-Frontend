@@ -20,7 +20,7 @@
           size="small"
           style="margin-left: 20px"
           v-show="!hasPurchased"
-          @click="purchaseCourse(courseId)"
+          @click="purchaseCourse(courseId,price,courseName)"
       >购买
       </el-button>
     </p>
@@ -39,9 +39,6 @@
   </div>
 
 </template>
-
-<script setup>
-</script>
 
 <script>
 

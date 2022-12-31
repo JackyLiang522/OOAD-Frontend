@@ -43,6 +43,10 @@ export default createStore({
         },
         ADD_BALANCE(state, payload) {
             state.userInfo.balance += payload
+        },
+        
+        DECREASE_BALANCE(state, payload) {
+            state.userInfo.balance -= payload
         }
     }
 })

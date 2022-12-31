@@ -44,7 +44,20 @@ export default {
       return purchasedCourses.value.some(item => item.id === courseId)
     }
 
-    function purchaseCourse(courseId) {
+    function purchaseCourse(courseId, price, course_name) {
+      const date = new Date();
+      const mon = date.getMonth() + 1;
+      const day = date.getDate();
+      const curDate = date.getFullYear() + "-" + (mon < 10 ? "0" + mon : mon) + "-" + (day < 10 ? "0" + day : day);
+      const store = useStore()
+      store.commit('DECREASE_BALANCE', price)
+      const new_record = {
+        date: curDate,
+        remain: store.state.userInfo.balance,
+        change: -price,
+        course_name: course_name
+      }
+      // 把 new_record 也发给后端，加入交易历史
       axios.post(`http://${store.state.host}/api/course/subscribe?courseId=${courseId}&clientId=${userInfo.id}`).then((response) => {
         purchasedCourses.value.push(courses.value.find(item => item.id === courseId))
       })
@@ -64,11 +77,12 @@ export default {
           introduction: coursesResponse.data[i].introduction
         })
       }
+
       const subscribeResponse = await axios.get(`http://${store.state.host}/api/course/list_subscribed`, {
-          params: {
-            clientId: userInfo.id
-          }
-        })
+        params: {
+          clientId: userInfo.id
+        }
+      })
       purchasedCourses.value = subscribeResponse.data
     })
 
