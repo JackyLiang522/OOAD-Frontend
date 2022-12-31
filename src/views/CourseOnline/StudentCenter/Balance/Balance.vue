@@ -13,7 +13,7 @@
 
   <div class="clearfix">
     <span style="float: left;line-height: 30px;font-size: 25px;color: #cb0000;font-weight: bold;margin-left: 20px;">
-      ￥{{ balance }}
+      ￥{{ balance.toFixed(2) }}
     </span>
     <span style="float:right;">
       <el-input-number
@@ -36,8 +36,14 @@
     <span style="float: left">
       <span style="vertical-align: 40%">交易历史</span><el-icon size="30px" style="margin-left: 5px"><Clock/></el-icon>
     </span>
-    <span style="float: right" v-show="records.value.length > 5">
-      <el-button type="primary" link style="height: 30px;margin-right: 10px">显示所有历史</el-button>
+    <span style="float: right" v-show="records.length > 5">
+      <el-button
+          type="primary"
+          link style="height: 30px;margin-right: 10px"
+          @click="is_show_all=!is_show_all"
+      >
+        {{ is_show_all ? '收起历史记录' : '展开历史记录' }}
+      </el-button>
     </span>
   </div>
 
@@ -63,42 +69,37 @@ export default {
     let records = reactive([
       {
         date: '2022-10-02',
-        behavior: 'recharge',
         change: 10,
         remain: 40
       }, {
         date: '2022-10-02',
-        behavior: 'recharge',
         change: 10,
         remain: 40
       }, {
         date: '2022-10-02',
-        behavior: 'recharge',
+        change: 10,
+        remain: 40
+      },  {
+        date: '2022-10-02',
         change: 10,
         remain: 40
       }, {
         date: '2022-10-02',
-        behavior: 'recharge',
         change: 10,
         remain: 40
       }, {
-        date: '2022-10-02',
-        behavior: 'recharge',
-        change: 10,
-        remain: 40
-      }, {
-        date: '2022-10-02',
-        behavior: 'recharge',
-        change: 10,
-        remain: 40
+        date: '2022-22-22',
+        change: -10,
+        remain: 30,
+        course_name: 'Java'
       }
     ])
 
 
-    function one_info(record: { value: { change: number; }; change: number; course?: string; remain: number; date: string; }) {
+    function one_info(record: any) {
       let content
       if (record.change < 0) {
-        content = `-￥${Math.abs(record.change)}：购买${record.course}，余额￥${record.remain}`
+        content = `-￥${Math.abs(record.change)}：购买${record.course_name}，余额￥${record.remain}`
       } else {
         content = `+￥${Math.abs(record.change)}，充值，余额￥${record.remain}`
       }
@@ -108,11 +109,19 @@ export default {
       }
     }
 
+    const is_show_all = ref(false)
+
     let show_info = computed(() => {
       let all_info: any = []
-      records.forEach((value: any) => {
-        all_info.push(one_info(value))
-      })
+      if (is_show_all.value) {
+        records.forEach((value: any) => {
+          all_info.push(one_info(value))
+        })
+      } else {
+        for (let i = 0; i < 3; i++) {
+          all_info.push(one_info(records[i]))
+        }
+      }
       return all_info
     })
 
@@ -122,11 +131,25 @@ export default {
     const charge_in = ref(0)
 
     function addBalance() {
+      if(charge_in.value === 0)
+        return
+      
       const added = charge_in.value
       charge_in.value = 0
+      store.commit('ADD_BALANCE', added)
+      const date = new Date();
+      const mon = date.getMonth() + 1;
+      const day = date.getDate();
+      const curDate = date.getFullYear() + "-" + (mon < 10 ? "0" + mon : mon) + "-" + (day < 10 ? "0" + day : day);
+      const new_record = {
+        change: added,
+        remain: balance.value.toFixed(2),
+        date: curDate
+      }
+      records.push(new_record)
+
       // 这里发消息给后端，说充钱了
 
-      store.commit('ADD_BALANCE', added)
     }
 
     return {
@@ -134,7 +157,8 @@ export default {
       records,
       balance,
       addBalance,
-      charge_in
+      charge_in,
+      is_show_all
     }
   }
 }
