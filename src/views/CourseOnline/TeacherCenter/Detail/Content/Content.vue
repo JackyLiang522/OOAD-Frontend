@@ -20,7 +20,7 @@
       <el-scrollbar max-height="400px">
         <el-divider style="margin: 0 0 0 0"/>
         <div v-for="(chapter, index) in chapters">
-          <el-link @click="changeChapter(index)" style="margin: 10px 10px 10px 10px;white-space: pre-wrap;">
+          <el-link @click="changeChapter(index, chapter.id)" style="margin: 10px 10px 10px 10px;white-space: pre-wrap;">
             <span>{{ `第${index + 1}章\n${chapter.name}` }}</span>
 
           </el-link>
@@ -80,7 +80,8 @@ export default {
     const chapters = ref([
       {
         id: 0,
-        name: 'name1'
+        name: 'name1',
+        number: 0,
       },
     ])
     const addChapter = () => {
@@ -91,6 +92,7 @@ export default {
     }
 
     const chapterInfo = reactive({
+      id: 0,
       number: 0,
       title: '这里是标题',
     })
@@ -105,27 +107,36 @@ export default {
       }
     }
 
-    function changeChapter(index: number) {
+    function changeChapter(index: number, id: number) {
+      chapterInfo.id = id
       chapterInfo.number = index + 1
       chapterInfo.title = chapters.value[index].name
     }
     
     const store = useStore()
 
-    onMounted(() => {
+    onMounted(async () => {
       axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
           .then(response => {
             courseName.value = response.data.courseName
           })
 
-      axios.get(`http://${store.state.host}/api/chapter/list?courseId=${courseId}`)
+      await axios.get(`http://${store.state.host}/api/chapter/list?courseId=${courseId}`)
           .then(response => {
             chapters.value = response.data
-
-            // set display chapter info
-            chapterInfo.number = chapters.value[0].id
-            chapterInfo.title = chapters.value[0].name
           })
+
+      // assign chapter numbers
+      for (let i = 0; i < chapters.value.length; i++) {
+        chapters.value[i].number = i + 1
+      }
+
+      console.log(chapters.value)
+
+      // set display chapter info
+      chapterInfo.number = 1
+      chapterInfo.title = chapters.value[0].name
+      chapterInfo.id = chapters.value[0].id
     })
 
     return {

@@ -37,7 +37,7 @@
               style="margin: 5px 0 5px 0;"
               :underline="false"
               href="/"
-          >
+          > {{ chapter.chapterNumber }}.
             {{ chapter.name }}
           </el-link>
         </div>
@@ -101,8 +101,9 @@ export default defineComponent({
     }
 
     let comment_input = ref('')
-
     const comments = ref([{username: 'Bob', content: '114514', date: '2022-10-10 10:10'}])
+    const chapters = ref([{id: 0, name: 'Introduction', chapterNumber: 0}])
+    const chapter = ref(chapters.value[0])
     const store = useStore()
 
     function releaseComment() {
@@ -148,24 +149,26 @@ export default defineComponent({
       comment_input,
       courseId: 0,
       teacher: '',
-      chapters: [{chapterId: 0, name: 'Introduction', chapterNumber: 0}],
-      chapter: {chapterId: 0},
+      chapters,
+      chapter,
       comments,
-      header: false,
       releaseComment
     }
   },
 
   async created() {
     this.courseId = router.currentRoute.value.query.course_id;
-    axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + this.courseId).then((response) => {
+    await axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + this.courseId).then((response) => {
       this.chapters = response.data;
       this.chapter = this.chapters[0];
     })
-    axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=` + this.courseId).then((response) => {
-      this.teacher = response.data.teacher;
+    for (let i = 0; i < this.chapters.length; i++) {
+      this.chapters[i].chapterNumber = i + 1;
+    }
+    axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=` + this.courseId).then((response) => {
+      this.teacher = response.data.name;
     })
-    axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + this.chapter.chapterId).then((response) => {
+    axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + this.chapter.id).then((response) => {
       this.comments = response.data;
     })
   },
