@@ -70,7 +70,7 @@
 </template>
 
 <script lang="ts">
-import {onMounted, ref, shallowRef} from 'vue'
+import {onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef} from 'vue'
 import {VideoJsPlayer} from "video.js"
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
@@ -79,6 +79,8 @@ import VideoHeader from "@/views/CourseOnline/Video/VideoHeader.vue";
 import router from '@/router/CourseOnline'
 import axios from 'axios';
 import {useStore} from "vuex";
+import {ElMessage, ElMessageBox} from 'element-plus'
+import type {Action} from 'element-plus'
 
 export default {
   name: 'vue-basic-player-example',
@@ -90,6 +92,27 @@ export default {
     VideoPlayer
   },
   setup() {
+    const has_open_video_page = localStorage.getItem('has_open_video_page')
+    if (has_open_video_page === 'true') {
+      ElMessageBox.alert('您已打开一个视频界面', '警告', {
+        confirmButtonText: 'OK',
+        callback: () => {
+          window.close();
+        },
+      })
+    } else {
+      localStorage.setItem('has_open_video_page', 'true')
+      window.addEventListener('beforeunload', e => removeHandler())
+    }
+
+    function removeHandler() {
+      localStorage.setItem('has_open_video_page', 'false')
+    }
+
+    onUnmounted(() => {
+      window.removeEventListener('beforeunload', e => removeHandler())
+    })
+
     const player = shallowRef<VideoJsPlayer>()
     const handleMounted = (payload: any) => {
       player.value = payload.player
@@ -105,8 +128,8 @@ export default {
     const chapter = ref(chapters.value[0])
     const courseId = ref(0)
     const teacher = ref('')
-    const store = useStore()
     const videoSrc = ref('')
+    const store = useStore()
 
     function changeChapter(chapterId: number) {
       for (let i = 0; i < chapters.value.length; i++) {
@@ -124,7 +147,7 @@ export default {
     function releaseComment() {
       if (comment_input.value === '')
         return
-      
+
       const new_comment = {
         username: store.state.userInfo.user_name,
         content: comment_input.value,
@@ -154,7 +177,7 @@ export default {
       })
     })
 
-  
+
     function dateFtt(fmt: string, date: Date) { //author: meizz   
       const o = {
         "M+": date.getMonth() + 1,                 //月份   
@@ -173,6 +196,7 @@ export default {
           fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
       return fmt;
     }
+
 
     return {
       player,

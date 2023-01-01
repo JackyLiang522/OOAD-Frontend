@@ -1,12 +1,12 @@
 <template>
   <div id="login-container" :style="{ boxShadow: `var(${'--el-box-shadow'})` }">
     <p id="login-title">注册</p>
-    <el-input class="top" size="large" v-model="userInfo.email" placeholder="请输入账号" clearable />
-    <el-input class="middle" size="large" v-model="userInfo.user_name" placeholder="请输入昵称" clearable />
+    <el-input class="top" size="large" v-model="userInfo.email" placeholder="请输入账号" clearable/>
+    <el-input class="middle" size="large" v-model="userInfo.user_name" placeholder="请输入昵称" clearable/>
     <el-input class="middle" size="large" v-model="userInfo.password" type="password" autocomplete="off"
-      placeholder="请输入密码" show-password clearable />
+              placeholder="请输入密码" show-password clearable/>
     <el-input class="middle" size="large" v-model="userInfo.password_again" type="password" autocomplete="off"
-      placeholder="请再次输入密码" show-password clearable />
+              placeholder="请再次输入密码" show-password clearable/>
     <el-radio-group v-model="userInfo.is_teacher" class="bottom">
       <el-radio :label="false" size="large">我是学生</el-radio>
       <el-radio :label="true" size="large">我是教师</el-radio>
@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import { onBeforeUnmount, reactive } from "vue";
-import { ElMessage } from 'element-plus'
+import {onBeforeUnmount, reactive} from "vue";
+import {ElMessage} from 'element-plus'
 import axios from "axios";
 import store from "@/store";
 import router from '@/router/Login'
@@ -89,17 +89,17 @@ export default {
 
     async function submitInfo() {
       await axios.post(`http://${store.state.host}/api/client/register?email=${userInfo.email}&password=${userInfo.password}&username=${userInfo.user_name}&isTeacher=${userInfo.is_teacher}`).then(
-        response => {
-          if (response.data) {
-            showSuccess("注册成功")
-            router.push('/Login')
-          } else {
-            showError('用户名或密码不符合规范')
-          }
-        },
-        err => {
-          response = err.message
-        })
+          response => {
+            if (response.data) {
+              showSuccess("注册成功")
+              router.push('/Login')
+            } else {
+              showError('用户名或密码不符合规范')
+            }
+          },
+          err => {
+            console.log(err)
+          })
     }
 
     return {

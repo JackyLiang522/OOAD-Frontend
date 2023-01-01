@@ -128,6 +128,7 @@ export default {
         balance: 0
       }
       localStorage.setItem('user_info', JSON.stringify(student_info))
+      localStorage.setItem('has_open_video_page', 'false')
       window.location.href = '/#/home'
     }
 
@@ -140,6 +141,7 @@ export default {
         balance: 0
       }
       localStorage.setItem('user_info', JSON.stringify(teacher_info))
+      localStorage.setItem('has_open_video_page', 'false')
       window.location.href = '/#/home'
     }
 
@@ -152,6 +154,7 @@ export default {
         balance: 0
       }
       localStorage.setItem('user_info', JSON.stringify(admin_info))
+      localStorage.setItem('has_open_video_page', 'false')
       window.location.href = '/#/admin'
     }
 
@@ -164,6 +167,7 @@ export default {
         balance: 0
       }
       localStorage.setItem('user_info', JSON.stringify(tourist_info))
+      localStorage.setItem('has_open_video_page', 'false')
       window.location.href = '/#/home'
     }
 
