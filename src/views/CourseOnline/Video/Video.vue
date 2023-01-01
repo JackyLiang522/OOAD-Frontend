@@ -210,7 +210,6 @@ export default {
       releaseComment,
       videoSrc,
       changeChapter,
-      changeVideo
     }
   }
 }
