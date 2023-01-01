@@ -79,8 +79,13 @@ export default {
     const identity = computed(() => store.state.userInfo.identity)
     const user_name = computed(() => store.state.userInfo.user_name)
     const email = computed(() => store.state.userInfo.email)
+    let timer = null
+    // const user = computed(() => JSON.parse(localStorage.getItem('user_info')))
+
 
     const welcome_word = computed(() => {
+      // console.log('home')
+      // window.location.href = '/#/home'
       if (identity.value === 'tourist')
         return '欢迎，游客'
       else if (identity.value === 'teacher')
@@ -125,11 +130,31 @@ export default {
       console.log(user_name.value)
     }
 
+    onMounted(() => {
+      timer = setInterval(
+      ()=>{
+        let user_info = JSON.parse(localStorage.getItem('user_info'))
+        // console.log("user.user_name"+user.user_name)
+        // console.log("user_name"+user_name.value)
+        if (user_name.value !== user_info.user_name){
+          console.log('user changed')
+          window.location.href = '/#/home'
+          store.commit('SET_EMAIL', user_info.email)
+          store.commit('SET_USER_NAME', user_info.user_name)
+          store.commit('SET_IDENTITY', user_info.identity)
+          store.commit('SET_PURCHASED_COURSES', user_info.purchased_courses)
+          store.commit('SET_BALANCE', user_info.balance)
+        }
+      }, 500)
+    })
+
     onBeforeMount(() => {
       const user_info = JSON.parse(localStorage.getItem('user_info'))
       store.commit('SET_EMAIL', user_info.email)
       store.commit('SET_USER_NAME', user_info.user_name)
       store.commit('SET_IDENTITY', user_info.identity)
+      store.commit('SET_PURCHASED_COURSES', user_info.purchased_courses)
+      store.commit('SET_BALANCE', user_info.balance)
       test()
     })
 
@@ -140,7 +165,16 @@ export default {
       login_words,
       icon_link
     }
-  }
+  },
+  // watch: {
+  //   user: 'refreshLocation'
+  // },
+  // methods: {
+  //   refreshLocation() {
+  //     console.log('back to home')
+  //     window.location.href = '/#/home'
+  //   }
+  // }
 }
 </script>
 
