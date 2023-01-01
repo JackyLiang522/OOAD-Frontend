@@ -36,6 +36,12 @@ export default createStore({
         SET_USER_NAME(state, payload) {
             state.userInfo.user_name = payload
         },
+        SET_PURCHASED_COURSES(state, payload) {
+            state.userInfo.purchased_courses = payload
+        },
+        SET_BALANCE(state, payload) {
+            state.userInfo.balance = payload
+        },
 
         PURCHASE_COURSE(state, payload) {
             // @ts-ignore

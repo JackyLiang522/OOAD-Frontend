@@ -8,7 +8,7 @@
           :key="question.id"
           :title="'第 ' + (index+1)+' 题'"
           :description="question.description"
-          :multiple="question.multiple"
+          :type="question.type"
           :answers="question.answers"
           :options="question.options"
       ></DisplayQuestion>
@@ -38,12 +38,12 @@ export default {
     }
   },
   methods: {
-    addQuestion(description, multiple, answers, options) {
+    addQuestion(description, type, answers, options) {
       alert("成功添加")
       const newQuestion = {
         id: new Date().toISOString(),
         description: description,
-        multiple: multiple,
+        type: type,
         answers: answers,
         options: options,
       };

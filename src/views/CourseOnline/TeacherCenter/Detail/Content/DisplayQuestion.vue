@@ -21,12 +21,12 @@
       <template #label>
         <div class="cell-item">
           <el-icon :style="iconStyle">
-            <TurnOff />
+            <Operation />
           </el-icon>
-          是否多选
+          题目类型
         </div>
       </template>
-      {{multiple}}
+      {{type}}
     </el-descriptions-item>
     <el-descriptions-item>
       <template #label>
@@ -66,12 +66,12 @@
 import { computed, ref } from 'vue'
 import {
   Tickets,
-  TurnOff,
+  Operation,
   Finished,
   Expand
 } from '@element-plus/icons-vue'
 
-const prop = defineProps(['title','description','multiple','answers','options'])
+const prop = defineProps(['title','description','type','answers','options'])
 //
 // const tags = ref([
 //   { name: '选项 1'},
