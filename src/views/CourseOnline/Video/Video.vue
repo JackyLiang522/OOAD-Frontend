@@ -44,6 +44,9 @@
       </el-scrollbar>
     </el-col>
   </el-row>
+  <el-row style="margin-top: 30px;" :gutter="30" justify="center">
+    <test-speed></test-speed>
+  </el-row>
 
   <el-row style="margin-top: 30px;" :gutter="30" justify="center">
     <el-col :span="15">
@@ -76,6 +79,7 @@ import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import Comment from "@/views/CourseOnline/Video/Comment.vue";
 import VideoHeader from "@/views/CourseOnline/Video/VideoHeader.vue";
+import testSpeed from "@/views/CourseOnline/Video/testSpeed.vue";
 import router from '@/router/CourseOnline'
 import axios from 'axios';
 import {useStore} from "vuex";
@@ -89,7 +93,8 @@ export default {
   components: {
     VideoHeader,
     Comment,
-    VideoPlayer
+    VideoPlayer,
+    testSpeed
   },
   setup() {
     function removeHandler() {
