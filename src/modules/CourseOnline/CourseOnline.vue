@@ -65,7 +65,7 @@
 import router from "@/router/CourseOnline";
 import StudentCenter from "@/views/CourseOnline/StudentCenter/StudentCenter.vue";
 import {useStore} from "vuex";
-import {computed, onBeforeMount, onMounted} from "vue";
+import {computed, onBeforeMount, onBeforeUnmount, onMounted} from "vue";
 
 export default {
   name: 'course_online_app',
@@ -159,7 +159,12 @@ export default {
       store.commit('SET_IDENTITY', user_info.identity)
       store.commit('SET_PURCHASED_COURSES', user_info.purchased_courses)
       store.commit('SET_BALANCE', user_info.balance)
-      test()
+      // test()
+    })
+
+    onBeforeUnmount(() => {
+      clearInterval(timer)
+      timer = null
     })
 
     return {
