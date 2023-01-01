@@ -41,7 +41,10 @@ export default {
     const userInfo = JSON.parse(localStorage.getItem('user_info'))
 
     function hasPurchased(courseId) {
-      return purchasedCourses.value.some(item => item.id === courseId)
+      const store = useStore()
+      const identity = store.state.userInfo.identity
+      return (identity === 'student' && purchasedCourses.value.some(item => item.id === courseId))
+          || (identity === 'teacher')
     }
 
     function purchaseCourse(courseId, price, course_name) {

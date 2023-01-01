@@ -21,7 +21,7 @@
 
 <script>
 import {onBeforeUnmount, reactive} from "vue";
-import {ElMessage} from 'element-plus'
+import {ElMessage, ElMessageBox} from 'element-plus'
 
 import axios from "axios";
 import {useStore} from "vuex";
@@ -76,17 +76,31 @@ export default {
 
     async function checkInfo() {
       await axios.post(`http://${store.state.host}/api/client/login?email=${userInfo.email}&password=${userInfo.password}`).then(
-          response => {
+          async response => {
             if (response.data) {
               showSuccess("登录成功")
 
-              var user = response.data;
+              const user = response.data;
               // obtain user identity
-              var identity = null;
+              let identity = null;
               if (user.admin) {
                 identity = 'admin'
               } else if (user.teacher) {
-                identity = 'teacher'
+                await ElMessageBox.confirm(
+                    '请选择你的身份',
+                    '提示',
+                    {
+                      confirmButtonText: '教师',
+                      cancelButtonText: '学生',
+                      type: 'info',
+                    }
+                )
+                    .then(() => {
+                      identity = 'teacher'
+                    })
+                    .catch(() => {
+                      identity = 'student'
+                    })
               } else {
                 identity = 'student'
               }

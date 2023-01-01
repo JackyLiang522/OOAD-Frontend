@@ -65,10 +65,6 @@
                 value-format="YYYY-MM-DD HH:mm:ss"
             />
           </el-form-item>
-          <el-form-item label="附件名">
-            <el-input v-model="new_attachment_name" placeholder="请输入附件名"
-                      clearable/>
-          </el-form-item>
           <el-form-item label="附件">
             <el-upload
                 ref="upload"
@@ -132,16 +128,18 @@ export default {
       dialog_visible.value = true
       new_deadline.value = table_data[index].deadline
       new_title.value = table_data[index].title
-      new_attachment_name.value = table_data[index].attachment_name
     }
 
     async function submitEdit() {
+      if (upload.value === undefined)
+        return
+
       await submitUpload()
       dialog_visible.value = false
       const row = table_data[edited_index.value]
       row.deadline = new_deadline.value
       row.title = new_title.value
-      row.attachment_name = new_attachment_name.value
+      row.attachment_name = upload.value.name
       //   这里把后端得到的文件下载地址传进去
       //   row.attachment_url = 'xxx/xxx/xxx'
     }
@@ -185,7 +183,6 @@ export default {
       })
     }
 
-    const new_attachment_name = ref('')
 
     return {
       table_data,
@@ -200,7 +197,6 @@ export default {
       handleSuccess,
       submitUpload,
       addRow,
-      new_attachment_name
     }
   }
 }

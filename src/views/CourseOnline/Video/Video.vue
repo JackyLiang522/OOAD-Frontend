@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import {onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef} from 'vue'
-import videojs, {VideoJsPlayer} from "video.js"
+import {VideoJsPlayer} from "video.js"
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import Comment from "@/views/CourseOnline/Video/Comment.vue";
