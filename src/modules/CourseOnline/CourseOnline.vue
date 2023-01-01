@@ -3,7 +3,7 @@
     <el-header height="60px" style="background-color: black;">
       <el-row :gutter="20">
         <el-col :span="2" style="text-align: center">
-          <router-link :to="icon_link">
+          <router-link :to="icon_link" @click="resetVideoValue">
             <el-image
                 style="width: 30px; height: 30px;margin-top: 5px;"
                 src='https://th.bing.com/th/id/OIP.RlUTXgwQmhZvma5follA8gHaHa?pid=ImgDet&rs=1'
@@ -32,7 +32,7 @@
         vertical-align: middle;
         height: 60px"
         >
-          <router-link :underline="false" :to="email_link" style="color:#3a8ee6">
+          <router-link :underline="false" :to="email_link" style="color:#3a8ee6" @click="resetVideoValue">
             <span style="line-height: 60px;">
               {{ email_words }}
             </span>
@@ -130,22 +130,26 @@ export default {
       console.log(user_name.value)
     }
 
+    function resetVideoValue() {
+      localStorage.setItem('has_open_video_page', 'false')
+    }
+
     onMounted(() => {
       timer = setInterval(
-      ()=>{
-        let user_info = JSON.parse(localStorage.getItem('user_info'))
-        // console.log("user.user_name"+user.user_name)
-        // console.log("user_name"+user_name.value)
-        if (user_name.value !== user_info.user_name){
-          console.log('user changed')
-          window.location.href = '/#/home'
-          store.commit('SET_EMAIL', user_info.email)
-          store.commit('SET_USER_NAME', user_info.user_name)
-          store.commit('SET_IDENTITY', user_info.identity)
-          store.commit('SET_PURCHASED_COURSES', user_info.purchased_courses)
-          store.commit('SET_BALANCE', user_info.balance)
-        }
-      }, 500)
+          () => {
+            let user_info = JSON.parse(localStorage.getItem('user_info'))
+            // console.log("user.user_name"+user.user_name)
+            // console.log("user_name"+user_name.value)
+            if (user_name.value !== user_info.user_name) {
+              console.log('user changed')
+              window.location.href = '/#/home'
+              store.commit('SET_EMAIL', user_info.email)
+              store.commit('SET_USER_NAME', user_info.user_name)
+              store.commit('SET_IDENTITY', user_info.identity)
+              store.commit('SET_PURCHASED_COURSES', user_info.purchased_courses)
+              store.commit('SET_BALANCE', user_info.balance)
+            }
+          }, 500)
     })
 
     onBeforeMount(() => {
@@ -163,7 +167,8 @@ export default {
       email_words,
       email_link,
       login_words,
-      icon_link
+      icon_link,
+      resetVideoValue
     }
   },
   // watch: {

@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import {onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef} from 'vue'
-import {VideoJsPlayer} from "video.js"
+import videojs, {VideoJsPlayer} from "video.js"
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import Comment from "@/views/CourseOnline/Video/Comment.vue";
@@ -92,19 +92,6 @@ export default {
     VideoPlayer
   },
   setup() {
-    const has_open_video_page = localStorage.getItem('has_open_video_page')
-    if (has_open_video_page === 'true') {
-      ElMessageBox.alert('您已打开一个视频界面', '警告', {
-        confirmButtonText: 'OK',
-        callback: () => {
-          window.close();
-        },
-      })
-    } else {
-      localStorage.setItem('has_open_video_page', 'true')
-      window.addEventListener('beforeunload', e => removeHandler())
-    }
-
     function removeHandler() {
       localStorage.setItem('has_open_video_page', 'false')
     }
@@ -161,6 +148,19 @@ export default {
     }
 
     onMounted(async () => {
+      const has_open_video_page = localStorage.getItem('has_open_video_page')
+      if (has_open_video_page === 'true') {
+        await ElMessageBox.alert('您已打开一个视频界面', '警告', {
+          confirmButtonText: 'OK',
+          callback: () => {
+            window.close();
+          },
+        })
+      } else {
+        localStorage.setItem('has_open_video_page', 'true')
+        window.addEventListener('beforeunload', e => removeHandler())
+      }
+
       courseId.value = router.currentRoute.value.query.course_id;
       const chaptersResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + courseId.value)
       chapters.value = chaptersResponse.data
@@ -169,15 +169,14 @@ export default {
       for (let i = 0; i < chapters.value.length; i++) {
         chapters.value[i].chapterNumber = i + 1;
       }
-      axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=` + courseId.value).then((response) => {
+      await axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=` + courseId.value).then((response) => {
         teacher.value = response.data.name;
       })
-      axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + chapter.value.id).then((response) => {
+      await axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + chapter.value.id).then((response) => {
         comments.value = response.data;
       })
     })
-
-
+    
     function dateFtt(fmt: string, date: Date) { //author: meizz   
       const o = {
         "M+": date.getMonth() + 1,                 //月份   
@@ -210,7 +209,8 @@ export default {
       comments,
       releaseComment,
       videoSrc,
-      changeChapter
+      changeChapter,
+      changeVideo
     }
   }
 }
