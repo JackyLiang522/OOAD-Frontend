@@ -5,27 +5,27 @@
       <p style="text-align: center;font-size: 20px;font-weight: bold">标题</p>
 
       <div v-for="(question,index) in questions">
-        <div v-if="question.type==='single' || question.type==='judge'">
+        <div v-if="question.type==='单选' || question.type==='判断'">
           <p style="word-break: break-word;margin: 20px 0 5px 0">
-            {{ question.question_text }}
+            {{ question.description }}
           </p>
           <el-radio-group
               v-model="student_answers[index]"
               style="margin-left: 20px;border: 10px black"
-              v-for="choice in question.choices">
+              v-for="option in question.options">
             >
-            <el-radio :label="choice"/>
+            <el-radio :label="option"/>
           </el-radio-group>
         </div>
 
-        <div v-else-if="question.type==='multiple'">
+        <div v-else-if="question.type==='多选'">
           <p style="word-break: break-word;margin: 15px 0 5px 0;">多选题的题目在这里:</p>
           <el-checkbox-group
               v-model="student_answers[index]"
               style="margin-left: 20px"
-              v-for="choice in question.choices">
+              v-for="option in question.options">
             >
-            <el-checkbox :label="choice"/>
+            <el-checkbox :label="option"/>
           </el-checkbox-group>
         </div>
       </div>
@@ -76,31 +76,31 @@ export default {
       // 在这里更新问题列表
       questions.value = [
         {
-          type: 'single',
-          question_text: '单选题的题目站在这里',
-          choices: [
+          description: '单选题的题目站在这里',
+          type: '单选',
+          answers: ['选项2'],
+          options: [
             '选项1的文本',
-            '选线2的文本',
+            '选项2的文本',
             '选项3的文本'
           ],
-          answer: ['选项2']
         }, {
-          type: 'multiple',
-          question_text: '多选题的题目在这里',
-          choices: [
+          description: '多选题的题目在这里',
+          type: '多选',
+          answers: ['选项1', '选项2'],
+          options: [
             '选项1的文本',
-            '选线2的文本',
+            '选项2的文本',
             '选项3的文本'
           ],
-          answer: ['选项1', '选项2']
         }, {
-          type: 'judge',
-          question_text: '判断题目站在这里',
-          choices: [
+          description: '判断题目站在这里',
+          type: '判断',
+          answers: ['选项2'],
+          options: [
             '选项1的文本',
-            '选线2的文本',
+            '选项2的文本',
           ],
-          answer: ['选项2']
         }
       ]
 
@@ -135,7 +135,7 @@ export default {
       let total_score = 0
       for (let i = 0; i < questions.value; i++) {
         const question = questions.value[i]
-        if (question.type === 'multiple') {
+        if (question.type === '多选') {
           parts.push(2)
           total_parts += 2
         } else {
@@ -144,9 +144,9 @@ export default {
         }
       }
       for (let i = 0; i < student_answers.value.length; i++) {
-        const answer = questions.value[i].answer
+        const answer = questions.value[i].answers
         const student_answer = student_answers.value[i]
-        if (questions.value[i].type === 'multiple') {
+        if (questions.value[i].type === '多选') {
           let is_correct = true
           for (let j = 0; j < answer.length; j++) {
             const cur_answer = answer[j]

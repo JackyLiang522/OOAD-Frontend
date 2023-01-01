@@ -14,8 +14,15 @@
       }">
         <el-input v-model="form.description" />
       </el-form-item>
-      <el-form-item label="是否多选">
-        <el-switch v-model="form.multiple" />
+<!--      <el-form-item label="是否多选">-->
+<!--        <el-switch v-model="form.multiple" />-->
+<!--      </el-form-item>-->
+      <el-form-item label="题目类型">
+        <el-radio-group v-model="form.type">
+          <el-radio label="多选" />
+          <el-radio label="单选" />
+          <el-radio label="判断" />
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="正确选项">
         <el-checkbox-group v-model="form.answers">
@@ -56,7 +63,7 @@ import type { FormInstance } from 'element-plus'
 const formRef = ref<FormInstance>()
 const form = reactive({
   description: '',
-  multiple: true,
+  type: '',
   answers: [],
   options: [
     {
@@ -90,9 +97,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       console.log('submit!')
-      emit('add-question', form.description,form.multiple,form.answers,form.options)
+      emit('add-question', form.description,form.type,form.answers,form.options)
       form.description = ''
-      form.multiple = true
+      form.type = ''
       form.answers = []
       form.options =  [
         {
