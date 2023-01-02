@@ -45,6 +45,7 @@
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
 import index from "vuex";
 
+
 export default {
   name: 'Quiz',
   computed: {

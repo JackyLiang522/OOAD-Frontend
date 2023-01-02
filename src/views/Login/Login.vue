@@ -25,9 +25,9 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 
 import axios from "axios";
 import {useStore} from "vuex";
-import {useRouter} from "vue-router";
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
   setup() {
     let userInfo = reactive({

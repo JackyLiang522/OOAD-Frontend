@@ -1,5 +1,5 @@
 <template>
-  <h4 style="margin: 0 0 0 10px">{{ `第${chapterInfo.number}章 ${chapterInfo.title}` }}</h4>
+  <h4 style="margin: 0 0 0 10px">{{ `第${this.chapterInfo.number}章 ${chapterInfo.title}` }}</h4>
 
   <el-scrollbar max-height="400px" style="margin-top: 10px;margin-bottom: 30px">
     <div>
@@ -27,10 +27,14 @@
 import StudentQuiz from '@/views/CourseOnline/Quiz/Quiz.vue'
 import Question from '@/views/CourseOnline/TeacherCenter/Detail/Content/Question.vue'
 import DisplayQuestion from '@/views/CourseOnline/TeacherCenter/Detail/Content/DisplayQuestion.vue'
+import axios from "axios";
+import store from "@/store";
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Quiz",
   props: ['chapterInfo'],
+  // eslint-disable-next-line vue/no-unused-components
   components: {StudentQuiz, Question, DisplayQuestion},
   data() {
     return {
@@ -48,11 +52,21 @@ export default {
         options: options,
       };
       this.questionList.push(newQuestion);
+      alert(this.questionList.length)
       console.log(this.questionList)
-
     },
-    submitQuestion() {
-      console.log("submit {{questionList}} to back end.")
+    async submitQuestion() {
+      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${this.chapterInfo.number}`, this.questionList)
+      /*return axios({
+        headers:{
+          "Content-Type": "application/json"
+        },
+        url: `http://${store.state.host}/api/quiz/add?chapterId=${this.chapterInfo.number}`,
+        method: 'post',
+        //转换成json字符串
+        data:JSON.stringify(this.questionList)
+      })*/
+
     }
   }
 }
