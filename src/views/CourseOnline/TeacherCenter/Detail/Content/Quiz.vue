@@ -55,7 +55,7 @@ export default {
       console.log(this.questionList)
     },
     async submitQuestion() {
-      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${this.chapterInfo.number}`, this.questionList)
+      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${this.chapterInfo.id}`, this.questionList)
       /*return axios({
         headers:{
           "Content-Type": "application/json"

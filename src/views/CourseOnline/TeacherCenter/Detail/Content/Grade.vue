@@ -52,6 +52,7 @@
     <el-button-group>
       <el-button type="primary" @click="submitInfo" round>提交变更</el-button>
       <exportExcel :id="'chapterTable'" :name="'章节成绩'" style="margin:0 0 0 0"></exportExcel>
+      <el-button @click="exportData">导出成绩</el-button>
     </el-button-group>
   </div>
 
@@ -85,6 +86,8 @@
 import {reactive, ref} from "vue";
 import ExportExcel from "@/views/CourseOnline/TeacherCenter/Detail/Student/ExportExcel.vue";
 import {ElMessageBox, ElMessage} from "element-plus";
+import axios from "axios";
+import store from "@/store";
 
 export default {
   name: "Grade",
@@ -131,6 +134,10 @@ export default {
       },
     ])
 
+    async function exportData() {
+      // await axios.get(`http://${store.state.host}/api/export?courseId=1&&chapterId=1`);
+      window.location.href = `http://${store.state.host}/api/export?courseId=1&&chapterId=1`;
+    }
 
     function submitInfo() {
       //   这里把所有东西传给后端
@@ -176,7 +183,8 @@ export default {
       dialog_visible,
       new_homework_score,
       new_quiz_score,
-      submitEdit
+      submitEdit,
+      exportData
     }
   }
 }

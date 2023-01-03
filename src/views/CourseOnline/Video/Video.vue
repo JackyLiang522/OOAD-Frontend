@@ -201,7 +201,6 @@ export default {
       return fmt;
     }
 
-
     return {
       player,
       handleMounted,

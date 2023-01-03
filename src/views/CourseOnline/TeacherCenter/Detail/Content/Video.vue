@@ -74,6 +74,7 @@ import store from '@/store'
 import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Video",
   components: {VideoPlayer},
   props: ['chapterInfo'],
