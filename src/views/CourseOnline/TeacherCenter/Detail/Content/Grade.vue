@@ -135,8 +135,8 @@ export default {
     ])
 
     async function exportData() {
-      // await axios.get(`http://${store.state.host}/api/export?courseId=1&&chapterId=1`);
-      window.location.href = `http://${store.state.host}/api/export?courseId=1&&chapterId=1`;
+      // TODO  修改course ID
+      window.location.href = `http://${store.state.host}/api/export?courseId=1&&chapterId=${this.chapterInfo.id}`;
     }
 
     function submitInfo() {

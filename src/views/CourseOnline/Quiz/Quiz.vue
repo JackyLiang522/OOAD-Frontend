@@ -77,7 +77,7 @@ export default {
     const student_answers = ref()
 
     onMounted(async () => {
-      // TODO 改为动态的
+      // TODO 修改chapter ID
       await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=1`).then(
           response => {
             if (response.data) {
