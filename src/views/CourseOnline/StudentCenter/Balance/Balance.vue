@@ -62,10 +62,27 @@
 <script lang="ts">
 import {computed, onMounted, reactive, ref} from "vue";
 import {useStore} from "vuex";
-
+import axios from "axios";
+import store from "@/store";
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Balance",
+
   setup() {
+
+    async function getRecord() {
+      await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=1`).then(
+          response => {
+            if (response.data) {
+              return response.data;
+            }
+          },
+          err => {
+            console.log(err)
+          })
+    }
+
+
     let records = reactive([
       {
         date: '2022-10-02',
@@ -93,7 +110,7 @@ export default {
         remain: '30.00',
         course_name: 'Java'
       }
-    ])
+    ]);
 
 
     function one_info(record: any) {
@@ -108,9 +125,7 @@ export default {
         timestamp: record.date
       }
     }
-
     const is_show_all = ref(false)
-
     let show_info = computed(() => {
       let all_info: any = []
       if (is_show_all.value) {
@@ -124,16 +139,13 @@ export default {
       }
       return all_info
     })
-
-
     const store = useStore()
     const balance = computed(() => store.state.userInfo.balance)
     const charge_in = ref(0)
-
     function addBalance() {
       if(charge_in.value === 0)
         return
-      
+
       const added = charge_in.value
       charge_in.value = 0
       store.commit('ADD_BALANCE', added)
@@ -147,11 +159,8 @@ export default {
         date: curDate
       }
       records.push(new_record)
-
       // 这里发消息给后端，说充钱了
-
     }
-
     return {
       show_info,
       records,
@@ -172,7 +181,6 @@ hr.style-three {
   height: 5px;
   background: #333 linear-gradient(to right, #ccc, #333, #ccc);
 }
-
 .clearfix:after {
   content: "";
   display: block; /*将设置为行内元素，内容多高且多高*/
