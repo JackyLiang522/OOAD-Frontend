@@ -19,7 +19,7 @@
         </div>
 
         <div v-else-if="question.type==='多选'">
-          <p style="word-break: break-word;margin: 15px 0 5px 0;">多选题的题目在这里:</p>
+          <p style="word-break: break-word;margin: 15px 0 5px 0;">{{ question.description }}</p>
           <el-checkbox-group
               v-model="student_answers[index]"
               style="margin-left: 20px"
@@ -32,7 +32,7 @@
 
 
       <div style="display: flex;justify-content: center;">
-        <el-button type="primary" style="margin-top: 25px">提交</el-button>
+        <el-button type="primary" @click="submitAnswers" style="margin-top: 25px" >提交</el-button>
       </div>
       <p style="text-align: right;margin:0 0 0 0;color:gray">{{
           `${hour}:${minute}:${second}`
@@ -44,9 +44,12 @@
 <script lang="ts">
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
 import index from "vuex";
+import axios from "axios";
+import store from "@/store";
 
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: 'Quiz',
   computed: {
     index() {
@@ -73,9 +76,19 @@ export default {
     const questions = ref()
     const student_answers = ref()
 
-    onMounted(() => {
+    onMounted(async () => {
+      // TODO 改为动态的
+      await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=1`).then(
+          response => {
+            if (response.data) {
+              questions.value = response.data;
+            }
+          },
+          err => {
+            console.log(err)
+          })
       // 在这里更新问题列表
-      questions.value = [
+      /*questions.value = [
         {
           description: '单选题的题目站在这里',
           type: '单选',
@@ -103,7 +116,7 @@ export default {
             '选项2的文本',
           ],
         }
-      ]
+      ]*/
 
       student_answers.value = []
       for (let i = 0; i < questions.value.length; i++) {
@@ -134,7 +147,7 @@ export default {
       const parts = []
       let total_parts = 0
       let total_score = 0
-      for (let i = 0; i < questions.value; i++) {
+      for (let i = 0; i < questions.value.length; i++) {
         const question = questions.value[i]
         if (question.type === '多选') {
           parts.push(2)
@@ -144,13 +157,25 @@ export default {
           total_parts++
         }
       }
+      // alert("student_answers.value.length" + student_answers.value.length)
       for (let i = 0; i < student_answers.value.length; i++) {
         const answer = questions.value[i].answers
         const student_answer = student_answers.value[i]
         if (questions.value[i].type === '多选') {
           let is_correct = true
+          if (answer.length == student_answer.length){
+            for (let j = 0; j < answer.length; j++){
+              if (!(questions.value[i].options[answer[j]-1] === student_answer[j])){
+                is_correct = false;
+                break;
+              }
+            }
+          } else {
+            is_correct = false;
+          }
+          /*
           for (let j = 0; j < answer.length; j++) {
-            const cur_answer = answer[j]
+            const cur_answer = questions.value[i].options[answer[j]]
             let cur_correct = false
             for (let k = 0; k < student_answer.length; k++) {
               let cur_student_answer = student_answer[k]
@@ -163,19 +188,22 @@ export default {
               is_correct = false
               break
             }
-          }
+          }*/
           if (is_correct)
-            total_score += 100 / total_parts * parts[i]
+            // total_score += 100 / total_parts * parts[i]
+            total_score += parts[i];
         } else {
-          if (answer[0] === student_answer)
-            total_score += 100 / total_parts * parts[i]
+          if (student_answer.length == 1 && questions.value[i].options[answer[0]-1] === student_answer[0])
+            // total_score += 100 / total_parts * parts[i]
+            total_score += parts[i];
         }
       }
+      total_score = 100 * total_score/total_parts;
       sendBackend(total_score)
     }
 
-    function sendBackend(score: number) {
-      // 把分数传给后端
+    async function sendBackend(score: number) {
+      await axios.post(`http://${store.state.host}/api/quiz/recordGrade?chapterId=1&&studentId=2&&grade=${score}`)
     }
 
     return {
@@ -183,7 +211,8 @@ export default {
       minute,
       hour,
       questions,
-      student_answers
+      student_answers,
+      submitAnswers
     }
   }
 }

@@ -52,7 +52,6 @@ export default {
         options: options,
       };
       this.questionList.push(newQuestion);
-      alert(this.questionList.length)
       console.log(this.questionList)
     },
     async submitQuestion() {

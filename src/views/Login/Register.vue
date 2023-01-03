@@ -27,6 +27,7 @@ import store from "@/store";
 import router from '@/router/Login'
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Register",
   setup() {
     document.body.setAttribute('style', 'background:rgba(159,197,248,0.78)')
