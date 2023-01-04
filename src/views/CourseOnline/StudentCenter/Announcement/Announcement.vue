@@ -26,7 +26,6 @@
                   style="width: 100%;height: 100%"
               >
                 <!--              :router="true"-->
-                <!--                TODO: 获取已购课程-->
                 <el-menu-item v-for="course in courseList"
                               index="1" style="text-align:center" @click="setCouseID(course.id)"
                               route="/student/announcement">
@@ -41,7 +40,7 @@
           <div>
             <div class="demo-collapse" style="width: 100%">
               <el-collapse>
-                <!--                TODO: 获取课程通知-->
+
                 <el-collapse-item v-for="announcement in announcementList"
                                   class="classTitle" :title="announcement.title" name="1">
                   <div>
@@ -76,7 +75,6 @@ export default {
 
     onBeforeMount(async () => {
       courseList.value = []
-      // TODO: 根据stuID返回已购课程
       await axios.get(`http://${store.state.host}/api/course/list_subscribed?clientId=${stuID}`)
           .then(
               response => {
@@ -90,7 +88,7 @@ export default {
 
       courseID = courseList.value[0].id
 
-      // TODO: 根据courseID返回通知列表
+
       announcementList.value = []
       await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseID}`)
           .then(
