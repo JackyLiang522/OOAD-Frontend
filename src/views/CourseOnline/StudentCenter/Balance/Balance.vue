@@ -74,8 +74,6 @@ export default {
 
     let records = ref([]);
     onBeforeMount(async () => {
-
-      // TODO: 这里从后端获取余额和交易记录
       /*
       balance.value = 10
       records.value = [
@@ -157,7 +155,6 @@ export default {
       const added = charge_in.value
       charge_in.value = 0
 
-      // TODO: 这里发消息给后端，说充钱了 added 元
       await axios.post(`http://${store.state.host}/api/transactionRecord/recharge?clientId=${userId}&&change=${added}`)
           .then(
               response => {
@@ -169,7 +166,6 @@ export default {
                 console.log(err)
               })
 
-      // TODO: 这里更新新的账户余额
       await axios.get(`http://${store.state.host}/api/transactionRecord/list?clientId=${userId}`)
           .then(
               response => {
