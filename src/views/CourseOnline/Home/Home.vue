@@ -52,7 +52,7 @@ export default {
     const pageSize = ref(8)
     const currentPage = ref(1)
     const store = useStore()
-    const userInfo = JSON.parse(localStorage.getItem('user_info'))
+    const userId = store.state.userInfo.id
     const shownCourses = ref([])
     const resultCourses = ref([])
 
@@ -86,14 +86,14 @@ export default {
         course_name: course_name
       }
       // 把 new_record 也发给后端，加入交易历史
-      axios.post(`http://${store.state.host}/api/course/subscribe?courseId=${courseId}&clientId=${userInfo.id}`).then((response) => {
+      axios.post(`http://${store.state.host}/api/course/subscribe?courseId=${courseId}&clientId=${userId}`).then((response) => {
         if (response.data) {
           purchasedCourses.value.push(allCourses.value.find(item => item.id === courseId))
           ElMessage({
             message: '购买成功',
             type: 'success',
           });
-        }else {
+        } else {
           ElMessage({
             message: '余额不足',
             type: 'warning',
@@ -128,7 +128,7 @@ export default {
 
       const subscribeResponse = await axios.get(`http://${store.state.host}/api/course/list_subscribed`, {
         params: {
-          clientId: userInfo.id
+          clientId: userId
         }
       })
       purchasedCourses.value = subscribeResponse.data
