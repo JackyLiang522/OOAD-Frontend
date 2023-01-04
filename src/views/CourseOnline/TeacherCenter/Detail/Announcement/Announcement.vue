@@ -109,7 +109,8 @@ export default {
     })
 
     // TODO: 将创建的通知发送给后端 (form.title, form.content, form.email)=>{}
-    const onSubmit = () => {
+    const onSubmit = async () => {
+      await axios.get(`http://${store.state.host}/api/announcement/add?courseId=${courseID}&&title=${form.title}&&content=${form.content}`)
       console.log('submit!')
     }
 
