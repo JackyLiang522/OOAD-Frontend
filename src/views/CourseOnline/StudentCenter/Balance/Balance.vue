@@ -85,7 +85,7 @@ export default {
               })
     }
 
-    let records = ref();
+    let records = ref([]);
 
     function one_info(record: any) {
       let content
@@ -137,12 +137,14 @@ export default {
       // TODO: 这里从后端获取余额和交易记录
       balance.value = 10
       records.value = [
+        // @ts-ignore
         {
           date: '2022-22-22',
           change: -10,
           remain: 30,
           course_name: 'Java'
         },
+        // @ts-ignore
         {
           date: '2022-22-22',
           change: -10,

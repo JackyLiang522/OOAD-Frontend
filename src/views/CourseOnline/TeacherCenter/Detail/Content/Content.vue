@@ -22,7 +22,6 @@
         <div v-for="(chapter, index) in chapters">
           <el-link @click="changeChapter(index, chapter.id)" style="margin: 10px 10px 10px 10px;white-space: pre-wrap;">
             <span>{{ `第${index + 1}章\n${chapter.name}` }}</span>
-
           </el-link>
           <el-divider style="margin: 0 0 0 0"/>
         </div>
@@ -35,7 +34,10 @@
     <el-col :offset="1" :span="19">
       <el-tabs>
         <el-tab-pane label="视频">
-          <Video :chapterInfo="chapterInfo" @change-title="changeTitle"/>
+          <Video
+              :chapterInfo="chapterInfo"
+              @change-title="changeTitle"
+          />
         </el-tab-pane>
         <el-tab-pane label="作业">
           <Homework :chapterInfo="chapterInfo"/>
@@ -54,7 +56,7 @@
 
 <script lang="ts">
 import {ArrowRight} from "@element-plus/icons-vue";
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, onBeforeMount, onMounted, reactive, ref} from "vue";
 import Video from "@/views/CourseOnline/TeacherCenter/Detail/Content/Video.vue";
 import Homework from "@/views/CourseOnline/TeacherCenter/Detail/Content/Homework.vue";
 import Grade from "@/views/CourseOnline/TeacherCenter/Detail/Content/Grade.vue";
@@ -84,6 +86,7 @@ export default {
         number: 0,
       },
     ])
+
     const addChapter = () => {
       axios.post(`http://${store.state.host}/api/chapter/add?courseId=${courseId}&chapterName=default`)
           .then(response => {
@@ -94,13 +97,13 @@ export default {
     const chapterInfo = reactive({
       id: 0,
       number: 0,
-      title: '这里是标题',
+      title: '',
     })
 
-    function changeTitle(number: number, newTitle: string) {
+    async function changeTitle(number: number, newTitle: string) {
       for (let i = 0; i < chapters.value.length; i++) {
         if (i + 1 === number) {
-          axios.put(`http://${store.state.host}/api/chapter/update?chapterId=${chapters.value[i].id}&chapterName=${newTitle}`)
+          await axios.put(`http://${store.state.host}/api/chapter/update?chapterId=${chapters.value[i].id}&chapterName=${newTitle}`)
           chapters.value[i].name = newTitle
           break
         }
@@ -112,11 +115,11 @@ export default {
       chapterInfo.number = index + 1
       chapterInfo.title = chapters.value[index].name
     }
-    
+
     const store = useStore()
 
-    onMounted(async () => {
-      axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
+    onBeforeMount(async () => {
+      await axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
           .then(response => {
             courseName.value = response.data.courseName
           })
@@ -130,8 +133,6 @@ export default {
       for (let i = 0; i < chapters.value.length; i++) {
         chapters.value[i].number = i + 1
       }
-
-      console.log(chapters.value)
 
       // set display chapter info
       chapterInfo.number = 1

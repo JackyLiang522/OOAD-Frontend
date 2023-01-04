@@ -52,8 +52,7 @@
             <router-link :to="{
               path:'/teacher/detail/content',
               query:{
-                course_id:cls.id,
-                course_name:cls.name
+                courseId:cls.id
               }
             }">
               <span class="my-h4">目录</span>

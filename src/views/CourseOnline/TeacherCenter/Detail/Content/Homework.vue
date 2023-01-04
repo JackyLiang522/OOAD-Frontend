@@ -104,11 +104,12 @@
 <script lang="ts">
 import {reactive, ref} from "vue";
 import {ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile} from "element-plus";
+import {useRoute} from "vue-router";
 
 export default {
   name: "Homework",
   props: ['chapterInfo'],
-  setup() {
+  setup(props: any) {
     const table_data = reactive([
       {
         title: '标题1',
@@ -134,13 +135,18 @@ export default {
       if (upload.value === undefined)
         return
 
+      // TODO: 这里把新数据发给后端：new_deadline, new_title, upload
+      const courseId = useRoute().query.courseId
+      const chapterId = props.chapterInfo.id
+
+
       await submitUpload()
       dialog_visible.value = false
       const row = table_data[edited_index.value]
       row.deadline = new_deadline.value
       row.title = new_title.value
       row.attachment_name = upload.value.name
-      //   这里把后端得到的文件下载地址传进去
+      //  TODO: 这里把后端得到的文件下载地址传进去
       //   row.attachment_url = 'xxx/xxx/xxx'
     }
 

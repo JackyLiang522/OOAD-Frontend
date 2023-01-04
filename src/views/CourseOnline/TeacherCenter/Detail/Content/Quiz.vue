@@ -30,6 +30,8 @@ import DisplayQuestion from '@/views/CourseOnline/TeacherCenter/Detail/Content/D
 import axios from "axios";
 import store from "@/store";
 import {ElMessage} from "element-plus";
+import {ref} from "vue";
+import {useRoute} from "vue-router";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -37,13 +39,12 @@ export default {
   props: ['chapterInfo'],
   // eslint-disable-next-line vue/no-unused-components
   components: {StudentQuiz, Question, DisplayQuestion},
-  data() {
-    return {
-      questionList: [],
-    }
-  },
-  methods: {
-    addQuestion(description, type, answers, options) {
+  setup(props) {
+    const questionList = ref([])
+    const courseId = useRoute().query.courseId
+    const chapterId = props.chapterInfo.id
+
+    function addQuestion(description, type, answers, options) {
       ElMessage({
         message: '成功添加.',
         type: 'success',
@@ -54,12 +55,13 @@ export default {
         type: type,
         answers: answers,
         options: options,
-      };
-      this.questionList.push(newQuestion);
-      console.log(this.questionList)
-    },
-    async submitQuestion() {
-      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${this.chapterInfo.id}`, this.questionList)
+      }
+      questionList.value.push(newQuestion);
+      console.log(questionList.value)
+    }
+
+    async function submitQuestion() {
+      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${chapterId}`, questionList.value)
       /*return axios({
         headers:{
           "Content-Type": "application/json"
@@ -69,9 +71,15 @@ export default {
         //转换成json字符串
         data:JSON.stringify(this.questionList)
       })*/
-
     }
-  }
+
+    return {
+      addQuestion,
+      submitQuestion,
+      questionList,
+      courseId,
+    }
+  },
 }
 </script>
 
