@@ -72,25 +72,56 @@ export default {
 
   setup() {
 
-    async function getRecord() {
-      await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=1`)
+    let records = ref([]);
+    onBeforeMount(async () => {
+
+      // TODO: 这里从后端获取余额和交易记录
+      /*
+      balance.value = 10
+      records.value = [
+        {
+          date: '2022-22-22',
+          change: -10,
+          remain: 30,
+          course_name: 'Java'
+        },
+        {
+          date: '2022-22-22',
+          change: -10,
+          remain: 30,
+          course_name: 'Java'
+        }
+      ]
+       */
+
+      await axios.get(`http://${store.state.host}/api/transactionRecord/list?clientId=${userId}`)
           .then(
               response => {
                 if (response.data) {
-                  return response.data;
+                  records.value = response.data;
+                  console.log("onB")
                 }
               },
               err => {
                 console.log(err)
               })
-    }
 
-    let records = ref([]);
+      await axios.get(`http://${store.state.host}/api/transactionRecord/remain?clientId=${userId}`)
+          .then(
+              response => {
+                if (response.data) {
+                  balance.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
+    })
 
     function one_info(record: any) {
       let content
       if (record.change < 0) {
-        content = `-￥${Math.abs(record.change)}：购买${record.course_name}，余额￥${record.remain}`
+        content = `-￥${Math.abs(record.change)}：购买${record.courseName}，余额￥${record.remain}`
       } else {
         content = `+￥${Math.abs(record.change)}，充值，余额￥${record.remain}`
       }
@@ -120,7 +151,7 @@ export default {
     const charge_in = ref(0)
     const userId = store.state.userInfo.id
 
-    function addBalance() {
+    async function addBalance() {
       if (charge_in.value === 0)
         return
 
@@ -128,31 +159,33 @@ export default {
       charge_in.value = 0
 
       // TODO: 这里发消息给后端，说充钱了 added 元
+      await axios.post(`http://${store.state.host}/api/transactionRecord/recharge?clientId=${userId}&&change=${added}`)
+          .then(
+              response => {
+                if (response.data) {
+                  balance.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
 
       // TODO: 这里更新新的账户余额
-      balance.value = 10
+      await axios.get(`http://${store.state.host}/api/transactionRecord/list?clientId=${userId}`)
+          .then(
+              response => {
+                if (response.data) {
+                  records.value = response.data;
+                  console.log("onB")
+                }
+              },
+              err => {
+                console.log(err)
+              })
+
     }
 
-    onBeforeMount(async () => {
-      // TODO: 这里从后端获取余额和交易记录
-      balance.value = 10
-      records.value = [
-        // @ts-ignore
-        {
-          date: '2022-22-22',
-          change: -10,
-          remain: 30,
-          course_name: 'Java'
-        },
-        // @ts-ignore
-        {
-          date: '2022-22-22',
-          change: -10,
-          remain: 30,
-          course_name: 'Java'
-        }
-      ]
-    })
+
 
     return {
       show_info,
