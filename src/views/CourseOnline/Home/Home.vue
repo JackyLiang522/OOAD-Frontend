@@ -7,7 +7,7 @@
 
   <el-space wrap style="display: flex;justify-content: center;">
     <CourseInfoCard
-        v-for="course in coursesShown"
+        v-for="course in shownCourses"
         :courseId="course.id"
         :courseName="course.courseName"
         :teacher="course.teacher"
@@ -19,10 +19,12 @@
     />
   </el-space>
   <el-pagination
-      layout="prev, pager, next" style="display: flex;justify-content: center;margin-top: 50px"
+      layout="prev, pager, next"
+      style="display: flex;justify-content: center;margin-top: 50px"
       :total="courses.length"
       :page-size="pageSize"
       :current-page="currentPage"
+      @current-change="changeShown"
   />
 </template>
 
@@ -35,7 +37,6 @@ import {ref} from "vue";
 import {Search} from "@element-plus/icons-vue";
 
 export default {
-  methods: {Search},
   components: {CourseInfoCard},
   setup() {
     let searchInfo = ref('')
@@ -45,14 +46,16 @@ export default {
     const currentPage = ref(1)
     const store = useStore()
     const userInfo = JSON.parse(localStorage.getItem('user_info'))
+    const shownCourses = ref([])
 
-    const coursesShown = computed(() => {
-      const ans = []
-      for (let i = (currentPage - 1) * pageSize + 1; i <pageSize; i++) {
-        ans.push(courses[i])
+
+    function changeShown() {
+      const temp = []
+      for (let i = (currentPage - 1) * pageSize + 1; i < pageSize; i++) {
+        temp.push(courses[i])
       }
-      return ans
-    })
+      shownCourses.value = temp
+    }
 
     function hasPurchased(courseId) {
       const store = useStore()
@@ -110,7 +113,9 @@ export default {
       searchInfo,
       currentPage,
       pageSize,
-      coursesShown
+      changeShown,
+      Search,
+      shownCourses
     }
   },
 }
