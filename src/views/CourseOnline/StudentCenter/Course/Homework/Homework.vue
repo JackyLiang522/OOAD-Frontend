@@ -85,9 +85,7 @@
           </el-button>
           <template #tip>
             <div class="el-upload__tip" style="color: indianred">
-              <!--              只能上传zip/pdf文件，且不超过20Mb-->
-              <!--              <br/>-->
-              最多上传一份文件，新的提交会覆盖已有提交
+              最多上传一份pdf文件，新的提交会覆盖已有提交
             </div>
           </template>
         </el-upload>
@@ -107,13 +105,14 @@ import {useRoute} from "vue-router";
 
 const upload = ref<UploadInstance>()
 const store = useStore()
-const hwURL = "http://" + store.state.host + "/api/upload/pdf"
-let homeWork = reactive({})
 
 const route = useRoute()
 const courseId = route.query.courseId
 const courseName = ref()
 const chapterId = route.query.chapterId
+const hwURL = "http://" + store.state.host + "/api/upload/studentAssignment?chapterId="+chapterId+"&studentId="+store.state.userInfo.id
+let homeWork = reactive({})
+
 
 onBeforeMount(() => {
   // TODO: 获取课程名字
@@ -134,7 +133,6 @@ onBeforeMount(() => {
 
 // const fileList = ref([])
 const beforeUpload = (file: any) => {
-  // const suffix = splitStrLast(file.name, '.')
   if (!file.name.includes('.pdf')) {
     ElMessage.warning('只能上传pdf文件')
     return false
@@ -154,7 +152,7 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
     message: '已更新提交.',
     type: 'success',
   })
-  // this.$message.warning(`已更新提交`);
+
 }
 
 const handleSuccess = () => {
@@ -165,86 +163,10 @@ const handleSuccess = () => {
 }
 
 const submitUpload = () => {
-  // console.log("submit")
   console.log(upload)
   upload.value!.submit()
 }
 </script>
-<!--<script lang="ts">-->
-<!--import axios from "axios";-->
-
-
-<!--export default {-->
-<!--  name: "Homework",-->
-<!--  data() {-->
-<!--    return {-->
-<!--      fileList: [{-->
-<!--        name: 'hanako.pdf',-->
-<!--        url: 'https://c-ssl.duitang.com/uploads/item/201802/26/20180226093953_rejxw.thumb.1000_0.jpg'-->
-<!--      }]-->
-<!--    };-->
-<!--  },-->
-<!--  methods: {-->
-<!--    beforeHomeworkUpload(file) {-->
-<!--      let that = this;-->
-<!--      const isZip = (file.type.indexOf("zip") !== -1);-->
-<!--      const isPdf = (file.type.indexOf("pdf") !== -1);-->
-<!--      const isLt20M = file.size / 1024 / 1024 < 20;-->
-<!--      console.log(file.type)-->
-
-<!--      if (!isZip && !isPdf) {-->
-<!--        this.$message.error('上传作业文件只能是 ZIP/PDF 格式!');-->
-<!--      }-->
-<!--      if (!isLt20M) {-->
-<!--        this.$message.error('上传作业文件大小不能超过 20MB!');-->
-<!--      }-->
-<!--      if ((isZip || isPdf) && isLt20M) {-->
-<!--        // this.filelist.push(file);-->
-<!--        console.log("add")-->
-<!--        return true-->
-<!--      }-->
-<!--      return false-->
-<!--    },-->
-<!--    handleRemove(file, fileList) {-->
-<!--      console.log(file, fileList);-->
-<!--    },-->
-<!--    handlePreview(file) {-->
-<!--      console.log(file);-->
-<!--    },-->
-
-<!--    // handleExceed(files, fileList) {-->
-<!--    //-->
-<!--    //   this.$message.warning(`已更新提交`);-->
-<!--    // },-->
-<!--    beforeRemove(file, fileList) {-->
-<!--      return this.$confirm(`确定移除 ${file.name}？`);-->
-<!--    },-->
-<!--    // 上传文件-->
-<!--    onUpload(file) {-->
-<!--      let that = this-->
-<!--      let formData = new FormData()-->
-<!--      formData.append('file', file.file)-->
-<!--      this.postUpload(formData).then((res) => {-->
-<!--        console.log(res)-->
-<!--        this.$message.success(this.$t('UPLOAD_SUCCESS'))-->
-<!--      }).catch((e) => {-->
-<!--        this.$message.error(e.message)-->
-<!--      })-->
-<!--    },-->
-<!--    postUpload(file) {-->
-<!--      return axios({-->
-<!--        url: 'upload',-->
-<!--        method: 'post',-->
-<!--        data: file,-->
-<!--        headers: {-->
-<!--          'Content-Type': 'multipart/form-data'-->
-<!--        }-->
-<!--      })-->
-<!--    },-->
-<!--  }-->
-
-<!--}-->
-<!--</script>-->
 
 <style scoped>
 
