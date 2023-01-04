@@ -71,7 +71,7 @@ export default {
   name: "Balance",
 
   setup() {
-
+    const balance = ref()
     let records = ref([]);
     onBeforeMount(async () => {
       /*
@@ -97,7 +97,6 @@ export default {
               response => {
                 if (response.data) {
                   records.value = response.data;
-                  console.log("onB")
                 }
               },
               err => {
@@ -107,9 +106,7 @@ export default {
       await axios.get(`http://${store.state.host}/api/transactionRecord/remain?clientId=${userId}`)
           .then(
               response => {
-                if (response.data) {
                   balance.value = response.data;
-                }
               },
               err => {
                 console.log(err)
@@ -145,7 +142,6 @@ export default {
     })
 
     const store = useStore()
-    const balance = ref()
     const charge_in = ref(0)
     const userId = store.state.userInfo.id
 

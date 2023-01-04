@@ -41,6 +41,7 @@ import axios from "axios";
 import CourseInfoCard from "@/views/CourseOnline/Home/CourseInfoCard.vue";
 import {ref} from "vue";
 import {Search} from "@element-plus/icons-vue";
+import {ElMessage} from "element-plus";
 
 export default {
   components: {CourseInfoCard},
@@ -72,11 +73,12 @@ export default {
     }
 
     function purchaseCourse(courseId, price, course_name) {
+      console.log("purchaseCourse")
       const date = new Date();
       const mon = date.getMonth() + 1;
       const day = date.getDate();
       const curDate = date.getFullYear() + "-" + (mon < 10 ? "0" + mon : mon) + "-" + (day < 10 ? "0" + day : day);
-      const store = useStore()
+      // const store = useStore()
       const new_record = {
         date: curDate,
         remain: store.state.userInfo.balance,
@@ -85,7 +87,14 @@ export default {
       }
       // 把 new_record 也发给后端，加入交易历史
       axios.post(`http://${store.state.host}/api/course/subscribe?courseId=${courseId}&clientId=${userInfo.id}`).then((response) => {
-        purchasedCourses.value.push(allCourses.value.find(item => item.id === courseId))
+        if (response.data) {
+          purchasedCourses.value.push(allCourses.value.find(item => item.id === courseId))
+        }else {
+          ElMessage({
+            message: '余额不足',
+            type: 'warning',
+          });
+        }
       })
     }
 
