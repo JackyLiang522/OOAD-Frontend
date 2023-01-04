@@ -64,24 +64,13 @@ import {useStore} from "vuex";
 import axios from "axios";
 
 export default {
+  // eslint-disable-next-line vue/multi-word-component-names
   name: "Announcement",
   setup() {
     const courseList = ref([])
     let courseID = 0
     const store = useStore()
     const stuID = store.state.userInfo.id
-    // const couseNameList = ref(['课程a', '课程b'])
-    // const announcementList = ref([{
-    //   title: '后端作业已发布',
-    //   body: '                    同学们好，\n' +
-    //       '                    后端作业已发布，线下检查安排如下：\n' +
-    //       '\n' +
-    //       '                    对于第二次后端作业，我们只支持在上机课时间线下检查，如果提前做好了，可找老师或SA现场检查并记分数。为了平衡检查资源，我们给同学们两次检查机会：\n' +
-    //       '                    第一次线下检查后会给个分数并记录，如果觉得不是很理想，可以回去修改\n' +
-    //       '                    第二次线下检查就确定了本次作业的最终分数。\n' +
-    //       '                    提交安排：\n' +
-    //       '                    第二次作业检查之后，需要将源代码提交sakai，但是对于检查环节，我们只支持上机课时间线下检查。'
-    // }])
     const announcementList = ref([])
 
 
@@ -116,7 +105,7 @@ export default {
 
     })
 
-    const setCourseID = async (id) => {
+    const setCourseID = async (id: number) => {
       console.log(id)
       courseID = id
       await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseID}`)
@@ -134,7 +123,7 @@ export default {
     return {
       courseList,
       announcementList,
-      setCouseID: setCourseID
+      setCourseID
     }
   }
 }
