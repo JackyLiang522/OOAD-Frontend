@@ -36,7 +36,7 @@
     <span style="float: left">
       <span style="vertical-align: 40%">交易历史</span><el-icon size="30px" style="margin-left: 5px"><Clock/></el-icon>
     </span>
-    <span style="float: right" v-show="records.length > 5">
+    <span style="float: right" v-show="records !== undefined && records.length > 3">
       <el-button
           type="primary"
           link style="height: 30px;margin-right: 10px"
@@ -60,10 +60,11 @@
 </template>
 
 <script lang="ts">
-import {computed, onMounted, reactive, ref} from "vue";
+import {computed, onBeforeMount, onMounted, reactive, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import store from "@/store";
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Balance",
@@ -83,34 +84,7 @@ export default {
     }
 
 
-    let records = reactive([
-      {
-        date: '2022-10-02',
-        change: 10,
-        remain: '40.00'
-      }, {
-        date: '2022-10-02',
-        change: 10,
-        remain: '40.00'
-      }, {
-        date: '2022-10-02',
-        change: 10,
-        remain: '40.00'
-      },  {
-        date: '2022-10-02',
-        change: 10,
-        remain: '40.00'
-      }, {
-        date: '2022-10-02',
-        change: 10,
-        remain: '40.00'
-      }, {
-        date: '2022-22-22',
-        change: -10,
-        remain: '30.00',
-        course_name: 'Java'
-      }
-    ]);
+    let records = ref();
 
 
     function one_info(record: any) {
@@ -125,25 +99,28 @@ export default {
         timestamp: record.date
       }
     }
+
     const is_show_all = ref(false)
     let show_info = computed(() => {
       let all_info: any = []
       if (is_show_all.value) {
-        records.forEach((value: any) => {
+        records.value.forEach((value: any) => {
           all_info.push(one_info(value))
         })
       } else {
-        for (let i = 0; i < 3; i++) {
-          all_info.push(one_info(records[i]))
+        for (let i = 0; i < Math.min(records.value.length, 3); i++) {
+          all_info.push(one_info(records.value[i]))
         }
       }
       return all_info
     })
+
     const store = useStore()
     const balance = computed(() => store.state.userInfo.balance)
     const charge_in = ref(0)
+
     function addBalance() {
-      if(charge_in.value === 0)
+      if (charge_in.value === 0)
         return
 
       const added = charge_in.value
@@ -156,18 +133,38 @@ export default {
       const new_record = {
         change: added,
         remain: balance.value.toFixed(2),
-        date: curDate
+        date: curDate,
+        course_name: ''
       }
-      records.push(new_record)
+      // @ts-ignore
+      records.value.push(new_record)
       // 这里发消息给后端，说充钱了
     }
+
+    onBeforeMount(async () => {
+      records.value = [
+        {
+          date: '2022-22-22',
+          change: -10,
+          remain: '30.00',
+          course_name: 'Java'
+        },
+        {
+          date: '2022-22-22',
+          change: -10,
+          remain: '30.00',
+          course_name: 'Java'
+        }
+      ]
+    })
+
     return {
       show_info,
       records,
       balance,
       addBalance,
       charge_in,
-      is_show_all
+      is_show_all,
     }
   }
 }
@@ -181,6 +178,7 @@ hr.style-three {
   height: 5px;
   background: #333 linear-gradient(to right, #ccc, #333, #ccc);
 }
+
 .clearfix:after {
   content: "";
   display: block; /*将设置为行内元素，内容多高且多高*/
