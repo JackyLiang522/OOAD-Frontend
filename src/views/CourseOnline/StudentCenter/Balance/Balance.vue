@@ -94,7 +94,7 @@ export default {
       ]
        */
 
-      await axios.get(`http://${store.state.host}/api/transactionRecord/list?clientId=2`)
+      await axios.get(`http://${store.state.host}/api/transactionRecord/list?clientId=${userId}`)
           .then(
               response => {
                 if (response.data) {
@@ -106,7 +106,7 @@ export default {
                 console.log(err)
               })
 
-      await axios.get(`http://${store.state.host}/api/transactionRecord/remain?clientId=2`)
+      await axios.get(`http://${store.state.host}/api/transactionRecord/remain?clientId=${userId}`)
           .then(
               response => {
                 if (response.data) {
@@ -157,7 +157,7 @@ export default {
     const charge_in = ref(0)
     const userId = store.state.userInfo.id
 
-    function addBalance() {
+    async function addBalance() {
       if (charge_in.value === 0)
         return
 
@@ -165,9 +165,30 @@ export default {
       charge_in.value = 0
 
       // TODO: 这里发消息给后端，说充钱了 added 元
+      await axios.post(`http://${store.state.host}/api/transactionRecord/recharge?clientId=${userId}&&change=${added}`)
+          .then(
+              response => {
+                if (response.data) {
+                  balance.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
 
       // TODO: 这里更新新的账户余额
-      balance.value = 10
+      await axios.get(`http://${store.state.host}/api/transactionRecord/list?clientId=${userId}`)
+          .then(
+              response => {
+                if (response.data) {
+                  records.value = response.data;
+                  console.log("onB")
+                }
+              },
+              err => {
+                console.log(err)
+              })
+
     }
 
 
