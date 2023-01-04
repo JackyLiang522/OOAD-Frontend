@@ -114,7 +114,8 @@ export default {
   setup(props: any) {
     const store = useStore()
     const chapterId = props.chapterInfo.id
-    const hwURL = "http://" + store.state.host + "/api/upload/pdf?chapterId="+chapterId
+    const courseId = useRoute().query.courseId
+    const hwURL = "http://" + store.state.host + "/api/upload/pdf?chapterId=" + chapterId
     const table_data = reactive([
       {
         title: '标题1',
@@ -123,7 +124,7 @@ export default {
         attachment_name: 'name1'
       }
     ])
-
+    
     const dialog_visible = ref(false)
     const new_deadline = ref('')
     const edited_index = ref(0)
@@ -137,22 +138,18 @@ export default {
     }
 
     async function submitEdit() {
-      console.log("beforeupload")
-      if (upload.value === undefined)
-        return
-      console.log("upload")
+      // if (upload.value === undefined)
+      //   return
 
       // TODO: 这里把新数据发给后端：new_deadline, new_title, upload
-      const courseId = useRoute().query.courseId
-      const chapterId = props.chapterInfo.id
-
-
+      console.log(courseId)
+      
       await submitUpload()
       dialog_visible.value = false
       const row = table_data[edited_index.value]
       row.deadline = new_deadline.value
       row.title = new_title.value
-      row.attachment_name = upload.value.name
+      // row.attachment_name = upload.value.name
       //  TODO: 这里把后端得到的文件下载地址传进去
       //   row.attachment_url = 'xxx/xxx/xxx'
 
