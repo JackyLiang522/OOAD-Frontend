@@ -89,6 +89,10 @@ export default {
       axios.post(`http://${store.state.host}/api/course/subscribe?courseId=${courseId}&clientId=${userInfo.id}`).then((response) => {
         if (response.data) {
           purchasedCourses.value.push(allCourses.value.find(item => item.id === courseId))
+          ElMessage({
+            message: '购买成功',
+            type: 'success',
+          });
         }else {
           ElMessage({
             message: '余额不足',
