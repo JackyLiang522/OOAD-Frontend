@@ -72,28 +72,62 @@ export default {
 
   setup() {
 
-    async function getRecord() {
-      await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=1`)
+    let records = ref([]);
+    onBeforeMount(async () => {
+
+      // TODO: 这里从后端获取余额和交易记录
+      /*
+      balance.value = 10
+      records.value = [
+        {
+          date: '2022-22-22',
+          change: -10,
+          remain: 30,
+          course_name: 'Java'
+        },
+        {
+          date: '2022-22-22',
+          change: -10,
+          remain: 30,
+          course_name: 'Java'
+        }
+      ]
+       */
+
+      await axios.get(`http://${store.state.host}/api/transactionRecord/list?clientId=2`)
           .then(
               response => {
                 if (response.data) {
-                  return response.data;
+                  records.value = response.data;
+                  console.log("onB")
                 }
               },
               err => {
                 console.log(err)
               })
-    }
 
-    let records = ref();
+      await axios.get(`http://${store.state.host}/api/transactionRecord/remain?clientId=2`)
+          .then(
+              response => {
+                if (response.data) {
+                  balance.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
+
+    })
+
 
     function one_info(record: any) {
       let content
       if (record.change < 0) {
-        content = `-￥${Math.abs(record.change)}：购买${record.course_name}，余额￥${record.remain}`
+        content = `-￥${Math.abs(record.change)}：购买${record.courseName}，余额￥${record.remain}`
       } else {
         content = `+￥${Math.abs(record.change)}，充值，余额￥${record.remain}`
       }
+      // alert(content)
       return {
         content: content,
         timestamp: record.date
@@ -102,12 +136,15 @@ export default {
 
     const is_show_all = ref(false)
     let show_info = computed(() => {
+      console.log('compute')
       let all_info: any = []
       if (is_show_all.value) {
         records.value.forEach((value: any) => {
           all_info.push(one_info(value))
         })
       } else {
+        console.log("length")
+        console.log(records.value.length)
         for (let i = 0; i < Math.min(records.value.length, 3); i++) {
           all_info.push(one_info(records.value[i]))
         }
@@ -133,24 +170,7 @@ export default {
       balance.value = 10
     }
 
-    onBeforeMount(async () => {
-      // TODO: 这里从后端获取余额和交易记录
-      balance.value = 10
-      records.value = [
-        {
-          date: '2022-22-22',
-          change: -10,
-          remain: 30,
-          course_name: 'Java'
-        },
-        {
-          date: '2022-22-22',
-          change: -10,
-          remain: 30,
-          course_name: 'Java'
-        }
-      ]
-    })
+
 
     return {
       show_info,
