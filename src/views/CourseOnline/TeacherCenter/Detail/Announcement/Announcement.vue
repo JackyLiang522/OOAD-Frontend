@@ -70,6 +70,7 @@ import {ArrowRight} from "@element-plus/icons-vue";
 import {onBeforeMount, reactive, ref} from 'vue'
 import axios from "axios";
 import {useStore} from "vuex";
+import {useRoute} from "vue-router";
 
 // const announcementList = ref([{
 //   title: '后端作业已发布',
@@ -97,8 +98,8 @@ export default {
     const announcementList = ref([])
 
     const store = useStore()
-    // TODO: 获取courseID
-    const courseID = 0
+    const route = useRoute()
+    const courseID = route.query.courseId
 
 
     const form = reactive({

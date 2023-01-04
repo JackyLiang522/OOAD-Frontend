@@ -40,19 +40,20 @@ export default {
   components: {CourseInfoCard},
   setup() {
     let searchInfo = ref('')
-    let courses = ref([])
+    let allCourses = ref([])
     let purchasedCourses = ref([])
     const pageSize = ref(8)
     const currentPage = ref(1)
     const store = useStore()
     const userInfo = JSON.parse(localStorage.getItem('user_info'))
     const shownCourses = ref([])
+    const shown
 
 
     function changeShown() {
       const temp = []
-      for (let i = (currentPage.value - 1) * pageSize.value; i < Math.min(courses.value.length, currentPage.value * pageSize.value); i++) {
-        temp.push(courses.value[i])
+      for (let i = (currentPage.value - 1) * pageSize.value; i < Math.min(allCourses.value.length, currentPage.value * pageSize.value); i++) {
+        temp.push(allCourses.value[i])
       }
       shownCourses.value = temp
     }
@@ -78,7 +79,7 @@ export default {
       }
       // 把 new_record 也发给后端，加入交易历史
       axios.post(`http://${store.state.host}/api/course/subscribe?courseId=${courseId}&clientId=${userInfo.id}`).then((response) => {
-        purchasedCourses.value.push(courses.value.find(item => item.id === courseId))
+        purchasedCourses.value.push(allCourses.value.find(item => item.id === courseId))
       })
     }
 
@@ -95,7 +96,7 @@ export default {
       for (let i = 0; i < coursesResponse.data.length; i++) {
         const chapterCountResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=${coursesResponse.data[i].id}`);
         const teacherResponse = await axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=${coursesResponse.data[i].id}`);
-        courses.value.push({
+        allCourses.value.push({
           id: coursesResponse.data[i].id,
           courseName: coursesResponse.data[i].courseName,
           teacher: teacherResponse.data.name,
@@ -115,7 +116,7 @@ export default {
     })
 
     return {
-      courses,
+      courses: allCourses,
       hasPurchased,
       purchaseCourse,
       purchasedCourses,
