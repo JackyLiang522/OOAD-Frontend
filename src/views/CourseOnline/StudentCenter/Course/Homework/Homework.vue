@@ -138,7 +138,7 @@ import {useStore} from "vuex";
 
 const upload = ref<UploadInstance>()
 const store = useStore()
-const hwURL = "http://"+store.state.host+"/api/upload/video"
+const hwURL = "http://"+store.state.host+"/api/upload/pdf"
 
 // const fileList = ref([])
 const beforeUpload = (file: any) => {
