@@ -1,7 +1,7 @@
 <template>
   <div id="login-container" :style="{ boxShadow: `var(${'--el-box-shadow'})` }">
     <p id="login-title">注册</p>
-    <el-input class="top" size="large" v-model="userInfo.email" placeholder="请输入账号" clearable/>
+    <el-input class="top" size="large" v-model="userInfo.email" placeholder="请输入邮箱" clearable/>
     <el-input class="middle" size="large" v-model="userInfo.user_name" placeholder="请输入昵称" clearable/>
     <el-input class="middle" size="large" v-model="userInfo.password" type="password" autocomplete="off"
               placeholder="请输入密码" show-password clearable/>
@@ -58,6 +58,11 @@ export default {
       }
       if (userInfo.password !== userInfo.password_again) {
         showWarning("两次密码输入不同")
+        return
+      }
+      let reg =/[\w!#$%&'*+/=?^_`{|}~-]+(?:\.[\w!#$%&'*+/=?^_`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[\w](?:[\w-]*[\w])?/
+      if (!reg.test(userInfo.email)) {
+        showWarning("请输入合法邮箱")
         return
       }
       submitInfo()
