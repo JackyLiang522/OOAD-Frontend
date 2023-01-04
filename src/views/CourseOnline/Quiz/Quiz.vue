@@ -32,7 +32,7 @@
 
 
       <div style="display: flex;justify-content: center;">
-        <el-button type="primary" @click="submitAnswers" style="margin-top: 25px" >提交</el-button>
+        <el-button type="primary" @click="submitAnswers" style="margin-top: 25px">提交</el-button>
       </div>
       <p style="text-align: right;margin:0 0 0 0;color:gray">{{
           `${hour}:${minute}:${second}`
@@ -43,9 +43,10 @@
 
 <script lang="ts">
 import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
-import index from "vuex";
+import index, {useStore} from "vuex";
 import axios from "axios";
 import store from "@/store";
+import {useRoute} from "vue-router";
 
 
 export default {
@@ -57,6 +58,11 @@ export default {
     }
   },
   setup() {
+    const route = useRoute()
+    const chapterId = route.query.chapterId
+    const store = useStore()
+    const userId = store.state.userInfo.id
+
     let total_seconds = ref(0)
     let timer: any = null
     const second = computed(() => {
@@ -72,13 +78,11 @@ export default {
       return h < 10 ? '0' + h : h.toString()
     })
 
-
     const questions = ref()
     const student_answers = ref()
 
     onMounted(async () => {
-      // TODO 修改chapter ID
-      await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=1`).then(
+      await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=${chapterId}`).then(
           response => {
             if (response.data) {
               questions.value = response.data;
@@ -163,9 +167,9 @@ export default {
         const student_answer = student_answers.value[i]
         if (questions.value[i].type === '多选') {
           let is_correct = true
-          if (answer.length == student_answer.length){
-            for (let j = 0; j < answer.length; j++){
-              if (!(questions.value[i].options[answer[j]-1] === student_answer[j])){
+          if (answer.length == student_answer.length) {
+            for (let j = 0; j < answer.length; j++) {
+              if (!(questions.value[i].options[answer[j] - 1] === student_answer[j])) {
                 is_correct = false;
                 break;
               }
@@ -190,20 +194,20 @@ export default {
             }
           }*/
           if (is_correct)
-            // total_score += 100 / total_parts * parts[i]
+              // total_score += 100 / total_parts * parts[i]
             total_score += parts[i];
         } else {
-          if (student_answer.length == 1 && questions.value[i].options[answer[0]-1] === student_answer[0])
-            // total_score += 100 / total_parts * parts[i]
+          if (student_answer.length == 1 && questions.value[i].options[answer[0] - 1] === student_answer[0])
+              // total_score += 100 / total_parts * parts[i]
             total_score += parts[i];
         }
       }
-      total_score = 100 * total_score/total_parts;
+      total_score = 100 * total_score / total_parts;
       sendBackend(total_score)
     }
 
     async function sendBackend(score: number) {
-      await axios.post(`http://${store.state.host}/api/quiz/recordGrade?chapterId=1&&studentId=2&&grade=${score}`)
+      await axios.post(`http://${store.state.host}/api/quiz/recordGrade?chapterId=${chapterId}&&studentId=${userId}&&grade=${score}`)
     }
 
     return {

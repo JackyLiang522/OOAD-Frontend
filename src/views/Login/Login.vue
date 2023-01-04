@@ -1,8 +1,8 @@
 <template>
   <div id="login-container" :style="{ boxShadow: `var(${'--el-box-shadow'})` }">
     <p id="login-title">登录</p>
-    <el-input class="top" size="large" v-model="userInfo.email" placeholder="请输入邮箱" clearable/>
-    <el-input class="middle" size="large" v-model="userInfo.password" type="password" placeholder="请输入密码"
+    <el-input class="top" size="large" v-model="user_input.email" placeholder="请输入邮箱" clearable/>
+    <el-input class="middle" size="large" v-model="user_input.password" type="password" placeholder="请输入密码"
               show-password
               clearable/>
     <router-link to="/register" class="ask-register">没有账号？点此注册</router-link>
@@ -25,23 +25,24 @@ import {ElMessage, ElMessageBox} from 'element-plus'
 
 import axios from "axios";
 import {useStore} from "vuex";
+import balance from "@/views/CourseOnline/StudentCenter/Balance/Balance.vue";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Login",
   setup() {
-    let userInfo = reactive({
+    let user_input = reactive({
       email: '',
       password: '',
     })
 
     function clearInfo() {
-      userInfo.email = ''
-      userInfo.password = ''
+      user_input.email = ''
+      user_input.password = ''
     }
 
     async function login() {
-      if (!userInfo.email || !userInfo.password) {
+      if (!user_input.email || !user_input.password) {
         showWarning("请输入所有信息")
         return
       }
@@ -75,7 +76,7 @@ export default {
     }
 
     async function checkInfo() {
-      await axios.post(`http://${store.state.host}/api/client/login?email=${userInfo.email}&password=${userInfo.password}`).then(
+      await axios.post(`http://${store.state.host}/api/client/login?email=${user_input.email}&password=${user_input.password}`).then(
           async response => {
             if (response.data) {
               showSuccess("登录成功")
@@ -109,6 +110,8 @@ export default {
                 identity: identity,
                 email: user.email,
                 user_name: user.name,
+                purchased_courses: user.courseSubscribed,
+                balance: user.account,
               }
               localStorage.setItem('user_info', JSON.stringify(user_info))
               if (identity === 'admin') {
@@ -186,7 +189,7 @@ export default {
     }
 
     return {
-      userInfo,
+      user_input: user_input,
       clearInfo,
       login,
       studentLogin_test,

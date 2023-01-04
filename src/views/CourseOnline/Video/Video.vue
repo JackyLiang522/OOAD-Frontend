@@ -2,7 +2,9 @@
   <VideoHeader
       :teacher="teacher"
       :chapterName="chapter.name"
-      :chapterNumber="chapter.chapterNumber"/>
+      :chapterNumber="chapter.chapterNumber"
+      :chapterId="chapter.id"
+  />
 
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
     <el-col :span="16">
@@ -96,6 +98,7 @@ export default {
     VideoPlayer,
     testSpeed
   },
+  emits:['changeChapter'],
   setup() {
     function removeHandler() {
       localStorage.setItem('has_open_video_page', 'false')

@@ -9,8 +9,9 @@ export default createStore({
                 user_name: '',
                 email: '',
                 purchased_courses: [],
-                balance: 0
-            },
+                balance: 0,
+                id: 0
+            },  
             host: 'localhost:8081',
         }
     },
@@ -18,8 +19,12 @@ export default createStore({
     // actions中所有函数名字为小写字母+下划线
     actions: {
         set_userInfo(context, payload) {
-            //    payload应该为对象：{ email:111@111, user_name:111, is_teacher:true }
-
+            context.commit('SET_ID',payload.id)
+            context.commit('SET_PURCHASED_COURSES',payload.purchased_courses)
+            context.commit('SET_BALANCE',payload.balance)
+            context.commit('SET_IDENTITY',payload.identity)
+            context.commit('SET_USER_NAME',payload.user_name)
+            context.commit('SET_EMAIL',payload.email)
         },
     },
 
@@ -54,5 +59,8 @@ export default createStore({
         DECREASE_BALANCE(state, payload) {
             state.userInfo.balance -= payload
         },
+        SET_ID(state, payload) {
+            state.userInfo.id = payload
+        }
     }
 })

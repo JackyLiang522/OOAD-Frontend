@@ -126,10 +126,6 @@ export default {
         return '/home'
     })
 
-    function test() {
-      console.log(user_name.value)
-    }
-
     function resetVideoValue() {
       localStorage.setItem('has_open_video_page', 'false')
     }
@@ -152,14 +148,9 @@ export default {
           }, 500)
     })
 
-    onBeforeMount(() => {
+    onBeforeMount(async () => {
       const user_info = JSON.parse(localStorage.getItem('user_info'))
-      store.commit('SET_EMAIL', user_info.email)
-      store.commit('SET_USER_NAME', user_info.user_name)
-      store.commit('SET_IDENTITY', user_info.identity)
-      store.commit('SET_PURCHASED_COURSES', user_info.purchased_courses)
-      store.commit('SET_BALANCE', user_info.balance)
-      // test()
+      await store.dispatch('set_userInfo', user_info)
     })
 
     onBeforeUnmount(() => {
@@ -176,15 +167,6 @@ export default {
       resetVideoValue
     }
   },
-  // watch: {
-  //   user: 'refreshLocation'
-  // },
-  // methods: {
-  //   refreshLocation() {
-  //     console.log('back to home')
-  //     window.location.href = '/#/home'
-  //   }
-  // }
 }
 </script>
 
