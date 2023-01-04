@@ -107,6 +107,7 @@ import {computed, onBeforeMount, reactive, ref, watch} from "vue";
 import {ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile} from "element-plus";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
+import axios from "axios";
 
 export default {
   name: "Homework",
@@ -134,6 +135,8 @@ export default {
     )
     const refreshTable = async () => {
       // TODO: 后端获取数据
+      // table_data.value
+
     }
 
     onBeforeMount(() => {
@@ -166,6 +169,8 @@ export default {
       //  TODO: 这里把后端得到的文件下载地址传进去
       //   row.attachment_url = 'xxx/xxx/xxx'
 
+      await axios.post(`http://${store.state.host}/api/assignment/add?chapterId=${chapterId.value}&&title=${row.title}&&deadline=${row.deadline}`)
+      
     }
 
     function removeRow(index: number) {

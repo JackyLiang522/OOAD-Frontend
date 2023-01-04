@@ -145,7 +145,7 @@ export default {
     async function releaseComment() {
       if (comment_input.value === '')
         return
-      
+
       const new_comment = {
         nickname: store.state.userInfo.user_name,
         contents: comment_input.value,
