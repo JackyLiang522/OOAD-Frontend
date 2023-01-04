@@ -96,6 +96,7 @@ export default {
           introduction: coursesResponse.data[i].introduction
         })
       }
+      changeShown()
 
       const subscribeResponse = await axios.get(`http://${store.state.host}/api/course/list_subscribed`, {
         params: {
