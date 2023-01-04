@@ -13,12 +13,12 @@
 
   <div class="clearfix">
     <span style="float: left;line-height: 30px;font-size: 25px;color: #cb0000;font-weight: bold;margin-left: 20px;">
-      ￥{{ balance.toFixed(2) }}
+      ￥{{ balance }}
     </span>
     <span style="float:right;">
       <el-input-number
-          :precision="2"
-          :step="0.1"
+          :precision="0"
+          :step="1"
           :min="0"
           v-model="charge_in"
           style="height: 30px"/>
@@ -64,6 +64,7 @@ import {computed, onBeforeMount, onMounted, reactive, ref} from "vue";
 import {useStore} from "vuex";
 import axios from "axios";
 import store from "@/store";
+import {ElMessage} from "element-plus";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -72,20 +73,19 @@ export default {
   setup() {
 
     async function getRecord() {
-      await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=1`).then(
-          response => {
-            if (response.data) {
-              return response.data;
-            }
-          },
-          err => {
-            console.log(err)
-          })
+      await axios.get(`http://${store.state.host}/api/quiz/listByChapter?chapterId=1`)
+          .then(
+              response => {
+                if (response.data) {
+                  return response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
     }
 
-
     let records = ref();
-
 
     function one_info(record: any) {
       let content
@@ -116,7 +116,7 @@ export default {
     })
 
     const store = useStore()
-    const balance = computed(() => store.state.userInfo.balance)
+    const balance = ref()
     const charge_in = ref(0)
 
     function addBalance() {
@@ -126,33 +126,26 @@ export default {
       const added = charge_in.value
       charge_in.value = 0
       store.commit('ADD_BALANCE', added)
-      const date = new Date();
-      const mon = date.getMonth() + 1;
-      const day = date.getDate();
-      const curDate = date.getFullYear() + "-" + (mon < 10 ? "0" + mon : mon) + "-" + (day < 10 ? "0" + day : day);
-      const new_record = {
-        change: added,
-        remain: balance.value.toFixed(2),
-        date: curDate,
-        course_name: ''
-      }
-      // @ts-ignore
-      records.value.push(new_record)
+
       // 这里发消息给后端，说充钱了
+
+      // 这里更新新的账户余额
+
     }
 
     onBeforeMount(async () => {
+      balance.value = 10
       records.value = [
         {
           date: '2022-22-22',
           change: -10,
-          remain: '30.00',
+          remain: 30,
           course_name: 'Java'
         },
         {
           date: '2022-22-22',
           change: -10,
-          remain: '30.00',
+          remain: 30,
           course_name: 'Java'
         }
       ]

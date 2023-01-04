@@ -141,8 +141,7 @@ export default {
         identity: 'student',
         email: 'student@example.com',
         user_name: '林雨航',
-        purchased_courses: [],
-        balance: 0
+        id: 0
       }
       localStorage.setItem('user_info', JSON.stringify(student_info))
       localStorage.setItem('has_open_video_page', 'false')
@@ -154,8 +153,7 @@ export default {
         identity: 'teacher',
         email: 'teacher@example.com',
         user_name: '朱悦明',
-        purchased_courses: [],
-        balance: 0
+        id: 0
       }
       localStorage.setItem('user_info', JSON.stringify(teacher_info))
       localStorage.setItem('has_open_video_page', 'false')
@@ -167,8 +165,7 @@ export default {
         identity: 'admin',
         email: 'admin@example.com',
         user_name: '梁家源',
-        purchased_courses: [],
-        balance: 0
+        id: 0
       }
       localStorage.setItem('user_info', JSON.stringify(admin_info))
       localStorage.setItem('has_open_video_page', 'false')
@@ -180,8 +177,7 @@ export default {
         identity: 'tourist',
         email: 'tourist@example.com',
         user_name: '',
-        purchased_courses: [],
-        balance: 0
+        id: 0
       }
       localStorage.setItem('user_info', JSON.stringify(tourist_info))
       localStorage.setItem('has_open_video_page', 'false')

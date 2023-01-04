@@ -12,7 +12,7 @@
         fit="contain"/>
 
     <p style="font-size: 20px;font-weight: bold;color: #397ce2;text-align: center;margin: 15px 0 15px 0">
-      <router-link :to="hasPurchased?('/video?course_id=' + courseId):''">
+      <router-link :to="hasPurchased?(`/video?courseId=${courseId}`):''">
         {{ courseName }}
       </router-link>
       <el-button

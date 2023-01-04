@@ -134,23 +134,20 @@ export default {
       timer = setInterval(
           () => {
             let user_info = JSON.parse(localStorage.getItem('user_info'))
-            // console.log("user.user_name"+user.user_name)
-            // console.log("user_name"+user_name.value)
             if (user_name.value !== user_info.user_name) {
-              console.log('user changed')
               window.location.href = '/#/home'
-              store.commit('SET_EMAIL', user_info.email)
-              store.commit('SET_USER_NAME', user_info.user_name)
-              store.commit('SET_IDENTITY', user_info.identity)
-              store.commit('SET_PURCHASED_COURSES', user_info.purchased_courses)
-              store.commit('SET_BALANCE', user_info.balance)
+              store.dispatch('set_userInfo', user_info)
             }
           }, 500)
     })
 
     onBeforeMount(async () => {
       const user_info = JSON.parse(localStorage.getItem('user_info'))
-      await store.dispatch('set_userInfo', user_info)
+      if (user_info === null || !['student', 'teacher', 'admin'].some(e => e === user_info.identity)) {
+        window.location.href = '/login#/login'
+      } else {
+        await store.dispatch('set_userInfo', user_info)
+      }
     })
 
     onBeforeUnmount(() => {

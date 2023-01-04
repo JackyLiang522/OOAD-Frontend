@@ -4,14 +4,12 @@ import {createStore} from 'vuex'
 export default createStore({
     state() {
         return {
-            userInfo: {
-                identity: 'tourist',    //只能是 tourist teacher student admin
-                user_name: '',
-                email: '',
-                purchased_courses: [],
-                balance: 0,
-                id: 0
-            },  
+            userInfo:{
+              id:0,
+              user_name:'',
+              identity:'tourist',
+              email:'111@111.11'  
+            },
             host: 'localhost:8081',
         }
     },
@@ -20,8 +18,6 @@ export default createStore({
     actions: {
         set_userInfo(context, payload) {
             context.commit('SET_ID',payload.id)
-            context.commit('SET_PURCHASED_COURSES',payload.purchased_courses)
-            context.commit('SET_BALANCE',payload.balance)
             context.commit('SET_IDENTITY',payload.identity)
             context.commit('SET_USER_NAME',payload.user_name)
             context.commit('SET_EMAIL',payload.email)
@@ -40,24 +36,6 @@ export default createStore({
 
         SET_USER_NAME(state, payload) {
             state.userInfo.user_name = payload
-        },
-        SET_PURCHASED_COURSES(state, payload) {
-            state.userInfo.purchased_courses = payload
-        },
-        SET_BALANCE(state, payload) {
-            state.userInfo.balance = payload
-        },
-
-        PURCHASE_COURSE(state, payload) {
-            // @ts-ignore
-            state.userInfo.purchased_courses.push(payload)
-        },
-        ADD_BALANCE(state, payload) {
-            state.userInfo.balance += payload
-        },
-
-        DECREASE_BALANCE(state, payload) {
-            state.userInfo.balance -= payload
         },
         SET_ID(state, payload) {
             state.userInfo.id = payload

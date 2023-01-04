@@ -3,11 +3,11 @@
     <span style="font-size: 20px;margin:0 100px 0 0">章节 {{ chapterNumber }}：{{ chapterName }}</span>
     <span style="float: right">
       <span style="font-size: 15px;">by {{ teacher }}</span>
-        <el-button 
+        <el-button
             size="default"
-            type="info" 
-            style="margin-left: 40px" 
-            @click="this.$router.push({ path: '/quiz', query: {chapterId: chapterId}})">
+            type="info"
+            style="margin-left: 40px"
+            @click="this.$router.push({ path: '/quiz', query: {chapterId: chapterId, courseId: courseId}})">
           测验
         </el-button>
     </span>
@@ -22,15 +22,9 @@
 </template>
 
 <script>
-import {ref} from "vue";
 
 export default {
-  props: {
-    teacher: String,
-    chapterNumber: Number,
-    chapterName: String,
-    chapterId: Number,
-  },
+  props: ['teacher', 'chapterNumber', 'chapterName', 'chapterId', 'courseId'],
   name: 'VideoQuizHeader',
 }
 </script>

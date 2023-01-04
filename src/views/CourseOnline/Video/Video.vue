@@ -4,6 +4,7 @@
       :chapterName="chapter.name"
       :chapterNumber="chapter.chapterNumber"
       :chapterId="chapter.id"
+      :courseId="courseId"
   />
 
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
@@ -87,6 +88,7 @@ import axios from 'axios';
 import {useStore} from "vuex";
 import {ElMessage, ElMessageBox} from 'element-plus'
 import type {Action} from 'element-plus'
+import {useRoute} from "vue-router";
 
 export default {
   name: 'vue-basic-player-example',
@@ -98,7 +100,7 @@ export default {
     VideoPlayer,
     testSpeed
   },
-  emits:['changeChapter'],
+  emits: ['changeChapter'],
   setup() {
     function removeHandler() {
       localStorage.setItem('has_open_video_page', 'false')
@@ -169,7 +171,8 @@ export default {
         window.addEventListener('beforeunload', e => removeHandler())
       }
 
-      courseId.value = router.currentRoute.value.query.course_id;
+      // @ts-ignore
+      courseId.value = useRoute().query.courseId;
       const chaptersResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + courseId.value)
       chapters.value = chaptersResponse.data
       chapter.value = chapters.value[0];
@@ -184,7 +187,7 @@ export default {
         comments.value = response.data;
       })
     })
-    
+
     function dateFtt(fmt: string, date: Date) { //author: meizz   
       const o = {
         "M+": date.getMonth() + 1,                 //月份   

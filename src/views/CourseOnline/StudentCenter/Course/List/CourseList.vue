@@ -1,11 +1,11 @@
 <template>
-<!--  <div style="display: flex;justify-content: center;">-->
-<!--    <el-divider content-position="left"-->
-<!--                style="display: flex;justify-content: center;width: 70%; margin:30px  0 3% 3%"><b>-->
-<!--      <h2>我的课程</h2>-->
-<!--    </b>-->
-<!--    </el-divider>-->
-<!--  </div>-->
+  <!--  <div style="display: flex;justify-content: center;">-->
+  <!--    <el-divider content-position="left"-->
+  <!--                style="display: flex;justify-content: center;width: 70%; margin:30px  0 3% 3%"><b>-->
+  <!--      <h2>我的课程</h2>-->
+  <!--    </b>-->
+  <!--    </el-divider>-->
+  <!--  </div>-->
   <el-container>
     <el-header style="height: 70px">
       <h3 style="margin-right: 5px;">
@@ -31,41 +31,24 @@
     </el-button>
   </div>
 
-  <el-row style="margin:  0 0 0 0" align="middle">
+  <el-row style="margin:  0 0 0 0" align="middle" v-for="course in courses">
     <el-col :span="5" :offset="6" style="text-align: center;vertical-align: center">
-      <div class="grid-content bg-purple-light" >
-        <router-link to="/video"  style="margin-top: 10px;line-height:inherit;display: block" >
-          <h4>课程 A</h4></router-link>
+      <div class="grid-content bg-purple-light">
+        <router-link :to="`/video?courseId=${course.courseId}`" style="margin-top: 10px;line-height:inherit;display: block">
+          <h4>{{ course.courseName }}</h4></router-link>
         <!--        跳转至课程视频观看url-->
       </div>
     </el-col>
     <el-col :span="5" style="text-align: center;vertical-align: center">
       <div class="grid-content bg-purple">
-        <router-link to="/student/course/detail">
-          <h4 >课程详情</h4></router-link>
+        <router-link :to="`/student/course/detail?courseId=${course.courseId}`">
+          <h4>课程详情</h4></router-link>
       </div>
     </el-col>
     <el-col :span="2">
-      <div class="grid-content bg-purple-dark"><h5 style="text-align: center">教师: xx </h5></div>
-    </el-col>
-  </el-row>
-
-  <el-row style="margin:  0 0 0 0">
-    <el-col :span="5" :offset="6">
-      <div class="grid-content bg-purple-light" style="text-align: center; ">
-        <router-link to="/video"  style="height: 200%">
-          <h4>课程 A</h4></router-link>
-        <!--        跳转至课程视频观看url-->
+      <div class="grid-content bg-purple-dark">
+        <h5 style="text-align: center">教师: {{ course.teacher.name }} </h5>
       </div>
-    </el-col>
-    <el-col :span="5">
-      <div class="grid-content bg-purple">
-        <router-link to="/student/course/detail">
-          <h4 style="text-align: center">课程详情</h4></router-link>
-      </div>
-    </el-col>
-    <el-col :span="2">
-      <div class="grid-content bg-purple-dark"><h5 style="text-align: center">教师: xx </h5></div>
     </el-col>
   </el-row>
 
@@ -74,10 +57,36 @@
 
 <script>
 import router from "@/router/CourseOnline";
+import {onBeforeMount, ref} from "vue";
 
 export default {
   name: "CourseList",
-  router,
+  setup() {
+    const courses = ref()
+
+    onBeforeMount(() => {
+      // Todo: 从后端获取订阅的课程
+      courses.value = [
+        {
+          courseName: 'JavaA',
+          courseId: 0,
+          teacher: {
+            name: 'TeacherA'
+          }
+        }, {
+          courseName: 'JavaB',
+          courseId: 1,
+          teacher: {
+            name: 'TeacherB'
+          },
+        },
+      ]
+    })
+
+    return {
+      courses
+    }
+  }
 }
 </script>
 
