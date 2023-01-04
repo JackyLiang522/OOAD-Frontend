@@ -116,7 +116,7 @@ export default {
 
     })
 
-    const setCouseID = async (id) => {
+    const setCourseID = async (id) => {
       console.log(id)
       courseID = id
       await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseID}`)
@@ -134,7 +134,7 @@ export default {
     return {
       courseList,
       announcementList,
-      setCouseID
+      setCouseID: setCourseID
     }
   }
 }
