@@ -108,7 +108,6 @@ export default {
           price: coursesResponse.data[i].price,
           introduction: coursesResponse.data[i].introduction
         })
-        resultCourses.value = allCourses.value
       }
       changeShown()
 

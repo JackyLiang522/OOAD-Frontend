@@ -50,7 +50,7 @@ export default {
 <style scoped>
 .course_info_card {
   width: 240px;
-  height: 300px;
+  height: 280px;
   background-color: white;
   border: 1px solid var(--el-border-color);
   margin: 0 0 0 0;
