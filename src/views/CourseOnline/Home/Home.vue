@@ -83,7 +83,15 @@ export default {
     }
 
     onBeforeMount(async () => {
-      const coursesResponse = await axios.get(`http://${store.state.host}/api/course/list`);
+      let coursesResponse
+      const store = useStore()
+      if (store.state.userInfo.identity === 'student') {
+        coursesResponse = await axios.get(`http://${store.state.host}/api/course/list`)
+      } else {
+        const userId = store.state.userInfo.id
+        // TODO: 获取这个老师创建的课程
+        // courseResponse = ...
+      }
       for (let i = 0; i < coursesResponse.data.length; i++) {
         const chapterCountResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=${coursesResponse.data[i].id}`);
         const teacherResponse = await axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=${coursesResponse.data[i].id}`);
@@ -105,10 +113,6 @@ export default {
       })
       purchasedCourses.value = subscribeResponse.data
     })
-
-    function test() {
-      console.log(currentPage.value)
-    }
 
     return {
       courses,
