@@ -71,7 +71,6 @@ import {onBeforeMount, reactive, ref} from 'vue'
 import axios from "axios";
 import {useStore} from "vuex";
 
-const announcementList = ref([])
 // const announcementList = ref([{
 //   title: '后端作业已发布',
 //   content: '                    同学们好，\n' +
@@ -93,10 +92,10 @@ export default {
     ArrowRight() {
       return ArrowRight
     },
-
-
   },
   setup() {
+    const announcementList = ref([])
+
     const store = useStore()
     // TODO: 获取courseID
     const courseID = 0
@@ -110,7 +109,7 @@ export default {
     })
 
     // TODO: 将创建的通知发送给后端 (form.title, form.content, form.email)=>{}
-    const onSubmit = ()=> {
+    const onSubmit = () => {
       console.log('submit!')
     }
 
@@ -131,7 +130,7 @@ export default {
     return {
       form,
       announcementList,
-      onSubmit
+      onSubmit,
     }
   }
 }

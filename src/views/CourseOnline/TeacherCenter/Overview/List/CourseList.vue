@@ -58,11 +58,21 @@
               <span class="my-h4">目录</span>
             </router-link>
             <el-divider direction="vertical"/>
-            <router-link to="/teacher/detail/announcement">
+            <router-link :to="{
+              path:'/teacher/detail/announcement',
+              query:{
+                courseId:cls.id
+              }
+            }">
               <span class="my-h4">通知</span>
             </router-link>
             <el-divider direction="vertical"/>
-            <router-link to="/teacher/detail/student">
+            <router-link :to="{
+              path:'/teacher/detail/student',
+              query:{
+                courseId:cls.id
+              }
+            }">
               <span class="my-h4">学生</span>
             </router-link>
             <el-divider direction="vertical"/>
