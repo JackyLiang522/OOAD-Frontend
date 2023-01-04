@@ -120,7 +120,7 @@ export default {
                 window.location.href = '/#/home'
               }
             } else {
-              showError('用户名或密码不符合规范')
+              showError('用户名或密码不正确')
             }
           },
           err => {
