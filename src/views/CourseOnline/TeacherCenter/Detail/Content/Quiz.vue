@@ -29,6 +29,7 @@ import Question from '@/views/CourseOnline/TeacherCenter/Detail/Content/Question
 import DisplayQuestion from '@/views/CourseOnline/TeacherCenter/Detail/Content/DisplayQuestion.vue'
 import axios from "axios";
 import store from "@/store";
+import {ElMessage} from "element-plus";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -43,7 +44,10 @@ export default {
   },
   methods: {
     addQuestion(description, type, answers, options) {
-      alert("成功添加")
+      ElMessage({
+        message: '成功添加.',
+        type: 'success',
+      });
       const newQuestion = {
         id: new Date().toISOString(),
         description: description,

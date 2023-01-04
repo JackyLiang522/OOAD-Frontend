@@ -12,40 +12,43 @@
         message: '题目描述不能为空',
         trigger: 'blur',
       }">
-        <el-input v-model="form.description" />
+        <el-input v-model="form.description"/>
       </el-form-item>
-<!--      <el-form-item label="是否多选">-->
-<!--        <el-switch v-model="form.multiple" />-->
-<!--      </el-form-item>-->
+      <!--      <el-form-item label="是否多选">-->
+      <!--        <el-switch v-model="form.multiple" />-->
+      <!--      </el-form-item>-->
       <el-form-item label="题目类型">
         <el-radio-group v-model="form.type">
-          <el-radio label="多选" />
-          <el-radio label="单选" />
-          <el-radio label="判断" />
+          <el-radio label="多选"/>
+          <el-radio label="单选"/>
+          <el-radio label="判断"/>
         </el-radio-group>
       </el-form-item>
       <el-form-item label="正确选项">
         <el-checkbox-group v-model="form.answers">
           <el-checkbox v-for="(domain, index) in form.options"
-                       :key="domain.key" :label="'选项 ' + (index+1)" name="type" />
+                       :key="domain.key" :label="'选项 ' + (index+1)" name="type"/>
         </el-checkbox-group>
       </el-form-item>
-
-      <el-form-item
-          v-for="(domain, index) in form.options"
-          :key="domain.key"
-          :label="'选项 ' + (index+1)"
-          :rules="{
+<!--      <div v-if="!isJudge">-->
+        <el-form-item
+            v-for="(domain, index) in form.options"
+            :key="domain.key"
+            :label="'选项 ' + (index+1)"
+            :rules="{
         required: true,
         message: 'domain can not be null',
         trigger: 'blur',
       }"
-      >
-        <el-input v-model="domain.value" />
-        <el-button class="mt-2" @click.prevent="removeDomain(domain)"
-        >删除</el-button
         >
-      </el-form-item>
+          <el-input v-model="domain.value"/>
+          <el-button class="mt-2" @click.prevent="removeDomain(domain)"
+          >删除
+          </el-button
+          >
+        </el-form-item>
+<!--      </div>-->
+<!--      <div v-else><h2>test</h2></div>-->
       <el-form-item>
         <el-button @click="addDomain">增加选项</el-button>
         <el-button type="primary" @click="submitForm(formRef)">添加问题</el-button>
@@ -56,8 +59,9 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from 'vue'
-import type { FormInstance } from 'element-plus'
+import {computed, reactive, ref} from 'vue'
+import type {FormInstance} from 'element-plus'
+import {ElMessage} from 'element-plus'
 
 
 const formRef = ref<FormInstance>()
@@ -72,6 +76,7 @@ const form = reactive({
     },
   ],
 })
+const isJudge = computed(form.type == '判断')
 
 interface OptionItem {
   key: number
@@ -94,14 +99,57 @@ const addDomain = () => {
 const emit = defineEmits(['add-question'])
 const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
+  if (!form.description || !form.type || form.answers.length == 0 || form.options.length == 0) {
+    ElMessage({
+      message: '请输入所有信息',
+      type: 'warning',
+    });
+    return;
+  }
+  for (let i = 0; i < form.options.length; i++) {
+    if (!form.options[i].value) {
+      ElMessage({
+        message: '请输入选项内容',
+        type: 'warning',
+      });
+      return;
+    }
+  }
+  if (form.type == '多选') {
+    if (form.answers.length <= 1) {
+      ElMessage({
+        message: '多选题需设置至少2个正确选项',
+        type: 'warning',
+      });
+      return
+    }
+  } else if (form.type == '单选') {
+    if (form.answers.length > 1 || form.answers.length == 0) {
+      ElMessage({
+        message: '单选题需设置1个正确选项',
+        type: 'warning',
+      });
+      return
+    }
+  } else {
+    if (form.answers.length > 1 || form.answers.length == 0) {
+      ElMessage({
+        message: '判断题需设置1个正确选项',
+        type: 'warning',
+      });
+      return
+    }
+  }
+
+
   formEl.validate((valid) => {
     if (valid) {
       console.log('submit!')
-      emit('add-question', form.description,form.type,form.answers,form.options)
+      emit('add-question', form.description, form.type, form.answers, form.options)
       form.description = ''
       form.type = ''
       form.answers = []
-      form.options =  [
+      form.options = [
         {
           key: 1,
           value: '',
