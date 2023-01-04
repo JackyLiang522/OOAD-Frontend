@@ -142,10 +142,9 @@ const beforeUpload = (file: any) => {
 }
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
-
   upload.value!.clearFiles()
   const file = files[0] as UploadRawFile
-  console.log(file)
+  // console.log(file)
   file.uid = genFileId()
   upload.value!.handleStart(file)
   ElMessage({

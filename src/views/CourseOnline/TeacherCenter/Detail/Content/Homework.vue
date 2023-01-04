@@ -69,10 +69,11 @@
             <el-upload
                 ref="upload"
                 class="upload-demo"
-                action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+                :action="hwURL"
                 :limit="1"
                 :on-exceed="handleExceed"
                 :on-success="handleSuccess"
+                :before-upload="beforeUpload"
                 :auto-upload="false"
                 list-type="text"
             >
@@ -105,11 +106,15 @@
 import {reactive, ref} from "vue";
 import {ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile} from "element-plus";
 import {useRoute} from "vue-router";
+import {useStore} from "vuex";
 
 export default {
   name: "Homework",
   props: ['chapterInfo'],
   setup(props: any) {
+    const store = useStore()
+    const chapterId = props.chapterInfo.id
+    const hwURL = "http://" + store.state.host + "/api/upload/pdf?chapterId="+chapterId
     const table_data = reactive([
       {
         title: '标题1',
@@ -132,8 +137,10 @@ export default {
     }
 
     async function submitEdit() {
+      console.log("beforeupload")
       if (upload.value === undefined)
         return
+      console.log("upload")
 
       // TODO: 这里把新数据发给后端：new_deadline, new_title, upload
       const courseId = useRoute().query.courseId
@@ -148,6 +155,7 @@ export default {
       row.attachment_name = upload.value.name
       //  TODO: 这里把后端得到的文件下载地址传进去
       //   row.attachment_url = 'xxx/xxx/xxx'
+
     }
 
     function removeRow(index: number) {
@@ -155,6 +163,15 @@ export default {
     }
 
     let upload = ref<UploadInstance>()
+
+    const beforeUpload = (file: any) => {
+      if (!file.name.includes('.pdf')) {
+        ElMessage.warning('只能上传pdf文件')
+        return false
+      } else {
+        return true
+      }
+    }
 
     const handleExceed: UploadProps['onExceed'] = (files) => {
       upload.value!.clearFiles()
@@ -177,7 +194,7 @@ export default {
 
     const submitUpload = () => {
       upload.value!.submit()
-
+      console.log("submit")
     }
 
     function addRow() {
@@ -199,10 +216,12 @@ export default {
       edited_index,
       new_title,
       removeRow,
+      beforeUpload,
       handleExceed,
       handleSuccess,
       submitUpload,
       addRow,
+      hwURL,
     }
   }
 }
