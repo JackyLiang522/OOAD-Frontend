@@ -7,7 +7,7 @@
 
   <el-space wrap style="display: flex;justify-content: center;">
     <CourseInfoCard
-        v-for="course in courses"
+        v-for="course in coursesShown"
         :courseId="course.id"
         :courseName="course.courseName"
         :teacher="course.teacher"
@@ -18,13 +18,17 @@
         :purchaseCourse="purchaseCourse"
     />
   </el-space>
-  <el-pagination layout="prev, pager, next" style="display: flex;justify-content: center;margin-top: 50px"
-                 :total="100"/>
+  <el-pagination
+      layout="prev, pager, next" style="display: flex;justify-content: center;margin-top: 50px"
+      :total="courses.length"
+      :page-size="pageSize"
+      :current-page="currentPage"
+  />
 </template>
 
 <script>
 import {useStore} from "vuex";
-import {computed, onMounted} from "vue";
+import {computed, onBeforeMount} from "vue";
 import axios from "axios";
 import CourseInfoCard from "@/views/CourseOnline/Home/CourseInfoCard.vue";
 import {ref} from "vue";
@@ -37,8 +41,18 @@ export default {
     let searchInfo = ref('')
     let courses = ref([])
     let purchasedCourses = ref([])
+    const pageSize = ref(8)
+    const currentPage = ref(1)
     const store = useStore()
     const userInfo = JSON.parse(localStorage.getItem('user_info'))
+
+    const coursesShown = computed(() => {
+      const ans = []
+      for (let i = (currentPage - 1) * pageSize + 1; i <pageSize; i++) {
+        ans.push(courses[i])
+      }
+      return ans
+    })
 
     function hasPurchased(courseId) {
       const store = useStore()
@@ -66,7 +80,7 @@ export default {
       })
     }
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
       const coursesResponse = await axios.get(`http://${store.state.host}/api/course/list`);
       for (let i = 0; i < coursesResponse.data.length; i++) {
         const chapterCountResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=${coursesResponse.data[i].id}`);
@@ -95,6 +109,9 @@ export default {
       purchaseCourse,
       purchasedCourses,
       searchInfo,
+      currentPage,
+      pageSize,
+      coursesShown
     }
   },
 }
