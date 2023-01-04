@@ -115,6 +115,7 @@ export default {
       return true
     }
 
+    // TODO: 向后端发送章节标题变动请求
     function handleEditTitle() {
       ElMessageBox.prompt('请输入新标题', '编辑标题', {
         confirmButtonText: '确定',
