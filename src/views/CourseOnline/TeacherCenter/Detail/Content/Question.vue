@@ -24,13 +24,13 @@
           <el-radio label="判断"/>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="正确选项">
-        <el-checkbox-group v-model="form.answers">
-          <el-checkbox v-for="(domain, index) in form.options"
-                       :key="domain.key" :label="'选项 ' + (index+1)" name="type"/>
-        </el-checkbox-group>
-      </el-form-item>
 <!--      <div v-if="!isJudge">-->
+        <el-form-item label="正确选项">
+          <el-checkbox-group v-model="form.answers">
+            <el-checkbox v-for="(domain, index) in form.options"
+                         :key="domain.key" :label="'选项 ' + (index+1)" name="type"/>
+          </el-checkbox-group>
+        </el-form-item>
         <el-form-item
             v-for="(domain, index) in form.options"
             :key="domain.key"
@@ -48,7 +48,8 @@
           >
         </el-form-item>
 <!--      </div>-->
-<!--      <div v-else><h2>test</h2></div>-->
+<!--      <div v-else>-->
+<!--      </div>-->
       <el-form-item>
         <el-button @click="addDomain">增加选项</el-button>
         <el-button type="primary" @click="submitForm(formRef)">添加问题</el-button>
@@ -59,7 +60,7 @@
 </template>
 
 <script lang="ts" setup>
-import {computed, reactive, ref} from 'vue'
+import {computed, reactive, ref, watch} from 'vue'
 import type {FormInstance} from 'element-plus'
 import {ElMessage} from 'element-plus'
 
@@ -74,9 +75,55 @@ const form = reactive({
       key: 1,
       value: '',
     },
-  ],
+    {
+      key: 2,
+      value: '',
+    },
+  ]
 })
-const isJudge = computed(form.type == '判断')
+const isJudge = computed(() => form.type == '判断')
+const type = computed(() => form.type)
+watch(
+    type,
+    (type) => {
+      if (type=='判断') {
+        form.options = [{
+          key: 1,
+          value: '对',
+        }, {
+          key: 2,
+          value: '错',
+        }];
+        console.log("isJudge")
+      } else {
+        if (type == '单选') {
+          form.options = [
+            {
+              key: 1,
+              value: '',
+            },
+            {
+              key: 2,
+              value: '',
+            },
+          ];
+        } else {
+          form.options = [
+            {
+              key: 1,
+              value: '',
+            },
+            {
+              key: 2,
+              value: '',
+            },
+          ];
+        }
+        console.log("isNotJudge")
+
+      }
+    }
+)
 
 interface OptionItem {
   key: number
