@@ -135,8 +135,7 @@ export default {
     ])
 
     async function exportData() {
-      // TODO  修改course ID
-      window.location.href = `http://${store.state.host}/api/export?courseId=1&&chapterId=${this.chapterInfo.id}`;
+      window.location.href = `http://${store.state.host}/api/export?chapterId=${this.chapterInfo.id}`;
     }
 
     function submitInfo() {
