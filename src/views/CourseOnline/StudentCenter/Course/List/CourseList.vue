@@ -34,20 +34,20 @@
   <el-row style="margin:  0 0 0 0" align="middle" v-for="course in courses">
     <el-col :span="5" :offset="6" style="text-align: center;vertical-align: center">
       <div class="grid-content bg-purple-light">
-        <router-link :to="`/video?courseId=${course.courseId}`" style="margin-top: 10px;line-height:inherit;display: block">
+        <router-link :to="`/video?courseId=${course.id}`" style="margin-top: 10px;line-height:inherit;display: block">
           <h4>{{ course.courseName }}</h4></router-link>
         <!--        跳转至课程视频观看url-->
       </div>
     </el-col>
     <el-col :span="5" style="text-align: center;vertical-align: center">
       <div class="grid-content bg-purple">
-        <router-link :to="`/student/course/detail?courseId=${course.courseId}`">
+        <router-link :to="`/student/course/detail?courseId=${course.id}`">
           <h4>课程详情</h4></router-link>
       </div>
     </el-col>
     <el-col :span="2">
       <div class="grid-content bg-purple-dark">
-        <h5 style="text-align: center">教师: {{ course.teacher.name }} </h5>
+        <h5 style="text-align: center">教师: {{ course.teacher }} </h5>
       </div>
     </el-col>
   </el-row>
@@ -56,31 +56,27 @@
 </template>
 
 <script>
-import router from "@/router/CourseOnline";
-import {onBeforeMount, ref} from "vue";
+import {onMounted, ref} from "vue";
+import axios from "axios";
+import store from "@/store";
 
 export default {
   name: "CourseList",
   setup() {
-    const courses = ref()
+    const courses = ref([])
+    const userInfo = JSON.parse(localStorage.getItem('user_info'))
 
-    onBeforeMount(() => {
-      // Todo: 从后端获取订阅的课程
-      courses.value = [
-        {
-          courseName: 'JavaA',
-          courseId: 0,
-          teacher: {
-            name: 'TeacherA'
-          }
-        }, {
-          courseName: 'JavaB',
-          courseId: 1,
-          teacher: {
-            name: 'TeacherB'
-          },
-        },
-      ]
+    onMounted(async () => {
+      // 从后端获取订阅的课程
+      const coursesResponse = await axios.get(`http://${store.state.host}/api/course/list_subscribed?clientId=${userInfo.id}`);
+      for (let i = 0; i < coursesResponse.data.length; i++) {
+        const teacherResponse = await axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=${coursesResponse.data[i].id}`);
+        courses.value.push({
+          id: coursesResponse.data[i].id,
+          courseName: coursesResponse.data[i].courseName,
+          teacher: teacherResponse.data.name,
+        })
+      }
     })
 
     return {

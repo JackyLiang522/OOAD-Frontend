@@ -89,7 +89,6 @@ export default {
       console.log('Basic player event', log)
     }
 
-    let comment_input = ref('')
     const host = store.state.host
 
     const has_video = ref(false)
@@ -133,7 +132,6 @@ export default {
       player,
       handleMounted,
       handleEvent,
-      comment_input,
       has_video,
       handleExceed,
       submitUpload,

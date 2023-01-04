@@ -52,7 +52,6 @@
     <el-button-group>
       <el-button type="primary" @click="submitInfo" round>提交变更</el-button>
       <exportExcel :id="'chapterTable'" :name="'章节成绩'" style="margin:0 0 0 0"></exportExcel>
-      <el-button @click="exportData">导出成绩</el-button>
     </el-button-group>
   </div>
 
@@ -88,12 +87,13 @@ import ExportExcel from "@/views/CourseOnline/TeacherCenter/Detail/Student/Expor
 import {ElMessageBox, ElMessage} from "element-plus";
 import axios from "axios";
 import store from "@/store";
+import {useRoute} from "vue-router";
 
 export default {
   name: "Grade",
   components: {ExportExcel},
   props: ['chapterInfo'],
-  setup() {
+  setup(props) {
     const table_data = reactive([
       {
         name: 'Stu 1',
@@ -139,7 +139,9 @@ export default {
     }
 
     function submitInfo() {
-      //   这里把所有东西传给后端
+      //  TODO: 这里把table_data传给后端
+      const chapterId = props.chapterInfo.id
+      const courseId = useRoute().query.courseId
     }
 
     function removeRow(index) {

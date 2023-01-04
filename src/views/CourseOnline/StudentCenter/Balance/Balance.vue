@@ -116,9 +116,7 @@ export default {
               err => {
                 console.log(err)
               })
-
     })
-
 
     function one_info(record: any) {
       let content
@@ -127,7 +125,6 @@ export default {
       } else {
         content = `+￥${Math.abs(record.change)}，充值，余额￥${record.remain}`
       }
-      // alert(content)
       return {
         content: content,
         timestamp: record.date
@@ -136,15 +133,12 @@ export default {
 
     const is_show_all = ref(false)
     let show_info = computed(() => {
-      console.log('compute')
       let all_info: any = []
       if (is_show_all.value) {
         records.value.forEach((value: any) => {
           all_info.push(one_info(value))
         })
       } else {
-        console.log("length")
-        console.log(records.value.length)
         for (let i = 0; i < Math.min(records.value.length, 3); i++) {
           all_info.push(one_info(records.value[i]))
         }
