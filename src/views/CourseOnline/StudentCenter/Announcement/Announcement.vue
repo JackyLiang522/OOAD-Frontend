@@ -61,6 +61,7 @@
 <script lang="ts">
 import {onBeforeMount, ref} from "vue";
 import {useStore} from "vuex";
+import axios from "axios";
 
 export default {
   name: "Announcement",
@@ -85,15 +86,49 @@ export default {
 
 
     onBeforeMount(async () => {
-      // TODO: 根据stuID返回已购课程
       courseList.value = []
+      // TODO: 根据stuID返回已购课程
+      await axios.get(`http://${store.state.host}/api/course/list_subscribed?clientId=${stuID}`)
+          .then(
+              response => {
+                if (response.data) {
+                  courseList.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
+
       courseID = courseList.value[0].id
+
       // TODO: 根据courseID返回通知列表
       announcementList.value = []
+      await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseID}`)
+          .then(
+              response => {
+                if (response.data) {
+                  announcementList.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
+
     })
 
-    const setCouseID = (id) =>{
+    const setCouseID = async (id) => {
+      console.log(id)
       courseID = id
+      await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseID}`)
+          .then(
+              response => {
+                if (response.data) {
+                  announcementList.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
     }
 
     return {
