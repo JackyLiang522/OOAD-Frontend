@@ -53,7 +53,6 @@ export default {
       const day = date.getDate();
       const curDate = date.getFullYear() + "-" + (mon < 10 ? "0" + mon : mon) + "-" + (day < 10 ? "0" + day : day);
       const store = useStore()
-      store.commit('DECREASE_BALANCE', price)
       const new_record = {
         date: curDate,
         remain: store.state.userInfo.balance,
