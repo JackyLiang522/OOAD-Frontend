@@ -23,7 +23,7 @@
       style="display: flex;justify-content: center;margin-top: 50px"
       :total="courses.length"
       :page-size="pageSize"
-      :current-page="currentPage"
+      v-model:current-page="currentPage"
       @current-change="changeShown"
   />
 </template>
@@ -51,7 +51,7 @@ export default {
 
     function changeShown() {
       const temp = []
-      for (let i = (currentPage.value - 1) * pageSize.value + 1; i < Math.max(courses.value.length, currentPage.value * pageSize.value); i++) {
+      for (let i = (currentPage.value - 1) * pageSize.value; i < Math.min(courses.value.length, currentPage.value * pageSize.value); i++) {
         temp.push(courses.value[i])
       }
       shownCourses.value = temp
@@ -106,6 +106,10 @@ export default {
       purchasedCourses.value = subscribeResponse.data
     })
 
+    function test() {
+      console.log(currentPage.value)
+    }
+
     return {
       courses,
       hasPurchased,
@@ -116,7 +120,7 @@ export default {
       pageSize,
       changeShown,
       Search,
-      shownCourses
+      shownCourses,
     }
   },
 }
