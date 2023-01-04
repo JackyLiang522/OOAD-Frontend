@@ -1,7 +1,12 @@
 <template>
   <div style="display: flex;justify-content: center;">
     <el-input v-model="searchInfo" size="large" placeholder="请输入" style="width: 450px"/>
-    <el-button size="large" :icon="Search" style="margin-left: 20px;width: 100px">搜索</el-button>
+    <el-button
+        size="large"
+        :icon="Search"
+        style="margin-left: 20px;width: 100px"
+        @click="handleSearch"
+    >搜索</el-button>
   </div>
   <el-divider/>
 
@@ -47,13 +52,13 @@ export default {
     const store = useStore()
     const userInfo = JSON.parse(localStorage.getItem('user_info'))
     const shownCourses = ref([])
-    const shown
+    const resultCourses = ref([])
 
 
     function changeShown() {
       const temp = []
-      for (let i = (currentPage.value - 1) * pageSize.value; i < Math.min(allCourses.value.length, currentPage.value * pageSize.value); i++) {
-        temp.push(allCourses.value[i])
+      for (let i = (currentPage.value - 1) * pageSize.value; i < Math.min(resultCourses.value.length, currentPage.value * pageSize.value); i++) {
+        temp.push(resultCourses.value[i])
       }
       shownCourses.value = temp
     }
@@ -90,8 +95,7 @@ export default {
         coursesResponse = await axios.get(`http://${store.state.host}/api/course/list`)
       } else {
         const userId = store.state.userInfo.id
-        // TODO: 获取这个老师创建的课程
-        // courseResponse = ...
+        coursesResponse = await axios.get(`http://${store.state.host}/api/course/list_by_teacher?&&teacherId=${userId}`)
       }
       for (let i = 0; i < coursesResponse.data.length; i++) {
         const chapterCountResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=${coursesResponse.data[i].id}`);
@@ -104,6 +108,7 @@ export default {
           price: coursesResponse.data[i].price,
           introduction: coursesResponse.data[i].introduction
         })
+        resultCourses.value = allCourses.value
       }
       changeShown()
 
@@ -114,6 +119,14 @@ export default {
       })
       purchasedCourses.value = subscribeResponse.data
     })
+
+    const handleSearch = function () {
+      const tempResults = []
+      allCourses.value
+          .filter(course => course.courseName.indexOf(searchInfo.value) !== -1)
+          .forEach(course => tempResults.push(course))
+      resultCourses.value = tempResults
+    }
 
     return {
       courses: allCourses,
@@ -126,6 +139,7 @@ export default {
       changeShown,
       Search,
       shownCourses,
+      handleSearch
     }
   },
 }
