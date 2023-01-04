@@ -127,13 +127,14 @@ export default {
     const teacher = ref('')
     const videoSrc = ref('')
     const store = useStore()
+    const userId = store.state.userInfo.id
 
     function changeChapter(chapterId: number) {
       for (let i = 0; i < chapters.value.length; i++) {
         if (chapters.value[i].id === chapterId) {
           chapter.value = chapters.value[i]
           videoSrc.value = `http://${store.state.host}/api/upload/video/${chapter.value.id}.mp4`
-          axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + chapter.value.id).then((response) => {
+          axios.get(`http://${store.state.host}/api/comment/list?chapterId=${chapter.value.id}`).then((response) => {
             comments.value = response.data;
           })
           break
@@ -141,22 +142,19 @@ export default {
       }
     }
 
-    function releaseComment() {
+    async function releaseComment() {
       if (comment_input.value === '')
         return
-
-      // TODO: 这里把新评论传给后端
+      
       const new_comment = {
-        username: store.state.userInfo.user_name,
-        content: comment_input.value,
+        nickname: store.state.userInfo.user_name,
+        contents: comment_input.value,
         date: dateFtt("yyyy-MM-dd hh:mm", new Date())
       }
-      
-      // TODO: 这里获取新的评论区列表
-      // comments.value = 从后端获取的新列表
-
-
-      
+      await axios.post(`http://${store.state.host}/api/comment/add?chapterId=${chapter.value.id}&&contents=${new_comment.contents}&&nickname=${new_comment.nickname}&&userId=${userId}`)
+      await axios.get(`http://${store.state.host}/api/comment/list?chapterId=${chapter.value.id}`).then((response) => {
+        comments.value = response.data;
+      })
       comment_input.value = ''
     }
 

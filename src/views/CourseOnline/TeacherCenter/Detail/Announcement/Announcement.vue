@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </template>
     <template #content>
-      <span class="text-large font-600 mr-3"> 高等数学 </span>
+      <span class="text-large font-600 mr-3"> {{ courseName }} </span>
     </template>
   </el-page-header>
   <el-divider/>
@@ -99,8 +99,8 @@ export default {
 
     const store = useStore()
     const route = useRoute()
-    const courseID = route.query.courseId
-
+    const courseId = route.query.courseId
+    const courseName = ref('')
 
     const form = reactive({
       title: '样例标题',
@@ -108,14 +108,14 @@ export default {
       // TODO: 实现发邮件功能
       email: false,
     })
-    
+
     const onSubmit = async () => {
-      await axios.get(`http://${store.state.host}/api/announcement/add?courseId=${courseID}&&title=${form.title}&&content=${form.content}`)
+      await axios.get(`http://${store.state.host}/api/announcement/add?courseId=${courseId}&&title=${form.title}&&content=${form.content}`)
       console.log('submit!')
     }
 
     onBeforeMount(async () => {
-      await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseID}`)
+      await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseId}`)
           .then(
               response => {
                 if (response.data) {
@@ -125,6 +125,10 @@ export default {
               err => {
                 console.log(err)
               })
+      await axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
+          .then(response => {
+            courseName.value = response.data.courseName
+          })
     })
 
 
@@ -132,6 +136,7 @@ export default {
       form,
       announcementList,
       onSubmit,
+      courseName
     }
   }
 }

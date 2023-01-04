@@ -9,7 +9,7 @@
       </el-breadcrumb>
     </template>
     <template #content>
-      <span class="text-large font-600 mr-3"> 高等数学 </span>
+      <span class="text-large font-600 mr-3"> {{ courseName }} </span>
     </template>
   </el-page-header>
 
@@ -59,7 +59,7 @@
       </div>
       <exportExcel :id="'stuTable'" :name="'学生名单'"></exportExcel>
 
-<!--/*      <el-button @click="exportToExcel" style="float: right; margin: 40px  3% 20px 0" type="primary" round>导出</el-button>*/-->
+      <!--/*      <el-button @click="exportToExcel" style="float: right; margin: 40px  3% 20px 0" type="primary" round>导出</el-button>*/-->
 
 
     </el-card>
@@ -74,6 +74,12 @@ import {ArrowRight} from "@element-plus/icons-vue";
 // const XLSX = require('xlsx')
 
 import ExportExcel from "@/views/CourseOnline/TeacherCenter/Detail/Student/ExportExcel.vue";
+import {useRoute} from "vue-router";
+import {onBeforeMount, ref} from "vue";
+import axios from "axios";
+import videojs from "video.js";
+import use = videojs.use;
+import {useStore} from "vuex";
 
 export default {
   name: "Student",
@@ -84,21 +90,39 @@ export default {
     },
 
   },
-  data() {
-    return {
-      stuData: [{
-        name: 'ksco',
-        score: 90
-      },
+  setup() {
+    const route = useRoute()
+    const courseId = route.query.courseId
+    const courseName = ref('')
+    const store = useStore()
+    const stuData = ref([])
+
+    onBeforeMount(async () => {
+      await axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
+          .then(response => {
+            courseName.value = response.data.courseName
+          })
+
+      // TODO: 获取stuData
+      stuData.value = [
+        // @ts-ignore
+        {
+          name: 'ksco',
+          score: 90
+        },
+        // @ts-ignore
         {
           name: 'tsuki',
           score: '-'
-        }],
+        }
+      ]
+    })
+
+    return {
+      stuData,
+      courseName,
     }
   },
-  // setup() {
-  //   return {}
-  // }
 }
 </script>
 
