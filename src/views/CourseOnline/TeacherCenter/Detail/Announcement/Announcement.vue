@@ -54,7 +54,7 @@
   </div>
   <div>
     <el-timeline>
-      <el-timeline-item v-for="announcement in announcementList" center :timestamp="announcement.time.toDateString()"
+      <el-timeline-item v-for="announcement in announcementList" center :timestamp="new Date(announcement.time).toDateString()"
                         placement="top">
         <el-card shadow="never">
           <h4>{{ announcement.title }}</h4>

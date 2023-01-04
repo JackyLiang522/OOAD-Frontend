@@ -41,7 +41,7 @@
                                   class="classTitle" :title="announcement.title" name="1">
                   <div>
                     <p> {{ announcement.content }}</p>
-                    <p> {{ announcement.time.toDateString() }}</p>
+                    <p> {{ new Date(announcement.time).toDateString() }}</p>
                   </div>
                 </el-collapse-item>
               </el-collapse>

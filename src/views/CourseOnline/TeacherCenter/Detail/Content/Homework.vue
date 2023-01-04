@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts">
-import {reactive, ref} from "vue";
+import {computed, onBeforeMount, reactive, ref, watch} from "vue";
 import {ElMessage, genFileId, UploadInstance, UploadProps, UploadRawFile} from "element-plus";
 import {useRoute} from "vue-router";
 import {useStore} from "vuex";
@@ -113,9 +113,9 @@ export default {
   props: ['chapterInfo'],
   setup(props: any) {
     const store = useStore()
-    const chapterId = props.chapterInfo.id
+    const chapterId = computed(() => props.chapterInfo.id)
     const courseId = useRoute().query.courseId
-    const hwURL = "http://" + store.state.host + "/api/upload/pdf?chapterId=" + chapterId
+    const hwURL = "http://" + store.state.host + "/api/upload/pdf?chapterId=" + chapterId.value
     const upload = ref<UploadInstance>()
     const table_data = reactive([
       {
@@ -125,6 +125,21 @@ export default {
         attachment_name: 'name1'
       }
     ])
+    watch(
+        chapterId,
+        (newValue, oldValue) => {
+          refreshTable()
+          console.log(newValue)
+        }
+    )
+    const refreshTable = async () => {
+      // TODO: 后端获取数据
+    }
+
+    onBeforeMount(() => {
+      refreshTable()
+    })
+
 
     const dialog_visible = ref(false)
     const new_deadline = ref('')
