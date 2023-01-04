@@ -145,8 +145,7 @@ export default {
     async function releaseComment() {
       if (comment_input.value === '')
         return
-
-      // TODO: 这里把新评论传给后端
+      
       const new_comment = {
         nickname: store.state.userInfo.user_name,
         contents: comment_input.value,
@@ -156,7 +155,6 @@ export default {
       await axios.get(`http://${store.state.host}/api/comment/list?chapterId=${chapter.value.id}`).then((response) => {
         comments.value = response.data;
       })
-
       comment_input.value = ''
     }
 
