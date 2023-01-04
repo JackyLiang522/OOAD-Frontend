@@ -52,7 +52,7 @@ export default {
     function changeShown() {
       const temp = []
       for (let i = (currentPage.value - 1) * pageSize.value + 1; i < pageSize.value; i++) {
-        temp.push(courses[i])
+        temp.push(courses.value[i])
       }
       shownCourses.value = temp
     }
