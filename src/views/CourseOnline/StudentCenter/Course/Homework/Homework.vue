@@ -99,14 +99,16 @@
         <el-upload
             ref="upload"
             class="upload-demo"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :action = "hwURL"
             :limit="1"
             :on-exceed="handleExceed"
             :on-success="handleSuccess"
+            :before-upload="beforeUpload"
             :auto-upload="false"
             list-type="text"
             style="margin-top: 20px"
         >
+<!--          :file-list="fileList"-->
           <template #trigger>
             <el-button type="primary">选择文件</el-button>
           </template>
@@ -115,8 +117,8 @@
           </el-button>
           <template #tip>
             <div class="el-upload__tip" style="color: indianred">
-<!--              只能上传zip/pdf文件，且不超过20Mb-->
-<!--              <br/>-->
+              <!--              只能上传zip/pdf文件，且不超过20Mb-->
+              <!--              <br/>-->
               最多上传一份文件，新的提交会覆盖已有提交
             </div>
           </template>
@@ -131,12 +133,29 @@
 import {ref} from 'vue'
 import {ElMessage, genFileId} from 'element-plus'
 import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
+import {$ref} from "vue/macros";
+import {useStore} from "vuex";
 
 const upload = ref<UploadInstance>()
+const store = useStore()
+const hwURL = "http://"+store.state.host+"/api/upload/video"
+
+// const fileList = ref([])
+const beforeUpload = (file: any) => {
+  // const suffix = splitStrLast(file.name, '.')
+  if (!file.name.includes('.pdf')) {
+    ElMessage.warning('只能上传pdf文件')
+    return false
+  } else {
+    return true
+  }
+}
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
+
   upload.value!.clearFiles()
   const file = files[0] as UploadRawFile
+  console.log(file)
   file.uid = genFileId()
   upload.value!.handleStart(file)
   ElMessage({
@@ -146,7 +165,7 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
   // this.$message.warning(`已更新提交`);
 }
 
-const handleSuccess = ()=> {
+const handleSuccess = () => {
   ElMessage({
     message: '上传成功.',
     type: 'success',
@@ -154,6 +173,8 @@ const handleSuccess = ()=> {
 }
 
 const submitUpload = () => {
+  // console.log("submit")
+  console.log(upload)
   upload.value!.submit()
 }
 </script>
