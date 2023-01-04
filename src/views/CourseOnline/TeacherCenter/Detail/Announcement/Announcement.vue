@@ -24,11 +24,11 @@
       </div>
       <div style="display: flex;justify-content: center;">
         <el-form :model="form" label-width="120px">
-          <el-form-item label="主题">
-            <el-input v-model="form.subject"/>
+          <el-form-item label="标题">
+            <el-input v-model="form.title"/>
           </el-form-item>
           <el-form-item label="通知内容">
-            <el-input v-model="form.message" type="textarea"/>
+            <el-input v-model="form.content" type="textarea"/>
           </el-form-item>
           <el-form-item label="同时发送邮件">
             <el-radio-group v-model="form.email">
@@ -46,58 +46,94 @@
     </el-card>
   </div>
 
-  <div  style="margin:40px 0 20px 30px">
-    <span >
+  <div style="margin:40px 0 20px 30px">
+    <span>
       <span style="vertical-align: 40%">历史通知</span><el-icon size="30px" style="margin-left: 5px"><Clock/></el-icon>
     </span>
 
   </div>
   <div>
-  <el-timeline>
-    <el-timeline-item center timestamp="2018/4/12" placement="top">
-      <el-card shadow="never">
-        <h4>后端作业已发布</h4>
-        <p>同学们好，
-          后端作业已发布，线下检查安排如下： 对于第二次后端作业，我们只支持在上机课时间线下检查，如果提前做好了，可找老师或SA现场检查并记分数。为了平衡检查资源，我们给同学们两次检查机会： 第一次线下检查后会给个分数并记录，如果觉得不是很理想，可以回去修改 第二次线下检查就确定了本次作业的最终分数。
-          提交安排： 第二次作业检查之后，需要将源代码提交sakai，但是对于检查环节，我们只支持上机课时间线下检查。</p>
-      </el-card>
-    </el-timeline-item>
-    <el-timeline-item center timestamp="2018/4/3" placement="top">
-      <el-card shadow="never">
-        <h4>第一次作业成绩发布通知</h4>
-        <p>同学们好，
-          第一次作业已发布，请大家在assignment模块查看。对应SA名单如下，后续作业批改SA依旧不变，如若有疑问，请本周内（建议上机课时间）咨询指定SA.</p>
-      </el-card>
-    </el-timeline-item>
-  </el-timeline>
+    <el-timeline>
+      <el-timeline-item v-for="announcement in announcementList" center :timestamp="announcement.time.toDateString()"
+                        placement="top">
+        <el-card shadow="never">
+          <h4>{{ announcement.title }}</h4>
+          <p>{{ announcement.content }}</p>
+        </el-card>
+      </el-timeline-item>
+    </el-timeline>
   </div>
 </template>
 
 <script lang="ts">
 import {ArrowRight} from "@element-plus/icons-vue";
-import {reactive} from 'vue'
+import {onBeforeMount, reactive, ref} from 'vue'
+import axios from "axios";
+import {useStore} from "vuex";
 
-
+const announcementList = ref([])
+// const announcementList = ref([{
+//   title: '后端作业已发布',
+//   content: '                    同学们好，\n' +
+//       '                    后端作业已发布，线下检查安排如下：\n' +
+//       '\n' +
+//       '                    对于第二次后端作业，我们只支持在上机课时间线下检查，如果提前做好了，可找老师或SA现场检查并记分数。为了平衡检查资源，我们给同学们两次检查机会：\n' +
+//       '                    第一次线下检查后会给个分数并记录，如果觉得不是很理想，可以回去修改\n' +
+//       '                    第二次线下检查就确定了本次作业的最终分数。\n' +
+//       '                    提交安排：\n' +
+//       '                    第二次作业检查之后，需要将源代码提交sakai，但是对于检查环节，我们只支持上机课时间线下检查。',
+//   time:new Date()
+// }])
 export default {
   name: "Announcement",
   data() {
-    return {
-      form: reactive({
-        subject: '样例主题',
-        message: '信息内容',
-        email: false,
-      })
-    }
+    return {}
   },
   methods: {
     ArrowRight() {
       return ArrowRight
     },
-    onSubmit() {
+
+
+  },
+  setup() {
+    const store = useStore()
+    // TODO: 获取courseID
+    const courseID = 0
+
+
+    const form = reactive({
+      title: '样例标题',
+      content: '信息内容',
+      // TODO: 实现发邮件功能
+      email: false,
+    })
+
+    // TODO: 将创建的通知发送给后端 (form.title, form.content, form.email)=>{}
+    const onSubmit = ()=> {
       console.log('submit!')
     }
 
-  },
+    onBeforeMount(async () => {
+      await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseID}`)
+          .then(
+              response => {
+                if (response.data) {
+                  announcementList.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
+    })
+
+
+    return {
+      form,
+      announcementList,
+      onSubmit
+    }
+  }
 }
 </script>
 

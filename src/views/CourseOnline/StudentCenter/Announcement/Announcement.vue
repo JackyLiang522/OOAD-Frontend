@@ -15,8 +15,6 @@
         <el-aside width="20%">
           <div>
             <el-row class="tac">
-
-              <!--                        <el-col :span="12">-->
               <el-menu
                   active-text-color="#ffd04b"
                   background-color="#545c64"
@@ -25,14 +23,12 @@
                   text-color="#fff"
                   style="width: 100%;height: 100%"
               >
-                <!--              :router="true"-->
                 <el-menu-item v-for="course in courseList"
                               index="1" style="text-align:center" @click="setCourseID(course.id)"
                               route="/student/announcement">
                   <span>{{ course.courseName }}</span>
                 </el-menu-item>
               </el-menu>
-              <!--              </el-col>-->
             </el-row>
           </div>
         </el-aside>
@@ -44,7 +40,8 @@
                 <el-collapse-item v-for="announcement in announcementList"
                                   class="classTitle" :title="announcement.title" name="1">
                   <div>
-                    {{ announcement.content }}
+                    <p> {{ announcement.content }}</p>
+                    <p> {{ announcement.time.toDateString() }}</p>
                   </div>
                 </el-collapse-item>
               </el-collapse>
@@ -72,20 +69,20 @@ export default {
     // const courseNameList = ref(['课程a', '课程b'])
     // const announcementList = ref([{
     //   title: '后端作业已发布',
-    //   body: '                    同学们好，\n' +
+    //   content: '                    同学们好，\n' +
     //       '                    后端作业已发布，线下检查安排如下：\n' +
     //       '\n' +
     //       '                    对于第二次后端作业，我们只支持在上机课时间线下检查，如果提前做好了，可找老师或SA现场检查并记分数。为了平衡检查资源，我们给同学们两次检查机会：\n' +
     //       '                    第一次线下检查后会给个分数并记录，如果觉得不是很理想，可以回去修改\n' +
     //       '                    第二次线下检查就确定了本次作业的最终分数。\n' +
     //       '                    提交安排：\n' +
-    //       '                    第二次作业检查之后，需要将源代码提交sakai，但是对于检查环节，我们只支持上机课时间线下检查。'
+    //       '                    第二次作业检查之后，需要将源代码提交sakai，但是对于检查环节，我们只支持上机课时间线下检查。',
+    //   time:new Date()
     // }])
     const announcementList = ref([])
 
 
     onBeforeMount(async () => {
-      courseList.value = []
       await axios.get(`http://${store.state.host}/api/course/list_subscribed?clientId=${stuID}`)
           .then(
               response => {
