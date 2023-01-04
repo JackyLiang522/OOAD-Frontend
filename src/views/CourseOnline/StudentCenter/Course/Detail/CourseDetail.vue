@@ -6,7 +6,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/student/course' } "><h3>课程列表</h3>
         </el-breadcrumb-item>
-        <el-breadcrumb-item><h3>课程XX</h3></el-breadcrumb-item>
+        <el-breadcrumb-item><h3>{{ courseName }}</h3></el-breadcrumb-item>
       </el-breadcrumb>
     </b>
     </el-divider>
@@ -14,7 +14,7 @@
   <div style="display: flex;justify-content: center;">
     <el-card class="box-card" style="height: 100%; width:50%">
       <div slot="header" class="clearfix" style="margin-bottom: 10px">
-        <h3>课程XX</h3>
+        <h3>{{ courseName }}</h3>
       </div>
       <div style="display: flex;justify-content: center;">
         <div>课程作业</div>
@@ -31,14 +31,11 @@
               prop="title"
               label="作业标题"
               width="150">
-            <template #default="scope">
-              <div>
-<!--                <router-link :to="{ name: '/student/course/hw', query: { id: scope.row.id } }">-->
-                <router-link to="/student/course/hw">
-                  {{ scope.row.title }}
-                </router-link>
-
-              </div>
+            <template v-slot="scope">
+              <router-link
+                  :to="`/student/course/hw?chapterId=${hwData[scope.$index].chapterId}&courseId=${courseId}`">
+                {{ scope.row.title }}
+              </router-link>
             </template>
           </el-table-column>
 
@@ -98,32 +95,62 @@
 </template>
 
 <script>
+import {onBeforeMount, ref} from "vue";
+import courseInfoCard from "../../../Home/CourseInfoCard.vue";
+import {useRoute} from "vue-router";
+
 export default {
   name: "CourseDetail",
-  data() {
-    return {
-      hwData: [{
+  computed: {
+    courseInfoCard() {
+      return courseInfoCard
+    }
+  },
+  setup() {
+    const route = useRoute()
+    const courseId = route.query.courseId
+
+    const hwData = ref()
+    const pgData = ref()
+    const courseName = ref()
+
+
+    onBeforeMount(() => {
+      // TODO: 从后端更新两个data变量
+      hwData.value = [{
         title: '作业1',
         state: '完成',
         date: '2016-05-02',
-        score: 90
-      },
+        score: 90,
+        chapterId: 0
+      }, {
+        title: '作业2',
+        state: '未完成',
+        date: '2016-05-02',
+        score: '-',
+        chapterId: 1
+      }]
+      pgData.value = [
         {
-          title: '作业2',
-          state: '未完成',
-          date: '2016-05-02',
-          score: '-'
-        }],
-      pgData: [{
-        title: '章节一',
-        state: '完成',
-        score: 90
-      },
-        {
+          title: '章节一',
+          state: '完成',
+          score: 90
+        }, {
           title: '章节二',
           state: '未完成',
           score: '-'
-        }]
+        }
+      ]
+
+      // TODO: 根据courseId获取课程名
+      courseName.value = 'Java'
+    })
+
+    return {
+      hwData,
+      pgData,
+      courseName,
+      courseId
     }
   }
 }

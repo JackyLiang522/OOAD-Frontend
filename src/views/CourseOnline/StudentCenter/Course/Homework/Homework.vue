@@ -6,7 +6,7 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/student/course' } "><h3>课程列表</h3>
         </el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/student/course/detail' } "><h3>课程XX</h3></el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/student/course/detail' } "><h3>{{ courseName }}</h3></el-breadcrumb-item>
         <el-breadcrumb-item><h3>作业</h3></el-breadcrumb-item>
       </el-breadcrumb>
     </b>
@@ -15,7 +15,7 @@
   <div style="display: flex;justify-content: center;">
     <el-card class="box-card" style="height: 100%; width:50%">
       <div slot="header" class="clearfix" style="margin-bottom: 10px">
-        <h3>第一次作业-xxx</h3>
+        <h3>{{ homeWork.title }}</h3>
       </div>
       <div style="display: flex;justify-content: center;margin-top: 1px">
         <el-divider></el-divider>
@@ -25,24 +25,15 @@
         <el-descriptions
             class="margin-top"
             :column="3"
-            :size="size"
             border
         >
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                标题
-              </div>
-            </template>
-            作业1
-          </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
               <div class="cell-item">
                 截止
               </div>
             </template>
-            2022/12/31
+            {{ homeWork.deadline }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
@@ -50,7 +41,7 @@
                 状态
               </div>
             </template>
-            尚未提交
+            {{ homeWork.state }}
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
@@ -58,7 +49,7 @@
                 评分
               </div>
             </template>
-            -（最高 100.0）
+            {{ homeWork.state === '未提交' ? '-' : homeWork.score}} / 100.0
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
@@ -66,40 +57,17 @@
                 题目
               </div>
             </template>
-            <a href="https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf">CS042_第一次作业.pdf</a>
+            <a :href="homeWork.attachment.url">
+              {{ homeWork.attachment.name}}
+            </a>
           </el-descriptions-item>
         </el-descriptions>
       </div>
       <div>
-        <!--        <el-upload-->
-        <!--            class="upload-demo"-->
-        <!--            action="https://jsonplaceholder.typicode.com/posts/"-->
-        <!--            :before-upload="beforeHomeworkUpload"-->
-        <!--            :on-preview="handlePreview"-->
-        <!--            :on-remove="handleRemove"-->
-        <!--            :before-remove="beforeRemove"-->
-        <!--            :limit="1"-->
-        <!--            :on-exceed="handleExceed"-->
-        <!--            :file-list="fileList"-->
-        <!--            list-type="text"-->
-        <!--            style="display: table;margin-top: 20px;"-->
-        <!--            :auto-upload="false"-->
-        <!--        >-->
-        <!--            http-request="onUpload"-->
-        <!--          <div style="display: table">-->
-        <!--            <el-button size="small" type="primary">点击上传</el-button>-->
-        <!--            <template #tip>-->
-        <!--              <div class="el-upload__tip text-red">-->
-        <!--                只能上传zip/pdf文件，且不超过20Mb-->
-        <!--                limit 1 file, new file will cover the old file-->
-        <!--              </div>-->
-        <!--            </template>-->
-        <!--&lt;!&ndash;            <div slot="tip" class="el-upload__tip">只能上传zip/pdf文件，且不超过20Mb</div>&ndash;&gt;-->
-        <!--          </div>-->
         <el-upload
             ref="upload"
             class="upload-demo"
-            :action = "hwURL"
+            :action="hwURL"
             :limit="1"
             :on-exceed="handleExceed"
             :on-success="handleSuccess"
@@ -108,7 +76,7 @@
             list-type="text"
             style="margin-top: 20px"
         >
-<!--          :file-list="fileList"-->
+          <!--          :file-list="fileList"-->
           <template #trigger>
             <el-button type="primary">选择文件</el-button>
           </template>
@@ -130,15 +98,39 @@
   </div>
 </template>
 <script setup lang="ts">
-import {ref} from 'vue'
+import {onBeforeMount, reactive, ref} from 'vue'
 import {ElMessage, genFileId} from 'element-plus'
 import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
 import {$ref} from "vue/macros";
 import {useStore} from "vuex";
+import {useRoute} from "vue-router";
 
 const upload = ref<UploadInstance>()
 const store = useStore()
-const hwURL = "http://"+store.state.host+"/api/upload/pdf"
+const hwURL = "http://" + store.state.host + "/api/upload/pdf"
+let homeWork = reactive({})
+
+const route = useRoute()
+const courseId = route.query.courseId
+const courseName = ref()
+const chapterId = route.query.chapterId
+
+onBeforeMount(() => {
+  // TODO: 获取课程名字
+  courseName.value = 'Java'
+
+  // TODO: 初始化作业信息
+  homeWork = {
+    title: "标题",
+    deadline: "2022/12/31",
+    state: '未提交',
+    score: 0,
+    attachment: {
+      url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+      name: 'CS042_第一次作业.pdf'
+    }
+  }
+})
 
 // const fileList = ref([])
 const beforeUpload = (file: any) => {
