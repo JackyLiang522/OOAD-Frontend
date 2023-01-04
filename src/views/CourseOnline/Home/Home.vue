@@ -6,7 +6,8 @@
         :icon="Search"
         style="margin-left: 20px;width: 100px"
         @click="handleSearch"
-    >搜索</el-button>
+    >搜索
+    </el-button>
   </div>
   <el-divider/>
 
@@ -26,7 +27,7 @@
   <el-pagination
       layout="prev, pager, next"
       style="display: flex;justify-content: center;margin-top: 50px"
-      :total="courses.length"
+      :total="resultCourses.length"
       :page-size="pageSize"
       v-model:current-page="currentPage"
       @current-change="changeShown"
@@ -109,6 +110,7 @@ export default {
           introduction: coursesResponse.data[i].introduction
         })
       }
+      resultCourses.value = allCourses.value
       changeShown()
 
       const subscribeResponse = await axios.get(`http://${store.state.host}/api/course/list_subscribed`, {
@@ -125,6 +127,7 @@ export default {
           .filter(course => course.courseName.indexOf(searchInfo.value) !== -1)
           .forEach(course => tempResults.push(course))
       resultCourses.value = tempResults
+      changeShown()
     }
 
     return {
@@ -138,7 +141,8 @@ export default {
       changeShown,
       Search,
       shownCourses,
-      handleSearch
+      handleSearch,
+      resultCourses,
     }
   },
 }

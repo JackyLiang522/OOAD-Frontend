@@ -76,7 +76,7 @@ export default {
   },
   setup() {
     const route = useRoute()
-    const courseId = route.query.course_id
+    const courseId = route.query.courseId
     const courseName = ref('')
 
     const chapters = ref([
