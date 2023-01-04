@@ -69,7 +69,7 @@ export default {
     let courseID = 0
     const store = useStore()
     const stuID = store.state.userInfo.id
-    // const couseNameList = ref(['课程a', '课程b'])
+    // const courseNameList = ref(['课程a', '课程b'])
     // const announcementList = ref([{
     //   title: '后端作业已发布',
     //   body: '                    同学们好，\n' +
@@ -87,19 +87,19 @@ export default {
     onBeforeMount(async () => {
       // TODO: 根据stuID返回已购课程
       courseList.value = []
-      courseID = courseList.value[0].id
+      // courseID = courseList.value[0].id
       // TODO: 根据courseID返回通知列表
       announcementList.value = []
     })
 
-    const setCouseID = (id) =>{
+    const setCourseID = (id: number) => {
       courseID = id
     }
 
     return {
       courseList,
       announcementList,
-      setCouseID
+      setCourseID
     }
   }
 }

@@ -145,16 +145,17 @@ export default {
       if (comment_input.value === '')
         return
 
+      // TODO: 这里把新评论传给后端
       const new_comment = {
         username: store.state.userInfo.user_name,
         content: comment_input.value,
         date: dateFtt("yyyy-MM-dd hh:mm", new Date())
       }
-
-      // 这里把新评论传给后端
-
+      
+      // TODO: 这里获取新的评论区列表
+      // comments.value = 从后端获取的新列表
+      
       comment_input.value = ''
-      comments.value.push(new_comment)
     }
 
     onMounted(async () => {

@@ -154,7 +154,6 @@ export default {
     async function addBalance() {
       if (charge_in.value === 0)
         return
-
       const added = charge_in.value
       charge_in.value = 0
 
@@ -184,9 +183,6 @@ export default {
               })
 
     }
-
-
-
     return {
       show_info,
       records,
