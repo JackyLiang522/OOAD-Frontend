@@ -47,7 +47,7 @@ export default {
     const store = useStore()
     const userInfo = JSON.parse(localStorage.getItem('user_info'))
     const shownCourses = ref([])
-    const shown
+   // const shown
 
 
     function changeShown() {
