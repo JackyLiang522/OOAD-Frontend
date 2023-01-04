@@ -118,6 +118,7 @@ export default {
     const store = useStore()
     const balance = ref()
     const charge_in = ref(0)
+    const userId = store.state.userInfo.id
 
     function addBalance() {
       if (charge_in.value === 0)
@@ -125,15 +126,15 @@ export default {
 
       const added = charge_in.value
       charge_in.value = 0
-      store.commit('ADD_BALANCE', added)
 
-      // 这里发消息给后端，说充钱了
+      // TODO: 这里发消息给后端，说充钱了 added 元
 
-      // 这里更新新的账户余额
-
+      // TODO: 这里更新新的账户余额
+      balance.value = 10
     }
 
     onBeforeMount(async () => {
+      // TODO: 这里从后端获取余额和交易记录
       balance.value = 10
       records.value = [
         {
