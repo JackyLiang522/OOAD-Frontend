@@ -26,16 +26,21 @@
         placeholder="请输入课程名"
         style="width: 50%; margin:  20px 0 10px 0"
     />
-    <el-button size="large" :icon="Search"
-               style="display: flex;justify-content: center; width: 100px;  margin:  20px 0 0  20px">搜索
+    <el-button
+        size="large"
+        :icon="Search"
+        style="display: flex;justify-content: center; width: 100px;  margin:  20px 0 0  20px"
+        @click="handleSearch"
+    >
+      搜索
     </el-button>
   </div>
 
   <div>
-    <el-row v-for="(cls, index) in classes" :key="index" style="margin: 0 0 0 0" align="middle">
+    <el-row v-for="cls in shownClasses" style="margin: 0 0 0 0" align="middle">
       <el-col :span="3" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
         <div class="grid-content bg-purple-light">
-          <router-link 
+          <router-link
               :to="{
                 path:'/video',
                 query:{
@@ -43,7 +48,8 @@
                 }
               }"
               style="line-height:inherit;display: block;">
-            <span class="my-h4">{{ cls.courseName }}</span></router-link>
+            <span class="my-h4">{{ cls.courseName }}</span>
+          </router-link>
         </div>
       </el-col>
       <el-col :span="9" style="text-align: center;margin-top:20px;vertical-align: center;">
@@ -87,30 +93,41 @@
 
 <script>
 import {Search} from "@element-plus/icons-vue";
-import {ref} from "vue";
+import {onBeforeMount, ref} from "vue";
 import axios from "axios";
 import store from "@/store";
+import {useStore} from "vuex";
 
 export default {
   name: "CourseList",
   setup() {
     const searchInfo = ref('')
+    const allClasses = ref([])
+    const shownClasses = ref([])
+    const store = useStore()
+    const userId = store.state.userInfo.id
+
+    onBeforeMount(async () => {
+      await axios.get(`http://${store.state.host}/api/course/list_by_teacher?teacherId=${userId}`)
+          .then(response => allClasses.value = response.data)
+      shownClasses.value = allClasses.value
+    })
+
+    function handleSearch() {
+      const temp = []
+      allClasses.value
+          .filter(course => course.courseName.indexOf(searchInfo.value) !== -1)
+          .forEach(course => temp.push(course))
+      shownClasses.value = temp
+    }
+
     return {
       Search,
-      searchInfo
+      searchInfo,
+      shownClasses,
+      handleSearch
     }
   },
-  data() {
-    return {
-      classes: [],
-      user: JSON.parse(localStorage.getItem("user_info"))
-    }
-  },
-  async created() {
-    axios.get(`http://${store.state.host}/api/course/list_by_teacher?teacherId=${this.user.id}`).then((response) => {
-      this.classes = response.data
-    })
-  }
 }
 </script>
 
