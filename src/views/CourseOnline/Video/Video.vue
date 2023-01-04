@@ -67,7 +67,7 @@
     </el-col>
   </el-row>
 
-  <Comment v-for="comment in comments" :username="comment.username" :content="comment.content" :date="comment.date"/>
+  <Comment v-for="comment in comments" :username="comment.nickname" :content="comment.contents" :date="comment.createTime"/>
 
 
   <el-divider/>
@@ -120,7 +120,7 @@ export default {
     }
 
     let comment_input = ref('')
-    const comments = ref([{username: 'Bob', content: '114514', date: '2022-10-10 10:10'}])
+    const comments = ref([{nickname: 'Bob', contents: '114514', createTime: '2022-10-10 10:10'}])
     const chapters = ref([{id: 0, name: 'Introduction', chapterNumber: 0}])
     const chapter = ref(chapters.value[0])
     const courseId = ref(0)
@@ -154,6 +154,8 @@ export default {
       
       // TODO: 这里获取新的评论区列表
       // comments.value = 从后端获取的新列表
+
+
       
       comment_input.value = ''
     }
@@ -185,6 +187,7 @@ export default {
         teacher.value = response.data.name;
       })
       await axios.get(`http://${store.state.host}/api/comment/list?chapterId=` + chapter.value.id).then((response) => {
+        // alert(response.data)
         comments.value = response.data;
       })
     })
