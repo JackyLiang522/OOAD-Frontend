@@ -36,13 +36,13 @@
               round>
             编辑
           </el-button>
-          <el-button
+<!--          <el-button
               type="danger"
               size="small"
               @click="removeRow(scope.$index)"
               round>
             删除
-          </el-button>
+          </el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -123,8 +123,8 @@ export default {
       await axios.get(`http://${store.state.host}/api/export/list?chapterId=${chapterId.value}`).then((response) => {
         // TODO 这里应该是要传一个URL做预览
         table_data.value = response.data;
-        console.log(table_data)
-        console.log(response.data)
+        // console.log(table_data)
+        // console.log(response.data)
       })
     }
 
