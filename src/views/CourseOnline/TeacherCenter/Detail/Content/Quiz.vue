@@ -30,7 +30,7 @@ import DisplayQuestion from '@/views/CourseOnline/TeacherCenter/Detail/Content/D
 import axios from "axios";
 import store from "@/store";
 import {ElMessage} from "element-plus";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import {useRoute} from "vue-router";
 
 export default {
@@ -42,7 +42,7 @@ export default {
   setup(props) {
     const questionList = ref([])
     const courseId = useRoute().query.courseId
-    const chapterId = props.chapterInfo.id
+    const chapterId = computed(() => props.chapterInfo.id)
 
     function addQuestion(description, type, answers, options) {
       ElMessage({
@@ -61,12 +61,12 @@ export default {
     }
 
     async function submitQuestion() {
-      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${chapterId}`, questionList.value)
+      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${chapterId.value}`, questionList.value)
       /*return axios({
         headers:{
           "Content-Type": "application/json"
         },
-        url: `http://${store.state.host}/api/quiz/add?chapterId=${this.chapterInfo.number}`,
+        url: `http://${store.state.host}/api/quiz/add?chapterId=${chapterId.value}`,
         method: 'post',
         //转换成json字符串
         data:JSON.stringify(this.questionList)

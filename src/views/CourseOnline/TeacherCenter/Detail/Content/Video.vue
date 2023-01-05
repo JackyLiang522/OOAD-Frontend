@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts">
-import {reactive, ref, shallowRef} from 'vue'
+import {computed, reactive, ref, shallowRef} from 'vue'
 import {VideoJsPlayer} from 'video.js'
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
@@ -81,6 +81,9 @@ export default {
   props: ['chapterInfo'],
   emits: ['changeTitle'],
   setup(props: any, context: any) {
+    const chapterId = computed(() => props.chapterInfo.id)
+    // 使用：chapterId.value
+    
     const player = shallowRef<VideoJsPlayer>()
     const handleMounted = (payload: any) => {
       player.value = payload.player

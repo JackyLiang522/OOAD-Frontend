@@ -64,7 +64,9 @@ import {computed, reactive, ref, watch} from 'vue'
 import type {FormInstance} from 'element-plus'
 import {ElMessage} from 'element-plus'
 
-
+const props = defineProps(['chapterInfo'])
+const chapterId = computed(() => props.chapterInfo.id)
+// chapterId.value
 const formRef = ref<FormInstance>()
 const form = reactive({
   description: '',

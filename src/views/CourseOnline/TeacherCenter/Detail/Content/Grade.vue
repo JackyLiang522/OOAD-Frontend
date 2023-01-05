@@ -84,16 +84,17 @@
 <script>
 import {computed, onBeforeMount, reactive, ref} from "vue";
 import ExportExcel from "@/views/CourseOnline/TeacherCenter/Detail/Student/ExportExcel.vue";
-import {ElMessageBox, ElMessage} from "element-plus";
+import {ElMessage} from "element-plus";
 import axios from "axios";
 import store from "@/store";
 import {useRoute} from "vue-router";
+
 export default {
   name: "Grade",
   components: {ExportExcel},
   props: ['chapterInfo'],
   setup(props) {
-    const chapterId = props.chapterInfo.id
+    const chapterId = computed(() => props.chapterInfo.id)
     const courseId = useRoute().query.courseId
     const table_data = reactive([
       {
@@ -102,37 +103,7 @@ export default {
         quiz_score: 10,
         attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
         attachment_name: 'name1'
-      }, /*{
-        name: 'Stu 2',
-        homework_score: 20,
-        quiz_score: 20,
-        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-        attachment_name: 'name1'
-      }, {
-        name: 'Stu 2',
-        homework_score: 20,
-        quiz_score: 20,
-        attachment_url: '',
-        attachment_name: ''
-      }, {
-        name: 'Stu 2',
-        homework_score: 20,
-        quiz_score: 20,
-        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-        attachment_name: 'name1'
-      }, {
-        name: 'Stu 2',
-        homework_score: 20,
-        quiz_score: 20,
-        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-        attachment_name: 'name1'
-      }, {
-        name: 'Stu 2',
-        homework_score: 20,
-        quiz_score: 20,
-        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-        attachment_name: 'name1'
-      },*/
+      }, 
     ])
 
     onBeforeMount(() => {
@@ -140,11 +111,9 @@ export default {
     })
 
     const refreshTable = async () => {
-      console.log("grade"+chapterId)
-      alert("************")
       // table_data.value
       // TODO 这里需要chapterId
-      await axios.get(`http://${store.state.host}/api/export/list?chapterId=${chapterId}`).then((response) => {
+      await axios.get(`http://${store.state.host}/api/export/list?chapterId=${chapterId.value}`).then((response) => {
         // teacher.value = response.data.name;
         // const row = table_data[edited_index.value]
         // row.deadline = response.data.deadline
@@ -156,25 +125,30 @@ export default {
 
     async function exportData() {
       // TODO 这里需要chapterId
-      window.location.href = `http://${store.state.host}/api/export?chapterId=${this.chapterInfo.id}`;
+      window.location.href = `http://${store.state.host}/api/export?chapterId=${chapterId.value}`;
     }
+
     function submitInfo() {
       //  TODO: 这里把table_data传给后端
 
     }
+
     function removeRow(index) {
       table_data.splice(index, 1)
     }
+
     const dialog_visible = ref(false)
     const new_homework_score = ref()
     const new_quiz_score = ref()
     const edited_index = ref()
+
     function editScore(index) {
       edited_index.value = index
       new_homework_score.value = table_data[index]?.homework_score
       new_quiz_score.value = table_data[index]?.quiz_score
       dialog_visible.value = true
     }
+
     function submitEdit() {
       const score_reg = /^([1-9]\d?|100)$/
       if (score_reg.test(new_homework_score.value) && score_reg.test(new_quiz_score.value)) {
@@ -190,6 +164,7 @@ export default {
         })
       }
     }
+    
     return {
       table_data,
       editScore,
@@ -199,7 +174,7 @@ export default {
       new_homework_score,
       new_quiz_score,
       submitEdit,
-      exportData
+      exportData,
     }
   }
 }

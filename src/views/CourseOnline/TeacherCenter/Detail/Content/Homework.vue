@@ -130,7 +130,6 @@ export default {
         chapterId,
         (newValue, oldValue) => {
           refreshTable()
-          console.log(newValue)
         }
     )
     const refreshTable = async () => {

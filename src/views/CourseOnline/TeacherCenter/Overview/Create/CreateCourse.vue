@@ -14,7 +14,7 @@
                   :rows="4"/>
       </el-form-item>
       <el-form-item label="价格">
-        <el-input-number v-model="course_info.price" :precision="2" :step="0.1" :min="0"
+        <el-input-number v-model="course_info.price" :precision="0" :step="1" :min="0"
                          placeholder="请输入课程价格（0 表示免费）"/>
       </el-form-item>
 
