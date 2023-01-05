@@ -82,7 +82,7 @@
 </template>
 
 <script>
-import {computed, onBeforeMount, reactive, ref} from "vue";
+import {computed, onBeforeMount, reactive, ref, watch} from "vue";
 import ExportExcel from "@/views/CourseOnline/TeacherCenter/Detail/Student/ExportExcel.vue";
 import {ElMessage} from "element-plus";
 import axios from "axios";
@@ -103,15 +103,18 @@ export default {
         quiz_score: 10,
         attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
         attachment_name: 'name1'
-      }, 
+      },
     ])
 
     onBeforeMount(() => {
       refreshTable();
     })
 
+    watch(props.chapterInfo, () => refreshTable())
+
     const refreshTable = async () => {
       // table_data.value
+      console.log(chapterId.value)
       // TODO 这里需要chapterId
       await axios.get(`http://${store.state.host}/api/export/list?chapterId=${chapterId.value}`).then((response) => {
         // teacher.value = response.data.name;
@@ -164,7 +167,7 @@ export default {
         })
       }
     }
-    
+
     return {
       table_data,
       editScore,
