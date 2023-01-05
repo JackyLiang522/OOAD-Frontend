@@ -113,10 +113,23 @@ export default {
       await axios.post(`http://${store.state.host}/api/announcement/add?courseId=${courseId}&&title=${form.title}&&content=${form.content}`)
       console.log('submit!')
 
+      await axios.get(`http://${store.state.host}/api/announcement/list?courseId=${courseId}`)
+          .then(
+              response => {
+                if (response.data) {
+                  announcementList.value = response.data;
+                }
+              },
+              err => {
+                console.log(err)
+              })
+      
       // send email
       if (form.email) {
         await axios.post(`http://${store.state.host}/api/announcement/send_email?courseId=${courseId}&&title=${form.title}&&content=${form.content}`)
       }
+
+
     }
 
     onBeforeMount(async () => {
