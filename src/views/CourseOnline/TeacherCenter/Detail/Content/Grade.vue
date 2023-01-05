@@ -51,7 +51,8 @@
   <div style="display: flex;justify-content: right;margin: 20px 50px 0 0">
     <el-button-group>
       <el-button type="primary" @click="submitInfo" round>提交变更</el-button>
-      <exportExcel :id="'chapterTable'" :name="'章节成绩'" style="margin:0 0 0 0"></exportExcel>
+      <el-button type="primary" @click="exportData" round>导出成绩</el-button>
+<!--      <exportExcel :id="'chapterTable'" :name="'章节成绩'" style="margin:0 0 0 0"></exportExcel>-->
     </el-button-group>
   </div>
 
