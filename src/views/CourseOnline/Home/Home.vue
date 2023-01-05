@@ -114,6 +114,8 @@ export default {
       for (let i = 0; i < coursesResponse.data.length; i++) {
         const chapterCountResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=${coursesResponse.data[i].id}`);
         const teacherResponse = await axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=${coursesResponse.data[i].id}`);
+        if(coursesResponse.data[i].status !== 1)
+          continue
         allCourses.value.push({
           id: coursesResponse.data[i].id,
           courseName: coursesResponse.data[i].courseName,
