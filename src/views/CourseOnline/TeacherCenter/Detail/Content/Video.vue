@@ -1,9 +1,4 @@
 <template>
-  <el-button type="primary" @click="has_video=!has_video">
-    该按钮仅用于测试，控制台有输出为正常现象
-    <br/>
-    当前 has_video 为 {{ has_video }}
-  </el-button>
   <el-row>
     <el-col :span="has_video?5:24">
       <h4 style="margin: 0 0 0 0">{{ `第${chapterInfo.number}章` }}</h4>
@@ -36,44 +31,43 @@
     </el-col>
 
     <el-col :offset="1" :span="18">
-      <video-player v-show="has_video"
-                    class="video-player vjs-big-play-centered"
-                    src="https://vjs.zencdn.net/v/oceans.mp4"
-                    poster="https://vjs.zencdn.net/v/oceans.png"
-                    crossorigin="anonymous"
-                    playsinline
-                    controls
-                    :volume="0.6"
-                    :playback-rates="[0.5, 1.0, 1.5, 2.0]"
-                    @mounted="handleMounted"
-                    @ready="handleEvent($event)"
-                    @play="handleEvent($event)"
-                    @pause="handleEvent($event)"
-                    @ended="handleEvent($event)"
-                    @loadeddata="handleEvent($event)"
-                    @waiting="handleEvent($event)"
-                    @playing="handleEvent($event)"
-                    @canplay="handleEvent($event)"
-                    @canplaythrough="handleEvent($event)"
-                    @timeupdate="handleEvent(player?.currentTime())"
-                    :fluid="true"
-                    preload="metadata"
+      <video-player
+          v-show="has_video"
+          class="video-player vjs-big-play-centered"
+          :src="videoSrc"
+          crossorigin="anonymous"
+          playsinline
+          controls
+          :volume="0.6"
+          :playback-rates="[0.5, 1.0, 1.5, 2.0]"
+          @mounted="handleMounted"
+          @ready="handleEvent($event)"
+          @play="handleEvent($event)"
+          @pause="handleEvent($event)"
+          @ended="handleEvent($event)"
+          @loadeddata="handleEvent($event)"
+          @waiting="handleEvent($event)"
+          @playing="handleEvent($event)"
+          @canplay="handleEvent($event)"
+          @canplaythrough="handleEvent($event)"
+          @timeupdate="handleEvent(player?.currentTime())"
+          :fluid="true"
+          preload="metadata"
       />
     </el-col>
   </el-row>
-
-
 </template>
 
 <script lang="ts">
-import {computed, reactive, ref, shallowRef} from 'vue'
+import {computed, onBeforeMount, onBeforeUnmount, onMounted, reactive, ref, shallowRef, watch} from 'vue'
 import {VideoJsPlayer} from 'video.js'
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import {ElMessage, genFileId, ElMessageBox} from 'element-plus'
 import store from '@/store'
 import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
-import axios from "axios/index";
+import axios from "axios";
+import {useStore} from "vuex";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -84,7 +78,7 @@ export default {
   setup(props: any, context: any) {
     const chapterId = computed(() => props.chapterInfo.id)
     // 使用：chapterId.value
-    
+
     const player = shallowRef<VideoJsPlayer>()
     const handleMounted = (payload: any) => {
       player.value = payload.player
@@ -94,9 +88,18 @@ export default {
       console.log('Basic player event', log)
     }
 
+    const store = useStore()
     const host = store.state.host
-
     const has_video = ref(false)
+    const videoSrc = ref('')
+
+    watch(chapterId, async () => {
+      if (chapterId.value === -1)
+        return
+      videoSrc.value = `http://${host}/api/upload/video/${chapterId.value}.mp4`
+      await axios.get(videoSrc.value)
+          .then(() => has_video.value = true, () => has_video.value = false)
+    })
 
     const upload = ref<UploadInstance>()
 
@@ -128,7 +131,6 @@ export default {
       })
           .then(async ({value}) => {
             context.emit('changeTitle', props.chapterInfo.number, value)
-
           })
           .catch(() => {
           })
@@ -142,6 +144,7 @@ export default {
       })
     }
 
+
     return {
       host,
       player,
@@ -153,7 +156,8 @@ export default {
       upload,
       checkType,
       handleEditTitle,
-      handleSuccess
+      handleSuccess,
+      videoSrc
     }
   },
 }
