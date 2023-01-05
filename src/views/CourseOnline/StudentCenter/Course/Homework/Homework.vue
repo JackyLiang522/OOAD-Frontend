@@ -2,7 +2,7 @@
   <div style="display: flex;justify-content: center;">
 
     <el-divider content-position="left"
-                style="display: flex;justify-content: center;width: 70%; margin:30px  0 30px 3%"><b>
+                style="display: flex;justify-content: center;width: 100%; margin:30px  0 30px 0"><b>
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/student/course' } "><h3>课程列表</h3>
         </el-breadcrumb-item>
@@ -13,88 +13,98 @@
     </b>
     </el-divider>
   </div>
-  <div style="display: flex;justify-content: center;">
-    <el-card class="box-card" style="height: 100%; width:50%">
-      <div slot="header" class="clearfix" style="margin-bottom: 10px">
-        <h3>{{ homeWork.title }}</h3>
-      </div>
-      <div style="display: flex;justify-content: center;margin-top: 1px">
-        <el-divider></el-divider>
-      </div>
-      <div>
+  <el-row>
 
-        <el-descriptions
-            class="margin-top"
-            :column="3"
-            border
-        >
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                截止
-              </div>
-            </template>
-            {{ homeWork.deadline }}
-          </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                状态
-              </div>
-            </template>
-            {{ homeWork.state }}
-          </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                评分
-              </div>
-            </template>
-            {{ homeWork.state === '未提交' ? '-' : homeWork.score }} / 100.0
-          </el-descriptions-item>
-          <el-descriptions-item>
-            <template #label>
-              <div class="cell-item">
-                题目
-              </div>
-            </template>
-            <a :href="homeWork.attachment.url">
-              {{ homeWork.attachment.name }}
-            </a>
-          </el-descriptions-item>
-        </el-descriptions>
-      </div>
-      <div>
-        <el-upload
-            ref="upload"
-            class="upload-demo"
-            :action="hwURL"
-            :limit="1"
-            :on-exceed="handleExceed"
-            :on-success="handleSuccess"
-            :before-upload="beforeUpload"
-            :auto-upload="false"
-            list-type="text"
-            style="margin-top: 20px"
-        >
-          <!--          :file-list="fileList"-->
-          <template #trigger>
-            <el-button type="primary">选择文件</el-button>
-          </template>
-          <el-button class="ml-3" type="success" @click="submitUpload" style="margin-left: 5px">
-            提交
-          </el-button>
-          <template #tip>
-            <div class="el-upload__tip" style="color: indianred">
-              最多上传一份pdf文件，新的提交会覆盖已有提交
-            </div>
-          </template>
-        </el-upload>
-      </div>
+    <el-col :span="15">
+      <iframe :src="`static/pdf/web/viewer.html?file=http://localhost:8081/api/upload/studentAssignment/${chapterId}_${userID}.pdf`"
+              style="width: 100%; height: 600px"
+      ></iframe>
+    </el-col>
 
+    <el-col :span="8" :offset="1">
+      <div style="margin: 20% 0 0 0">
+        <el-card class="box-card" style="height: 100%; width:100%">
+          <div slot="header" class="clearfix" style="margin-bottom: 10px">
+            <h3>{{ homeWork.title }}</h3>
+          </div>
+          <div style="display: flex;justify-content: center;margin-top: 1px">
+            <el-divider></el-divider>
+          </div>
+          <div>
 
-    </el-card>
-  </div>
+            <el-descriptions
+                class="margin-top"
+                :column="3"
+                border
+            >
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    截止
+                  </div>
+                </template>
+                {{ homeWork.deadline }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    状态
+                  </div>
+                </template>
+                {{ homeWork.state }}
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    评分
+                  </div>
+                </template>
+                {{ homeWork.state === '未提交' ? '-' : homeWork.score }} / 100.0
+              </el-descriptions-item>
+              <el-descriptions-item>
+                <template #label>
+                  <div class="cell-item">
+                    题目
+                  </div>
+                </template>
+                <el-link type="primary" @click="openUrl(homeWork.attachment.url)">
+                  {{ homeWork.attachment.name }}
+                </el-link>
+              </el-descriptions-item>
+            </el-descriptions>
+          </div>
+          <div>
+            <el-upload
+                ref="upload"
+                class="upload-demo"
+                :action="hwURL"
+                :limit="1"
+                :on-exceed="handleExceed"
+                :on-success="handleSuccess"
+                :before-upload="beforeUpload"
+                :auto-upload="false"
+                list-type="text"
+                style="margin-top: 20px"
+            >
+              <!--          :file-list="fileList"-->
+              <template #trigger>
+                <el-button type="primary">选择文件</el-button>
+              </template>
+              <el-button class="ml-3" type="success" @click="submitUpload" style="margin-left: 5px">
+                提交
+              </el-button>
+              <template #tip>
+                <div class="el-upload__tip" style="color: indianred">
+                  最多上传一份pdf文件，新的提交会覆盖已有提交
+                </div>
+              </template>
+            </el-upload>
+          </div>
+        </el-card>
+      </div>
+    </el-col>
+
+  </el-row>
 </template>
 <script setup lang="ts">
 import {onBeforeMount, reactive, ref} from 'vue'
@@ -111,6 +121,7 @@ const store = useStore()
 const route = useRoute()
 const courseId = route.query.courseId
 const courseName = ref()
+const userID = useStore().state.userInfo.id
 const chapterId = route.query.chapterId
 const hwURL = "http://" + store.state.host + "/api/upload/studentAssignment?chapterId=" + chapterId + "&studentId=" + store.state.userInfo.id
 const studentId = store.state.userInfo.id
@@ -183,6 +194,13 @@ const handleSuccess = () => {
 const submitUpload = () => {
   console.log(upload)
   upload.value!.submit()
+}
+
+const openUrl = (url: string | URL | undefined) => {
+  if (url === '') {
+    return
+  }
+  window.open(url)
 }
 </script>
 
