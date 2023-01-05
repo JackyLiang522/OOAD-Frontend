@@ -30,7 +30,7 @@ import DisplayQuestion from '@/views/CourseOnline/TeacherCenter/Detail/Content/D
 import axios from "axios";
 import store from "@/store";
 import {ElMessage} from "element-plus";
-import {computed, onBeforeMount, ref} from "vue";
+import {computed, onBeforeMount, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 
 export default {
@@ -77,8 +77,10 @@ export default {
       })*/
     }
 
-    onBeforeMount(async () => {
-      // todo:获取已有quiz并赋值给addQuestionList.value
+
+    watch(chapterId, async () => {
+      if (chapterId.value === -1)
+        return
       await axios.get(`http://${store.state.host}/api/quiz/listQuizProblems?chapterId=${chapterId.value}`).then((response) => {
         addQuestionList.value = response.data;
       })
