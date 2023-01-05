@@ -99,7 +99,6 @@
       </template>
     </el-dialog>
   </Teleport>
-
 </template>
 
 <script lang="ts">
@@ -116,22 +115,22 @@ export default {
     const store = useStore()
     const chapterId = computed(() => props.chapterInfo.id)
     const courseId = useRoute().query.courseId
-    const hwURL = "http://" + store.state.host + "/api/upload/pdf?chapterId=" + chapterId.value
+    const hwURL = computed(() => "http://" + store.state.host + "/api/upload/pdf?chapterId=" + props.chapterInfo.id)
     const upload = ref<UploadInstance>()
     const table_data = ref([
       {
-        title: '标题1',
-        deadline: '这里表示DDL',
-        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-        attachment_name: 'name1'
+        title: '',
+        deadline: '',
+        attachment_url: '',
+        attachment_name: ''
       }
     ])
 
     watch(chapterId, () => refreshTable())
     const refreshTable = async () => {
-      if(chapterId.value === -1)
+      if (chapterId.value === -1)
         return
-      
+
       // table_data.value
       await axios.get(`http://${store.state.host}/api/assignment/list?chapterId=${chapterId.value}`).then((response) => {
         // teacher.value = response.data.name;
