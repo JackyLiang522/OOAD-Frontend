@@ -115,8 +115,8 @@ export default {
 
     function one_info(record: any) {
       let content
-      if (record.change < 0) {
-        content = `-￥${Math.abs(record.change)}：购买${record.courseName}，余额￥${record.remain}`
+      if (record.change <= 0) {
+        content = `-￥${Math.abs(record.change)}：购买【${record.courseName}】课程，余额￥${record.remain}`
       } else {
         content = `+￥${Math.abs(record.change)}，充值，余额￥${record.remain}`
       }

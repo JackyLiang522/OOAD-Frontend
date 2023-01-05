@@ -10,7 +10,6 @@
         :data="table_data"
         border
         style="width: 650px;margin:20px 20px 0 20px;"
-        height="250px"
         stripe
         :header-cell-style="{'text-align':'center'}"
         :cell-style="{'text-align':'center'}"
@@ -65,7 +64,7 @@
             <el-input style="width: 300px;" v-model="new_homework_score" placeholder="请输入作业分数" clearable/>
           </el-form-item>
           <el-form-item label="测验分数">
-            <el-input style="width: 300px;" v-model="new_quiz_score" placeholder="请输入作业分数" clearable/>
+            <el-input style="width: 300px;" v-model="new_quiz_score" placeholder="请输入测验分数" clearable/>
           </el-form-item>
         </el-form>
       </div>
@@ -98,16 +97,16 @@ export default {
     const chapterId = computed(() => props.chapterInfo.id)
     const courseId = useRoute().query.courseId
     let table_data = ref([
-      {
-        id: 0,
-        name: 'Stu 1',
-        homework_score: 10,
-        quiz_score: 10,
-        homework_gradebook_id: 0,
-        quiz_gradebook_id: 0,
-        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-        attachment_name: 'name1'
-      },
+      // {
+      //   id: 0,
+      //   name: 'Stu 1',
+      //   homework_score: 10,
+      //   quiz_score: 10,
+      //   homework_gradebook_id: 0,
+      //   quiz_gradebook_id: 0,
+      //   attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
+      //   attachment_name: 'name1'
+      // },
     ])
 
     onBeforeMount(() => {
