@@ -10,6 +10,7 @@
   <el-row style="margin:20px 0 0 0;height: 350px" :gutter="30">
     <el-col :span="16">
       <video-player
+          id="video-player"
           class="video-player vjs-big-play-centered"
           :src="videoSrc"
           crossorigin="anonymous"
@@ -26,14 +27,14 @@
           @waiting="handleEvent($event)"
           @playing="handleEvent($event)"
           @canplay="handleEvent($event)"
-          @canplaythrough="handleEvent($event)"
-          @timeupdate="handleEvent(player?.currentTime())"
+          @canplaythrough="handleCanPlay"
+          @timeupdate="handleTimeUpdate(player?.currentTime())"
           style="height: 100%;margin-top: 3px"
       />
     </el-col>
     <el-col :span="8">
       <el-scrollbar height="340px" style="border: 3px solid gray">
-        <div style="word-break: break-word;" v-for="chapter in chapters" >
+        <div style="word-break: break-word;" v-for="chapter in chapters">
           <el-link
               style="margin:0px 0px 0px 50px;"
               type="primary"
@@ -66,6 +67,8 @@
     </el-col>
   </el-row>
 
+  <el-button @click="test">111</el-button>
+
   <Comment
       v-for="comment in comments"
       :username="comment.nickname"
@@ -73,25 +76,22 @@
       :date="comment.createTime"
   />
 
-
   <el-divider/>
 
 
 </template>
 
 <script lang="ts">
-import {onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef} from 'vue'
-import {VideoJsPlayer} from "video.js"
+import {onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef} from 'vue'
+import videojs, {VideoJsPlayer} from "video.js"
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
 import Comment from "@/views/CourseOnline/Video/Comment.vue";
 import VideoHeader from "@/views/CourseOnline/Video/VideoHeader.vue";
 import testSpeed from "@/views/CourseOnline/Video/testSpeed.vue";
-import router from '@/router/CourseOnline'
 import axios from 'axios';
 import {useStore} from "vuex";
-import {ElMessage, ElMessageBox} from 'element-plus'
-import type {Action} from 'element-plus'
+import {ElMessageBox} from 'element-plus'
 import {useRoute} from "vue-router";
 
 export default {
@@ -145,7 +145,6 @@ export default {
       const new_comment = {
         nickname: store.state.userInfo.user_name,
         contents: comment_input.value,
-        date: dateFtt("yyyy-MM-dd hh:mm", new Date())
       }
       await axios.post(`http://${store.state.host}/api/comment/add?chapterId=${chapter.value.id}&&contents=${new_comment.contents}&&nickname=${new_comment.nickname}&&userId=${userId}`)
       await axios.get(`http://${store.state.host}/api/comment/list?chapterId=${chapter.value.id}`).then((response) => {
@@ -192,23 +191,29 @@ export default {
       })
     })
 
-    function dateFtt(fmt: string, date: Date) { //author: meizz   
-      const o = {
-        "M+": date.getMonth() + 1,                 //月份   
-        "d+": date.getDate(),                    //日   
-        "h+": date.getHours(),                   //小时   
-        "m+": date.getMinutes(),                 //分   
-        "s+": date.getSeconds(),                 //秒   
-        "q+": Math.floor((date.getMonth() + 3) / 3), //季度   
-        "S": date.getMilliseconds()             //毫秒   
-      };
-      if (/(y+)/.test(fmt))
-        fmt = fmt.replace(RegExp.$1, (date.getFullYear() + "").substr(4 - RegExp.$1.length));
-      for (const k in o)
-        if (new RegExp("(" + k + ")").test(fmt))
-            // @ts-ignore
-          fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-      return fmt;
+    const lastTime = ref(-1)
+    const time = ref(-1)
+    const hasJump = ref(false)
+
+    function handleTimeUpdate(timeNumber: number) {
+      time.value = timeNumber
+    }
+
+    async function handleCanPlay() {
+      if (lastTime.value === -1)
+        return
+      if (hasJump.value)
+        return
+      const video = videojs('video-player')
+      video.play()
+      video.currentTime(lastTime.value)
+      hasJump.value = true
+    }
+
+    function test() {
+      lastTime.value = time.value
+      videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\3_240.mp4`)
+      hasJump.value = false
     }
 
     return {
@@ -224,6 +229,9 @@ export default {
       releaseComment,
       videoSrc,
       changeChapter,
+      test,
+      handleTimeUpdate,
+      handleCanPlay
     }
   }
 }
