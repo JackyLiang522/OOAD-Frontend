@@ -26,7 +26,7 @@
         placeholder="请输入课程名"
         style="width: 50%; margin:  20px 0 10px 0"
     />
-    <el-button size="large" :icon="Search"
+    <el-button size="large" :icon="Search()"
                style="display: flex;justify-content: center; width: 100px;  margin:  20px 0 0  20px">搜索
     </el-button>
   </div>
@@ -59,9 +59,15 @@
 import {onMounted, ref} from "vue";
 import axios from "axios";
 import store from "@/store";
+import {Search} from "@element-plus/icons-vue";
 
 export default {
   name: "CourseList",
+  methods: {
+    Search() {
+      return Search
+    }
+  },
   setup() {
     const courses = ref([])
     const userInfo = JSON.parse(localStorage.getItem('user_info'))

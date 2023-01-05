@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import {onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef} from 'vue'
+import {onBeforeMount, onBeforeUnmount, onMounted, onUnmounted, ref, shallowRef} from 'vue'
 import {VideoJsPlayer} from "video.js"
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
@@ -106,14 +106,6 @@ export default {
   },
   emits: ['changeChapter'],
   setup() {
-    function removeHandler() {
-      localStorage.setItem('has_open_video_page', 'false')
-    }
-
-    onUnmounted(() => {
-      window.removeEventListener('beforeunload', e => removeHandler())
-    })
-
     const player = shallowRef<VideoJsPlayer>()
     const handleMounted = (payload: any) => {
       player.value = payload.player
@@ -162,8 +154,9 @@ export default {
       comment_input.value = ''
     }
 
-    onMounted(async () => {
+    onBeforeMount(async () => {
       const has_open_video_page = localStorage.getItem('has_open_video_page')
+      console.log(has_open_video_page)
       if (has_open_video_page === 'true') {
         await ElMessageBox.alert('您已打开一个视频界面', '警告', {
           confirmButtonText: 'OK',
@@ -173,9 +166,14 @@ export default {
         })
       } else {
         localStorage.setItem('has_open_video_page', 'true')
-        window.addEventListener('beforeunload', e => removeHandler())
       }
+    })
+    
+    onBeforeUnmount(()=>{
+      localStorage.setItem("has_open_video_page", 'false')
+    })
 
+    onMounted(async () => {
       // @ts-ignore
       courseId.value = useRoute().query.courseId;
       const chaptersResponse = await axios.get(`http://${store.state.host}/api/chapter/list?courseId=` + courseId.value)

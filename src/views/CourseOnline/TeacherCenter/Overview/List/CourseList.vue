@@ -44,7 +44,7 @@
               :to="{
                 path:'/video',
                 query:{
-                  course_id:cls.id
+                  courseId:cls.id
                 }
               }"
               style="line-height:inherit;display: block;">

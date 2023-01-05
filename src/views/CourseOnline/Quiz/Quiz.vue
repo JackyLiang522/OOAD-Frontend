@@ -2,7 +2,7 @@
   <div style="display: flex;justify-content: center">
     <div
         style="height:auto;background-color: white;margin:30px 0 0 0;border: 3px solid black;width: 70%;padding: 0 20px 5px 20px">
-      <p style="text-align: center;font-size: 20px;font-weight: bold">标题</p>
+      <p style="text-align: center;font-size: 20px;font-weight: bold">测验</p>
 
       <div v-for="(question,index) in questions">
         <div v-if="question.type==='单选' || question.type==='判断'">
@@ -46,7 +46,8 @@ import {computed, onBeforeUnmount, onMounted, ref} from 'vue'
 import index, {useStore} from "vuex";
 import axios from "axios";
 import store from "@/store";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
+import {ElMessage} from 'element-plus';
 
 
 export default {
@@ -208,6 +209,12 @@ export default {
 
     async function sendBackend(score: number) {
       await axios.post(`http://${store.state.host}/api/quiz/recordGrade?chapterId=${chapterId}&&studentId=${userId}&&grade=${score}`)
+      ElMessage({
+        message: '提交成功',
+        type: 'success',
+      })
+      const router = useRouter()
+      setTimeout(()=>router.push('/#/home'),3000)
     }
 
     return {
