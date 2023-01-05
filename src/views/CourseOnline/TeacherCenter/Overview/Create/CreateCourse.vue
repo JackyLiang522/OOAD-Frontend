@@ -127,6 +127,9 @@ export default {
           // courseID = 0
           // create course success
         })
+
+      await axios.post(`http://${store.state.host}/api/chapter/add?courseId=${courseID.value}&&chapterName=default`)
+
       upload.value!.submit()
     }
 

@@ -128,9 +128,9 @@ export default {
       window.location.href = `http://${store.state.host}/api/export?chapterId=${chapterId.value}`;
     }
 
-    function submitInfo() {
+    async function submitInfo() {
       //  TODO: 这里把table_data传给后端
-
+      await axios.post(`http://${store.state.host}/api/export/updateQuizAndAssignment?chapterId=${chapterId.value}`, table_data.value)
     }
 
     function removeRow(index) {
