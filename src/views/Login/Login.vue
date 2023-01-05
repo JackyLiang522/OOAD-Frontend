@@ -139,9 +139,9 @@ export default {
     function studentLogin_test() {
       const student_info = {
         identity: 'student',
-        email: 'student@example.com',
-        user_name: '林雨航',
-        id: 0
+        email: '12012437@mail.sustech.edu.cn',
+        user_name: '陈文雁',
+        id: 4
       }
       localStorage.setItem('user_info', JSON.stringify(student_info))
       localStorage.setItem('has_open_video_page', 'false')
@@ -151,9 +151,9 @@ export default {
     function teacherLogin_test() {
       const teacher_info = {
         identity: 'teacher',
-        email: 'teacher@example.com',
-        user_name: '朱悦明',
-        id: 0
+        email: '12010903@mail.sustech.edu.cn',
+        user_name: '林雨航',
+        id: 1
       }
       localStorage.setItem('user_info', JSON.stringify(teacher_info))
       localStorage.setItem('has_open_video_page', 'false')
@@ -163,9 +163,9 @@ export default {
     function adminLogin_test() {
       const admin_info = {
         identity: 'admin',
-        email: 'admin@example.com',
+        email: '11910504@mail.sustech.edu.cn',
         user_name: '梁家源',
-        id: 0
+        id: 3
       }
       localStorage.setItem('user_info', JSON.stringify(admin_info))
       localStorage.setItem('has_open_video_page', 'false')

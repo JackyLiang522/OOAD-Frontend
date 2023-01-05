@@ -17,6 +17,7 @@
           :data="{chapterId: chapterInfo.id}"
           :limit="1"
           :on-exceed="handleExceed"
+          :on-success="handleSuccess"
           :auto-upload="false"
           :before-upload="checkType"
       >
@@ -133,6 +134,14 @@ export default {
           })
     }
 
+
+    const handleSuccess = () => {
+      ElMessage({
+        message: '上传成功.',
+        type: 'success',
+      })
+    }
+
     return {
       host,
       player,
@@ -143,7 +152,8 @@ export default {
       submitUpload,
       upload,
       checkType,
-      handleEditTitle
+      handleEditTitle,
+      handleSuccess
     }
   },
 }
