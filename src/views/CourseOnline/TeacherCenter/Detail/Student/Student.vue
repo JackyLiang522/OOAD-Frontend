@@ -40,24 +40,14 @@
           </el-table-column>
 
           <el-table-column
-              prop="score"
-              label="分数">
-          </el-table-column>
-          <el-table-column label="操作" width="150px">
-            <el-button
-                type="success"
-                size="small" round>
-              编辑
-            </el-button>
-            <el-button
-                type="danger"
-                size="small" round>
-              删除
-            </el-button>
+              prop="email"
+              label="邮箱">
           </el-table-column>
         </el-table>
       </div>
-      <exportExcel :id="'stuTable'" :name="'学生名单'"></exportExcel>
+      <el-button type="primary"   size="default" @click="exportData"
+                 style="float: right; margin: 40px  3% 20px 0"  round>导出</el-button>
+<!--      <exportExcel :id="'stuTable'" :name="'学生名单'"></exportExcel>-->
 
       <!--/*      <el-button @click="exportToExcel" style="float: right; margin: 40px  3% 20px 0" type="primary" round>导出</el-button>*/-->
 
@@ -80,6 +70,7 @@ import axios from "axios";
 import videojs from "video.js";
 import use = videojs.use;
 import {useStore} from "vuex";
+import store from "@/store";
 
 export default {
   name: "Student",
@@ -108,19 +99,35 @@ export default {
         // @ts-ignore
         {
           name: 'ksco',
-          score: 90
+          email: 90
         },
         // @ts-ignore
         {
           name: 'tsuki',
-          score: '-'
+          email: '-'
         }
       ]
+      await axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
+          .then(response => {
+            courseName.value = response.data.courseName
+          })
+
+      await axios.get(`http://${store.state.host}/api/client/getByCourse?courseId=${courseId}`)
+          .then(response => {
+            stuData.value = response.data
+          })
+
     })
+
+
+    function exportData(){
+      window.location.href = `http://${store.state.host}/api/export/studentData?courseId=${courseId}`;
+    }
 
     return {
       stuData,
       courseName,
+      exportData,
     }
   },
 }

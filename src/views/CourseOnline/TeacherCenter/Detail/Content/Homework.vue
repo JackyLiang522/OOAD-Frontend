@@ -138,7 +138,8 @@ export default {
         const row = table_data.value[edited_index.value]
         row.deadline = response.data.deadline
         row.title = response.data.title
-        // TODO 这里应该是要传一个URL做预览
+        row.attachment_name = `作业附件`
+        row.attachment_url = `http://${store.state.host}/api/upload/pdf/${chapterId.value}.pdf`
       })
 
     }
