@@ -26,12 +26,15 @@
         placeholder="请输入课程名"
         style="width: 50%; margin:  20px 0 10px 0"
     />
-    <el-button size="large" :icon="Search()"
-               style="display: flex;justify-content: center; width: 100px;  margin:  20px 0 0  20px">搜索
+    <el-button
+        size="large"
+        :icon="Search()"
+        @click="searchCourses"
+        style="display: flex;justify-content: center; width: 100px;  margin:  20px 0 0  20px">搜索
     </el-button>
   </div>
 
-  <el-row style="margin:  0 0 0 0" align="middle" v-for="course in courses">
+  <el-row style="margin:  0 0 0 0" align="middle" v-for="course in shownCourses">
     <el-col :span="5" :offset="6" style="text-align: center;vertical-align: center">
       <div class="grid-content bg-purple-light">
         <router-link :to="`/video?courseId=${course.id}`" style="margin-top: 10px;line-height:inherit;display: block">
@@ -69,7 +72,7 @@ export default {
     }
   },
   setup() {
-    const courses = ref([])
+    const allCourses = ref([])
     const userInfo = JSON.parse(localStorage.getItem('user_info'))
 
     onMounted(async () => {
@@ -77,16 +80,30 @@ export default {
       const coursesResponse = await axios.get(`http://${store.state.host}/api/course/list_subscribed?clientId=${userInfo.id}`);
       for (let i = 0; i < coursesResponse.data.length; i++) {
         const teacherResponse = await axios.get(`http://${store.state.host}/api/course/get_teacher?courseId=${coursesResponse.data[i].id}`);
-        courses.value.push({
+        allCourses.value.push({
           id: coursesResponse.data[i].id,
           courseName: coursesResponse.data[i].courseName,
           teacher: teacherResponse.data.name,
         })
       }
+      shownCourses.value = allCourses.value
     })
 
+    const searchInfo = ref('')
+    const shownCourses = ref([])
+
+    function searchCourses() {
+      const temp = []
+      allCourses.value
+          .filter(course => course.courseName.includes(searchInfo.value))
+          .forEach(course => temp.push(course))
+      shownCourses.value = temp
+    }
+
     return {
-      courses
+      shownCourses,
+      searchInfo,
+      searchCourses
     }
   }
 }
