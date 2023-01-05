@@ -103,6 +103,8 @@ export default {
         name: 'Stu 1',
         homework_score: 10,
         quiz_score: 10,
+        homework_gradebook_id: 0,
+        quiz_gradebook_id: 0,
         attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
         attachment_name: 'name1'
       },
@@ -124,13 +126,14 @@ export default {
         console.log(response.data)
       })
     }
+
     async function exportData() {
       window.location.href = `http://${store.state.host}/api/export?chapterId=${chapterId.value}`;
     }
 
     async function submitInfo() {
       //  TODO: 这里把table_data传给后端
-      await axios.post(`http://${store.state.host}/api/export/updateQuizAndAssignment?chapterId=${chapterId.value}`, table_data.value)
+      await axios.post(`http://${store.state.host}/api/export/updateQuizAndAssignment`, table_data.value)
     }
 
     function removeRow(index) {
@@ -152,7 +155,8 @@ export default {
     function submitEdit() {
       const score_reg = /^([1-9]\d?|100)$/
       if (score_reg.test(new_homework_score.value) && score_reg.test(new_quiz_score.value)) {
-        const row = table_data[edited_index.value]
+        const row = table_data.value[edited_index.value]
+        // console.log("new_homework_score.value" + new_homework_score.value)
         row.homework_score = new_homework_score.value
         row.quiz_score = new_quiz_score.value
         dialog_visible.value = false
