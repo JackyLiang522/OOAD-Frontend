@@ -56,7 +56,7 @@
 
 <script lang="ts">
 import {ArrowRight} from "@element-plus/icons-vue";
-import {computed, onBeforeMount, onMounted, reactive, ref} from "vue";
+import {onBeforeMount, reactive, ref} from "vue";
 import Video from "@/views/CourseOnline/TeacherCenter/Detail/Content/Video.vue";
 import Homework from "@/views/CourseOnline/TeacherCenter/Detail/Content/Homework.vue";
 import Grade from "@/views/CourseOnline/TeacherCenter/Detail/Content/Grade.vue";
@@ -79,13 +79,7 @@ export default {
     const courseId = route.query.courseId
     const courseName = ref('')
 
-    const chapters = ref([
-      {
-        id: 0,
-        name: 'name1',
-        number: 0,
-      },
-    ])
+    const chapters = ref()
 
     const addChapter = () => {
       axios.post(`http://${store.state.host}/api/chapter/add?courseId=${courseId}&chapterName=default`)
@@ -94,10 +88,10 @@ export default {
           })
     }
 
-    const chapterInfo = reactive({
-      id: 0,
-      number: 0,
-      title: '',
+    let chapterInfo = reactive({
+      id: -1,
+      number: -1,
+      title: ''
     })
 
     // 在后端做更新

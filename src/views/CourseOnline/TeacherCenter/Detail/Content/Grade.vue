@@ -114,7 +114,7 @@ export default {
       refreshTable();
     })
 
-    watch(chapterId, () => refreshTable())
+    watch(props.chapterInfo, () => refreshTable())
 
     const refreshTable = async () => {
       // table_data.value
