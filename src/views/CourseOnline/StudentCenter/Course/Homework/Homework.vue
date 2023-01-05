@@ -6,7 +6,8 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/student/course' } "><h3>课程列表</h3>
         </el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/student/course/detail' } "><h3>{{ courseName }}</h3></el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/student/course/detail',query:{courseId:route.query.courseId} } "><h3>
+          {{ courseName }}</h3></el-breadcrumb-item>
         <el-breadcrumb-item><h3>作业</h3></el-breadcrumb-item>
       </el-breadcrumb>
     </b>
@@ -49,7 +50,7 @@
                 评分
               </div>
             </template>
-            {{ homeWork.state === '未提交' ? '-' : homeWork.score}} / 100.0
+            {{ homeWork.state === '未提交' ? '-' : homeWork.score }} / 100.0
           </el-descriptions-item>
           <el-descriptions-item>
             <template #label>
@@ -58,7 +59,7 @@
               </div>
             </template>
             <a :href="homeWork.attachment.url">
-              {{ homeWork.attachment.name}}
+              {{ homeWork.attachment.name }}
             </a>
           </el-descriptions-item>
         </el-descriptions>
@@ -111,7 +112,7 @@ const route = useRoute()
 const courseId = route.query.courseId
 const courseName = ref()
 const chapterId = route.query.chapterId
-const hwURL = "http://" + store.state.host + "/api/upload/studentAssignment?chapterId="+chapterId+"&studentId="+store.state.userInfo.id
+const hwURL = "http://" + store.state.host + "/api/upload/studentAssignment?chapterId=" + chapterId + "&studentId=" + store.state.userInfo.id
 const studentId = store.state.userInfo.id
 let homeWork = reactive({
   title: "标题",
@@ -120,7 +121,8 @@ let homeWork = reactive({
   score: 0,
   attachment: {
     url: '',
-    name: ''}
+    name: ''
+  }
 })
 
 

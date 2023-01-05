@@ -30,7 +30,7 @@ import DisplayQuestion from '@/views/CourseOnline/TeacherCenter/Detail/Content/D
 import axios from "axios";
 import store from "@/store";
 import {ElMessage} from "element-plus";
-import {computed, ref} from "vue";
+import {computed, onBeforeMount, ref} from "vue";
 import {useRoute} from "vue-router";
 
 export default {
@@ -72,6 +72,11 @@ export default {
         data:JSON.stringify(this.questionList)
       })*/
     }
+
+    onBeforeMount(() => {
+      //todo:获取已有quiz并赋值给questionList.value
+
+    })
 
     return {
       addQuestion,

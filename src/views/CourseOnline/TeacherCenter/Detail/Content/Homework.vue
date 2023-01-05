@@ -14,9 +14,11 @@
       <el-table-column prop="deadline" label="截止日期" width="200px"/>
       <el-table-column prop="attachment_url" label="附件" width="200px">
         <template v-slot="scope">
-          <a :href="table_data[scope.$index].attachment_url">
+          <el-link
+              @click="openUrl(scope.$index)">
             {{ table_data[scope.$index].attachment_name }}
-          </a>
+<!--            {{table_data[scope.$index].attachment_url}}-->
+          </el-link>
         </template>
       </el-table-column>
       <el-table-column label="编辑" width="150px">
@@ -28,13 +30,13 @@
               round>
             编辑
           </el-button>
-          <el-button
+<!--          <el-button
               type="danger"
               size="small"
               @click="removeRow(scope.$index)"
               round>
             删除
-          </el-button>
+          </el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -99,7 +101,6 @@
       </template>
     </el-dialog>
   </Teleport>
-
 </template>
 
 <script lang="ts">
@@ -116,30 +117,34 @@ export default {
     const store = useStore()
     const chapterId = computed(() => props.chapterInfo.id)
     const courseId = useRoute().query.courseId
-    const hwURL = "http://" + store.state.host + "/api/upload/pdf?chapterId=" + chapterId.value
+    const hwURL = computed(() => "http://" + store.state.host + "/api/upload/pdf?chapterId=" + props.chapterInfo.id)
     const upload = ref<UploadInstance>()
     const table_data = ref([
       {
-        title: '标题1',
-        deadline: '这里表示DDL',
-        attachment_url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-        attachment_name: 'name1'
+        title: '',
+        deadline: '',
+        attachment_url: '',
+        attachment_name: ''
       }
     ])
 
     watch(chapterId, () => refreshTable())
     const refreshTable = async () => {
-      if(chapterId.value === -1)
+      if (chapterId.value === -1)
         return
-      
+
       // table_data.value
       await axios.get(`http://${store.state.host}/api/assignment/list?chapterId=${chapterId.value}`).then((response) => {
         // teacher.value = response.data.name;
-        const row = table_data.value[edited_index.value]
-        row.deadline = response.data.deadline
-        row.title = response.data.title
-        row.attachment_name = `作业附件`
-        row.attachment_url = `http://${store.state.host}/api/upload/pdf/${chapterId.value}.pdf`
+        if (response.data){
+          const row = table_data.value[edited_index.value]
+          row.deadline = response.data.deadline
+          row.title = response.data.title
+          row.attachment_name = `作业附件`
+          row.attachment_url = `http://${store.state.host}/api/upload/pdf/${chapterId.value}.pdf`
+        } else {
+          table_data.value = []
+        }
       })
 
     }
@@ -159,6 +164,7 @@ export default {
       dialog_visible.value = true
       new_deadline.value = table_data.value[index].deadline
       new_title.value = table_data.value[index].title
+
     }
 
     function finishEdit() {
@@ -170,12 +176,17 @@ export default {
       const row = table_data.value[edited_index.value]
       row.deadline = new_deadline.value
       row.title = new_title.value
-      row.attachment_name = upload.value.name
+      row.attachment_name = '作业附件待提交'
+      row.attachment_url = ''
+      // row.attachment_name = upload.value.name
+      // console.log("upload.value.name")
+      // console.log(upload.value.name)
     }
 
     async function submitEdit() {
       await axios.post(`http://${store.state.host}/api/assignment/add?chapterId=${chapterId.value}&&title=${new_title.value}&&deadline=${new_deadline.value}`)
       await submitUpload()
+      await refreshTable()
     }
 
     function removeRow(index: number) {
@@ -225,6 +236,13 @@ export default {
       })
     }
 
+    function openUrl(index:number) {
+      if (table_data.value[index].attachment_url === ''){
+        return
+      }
+      window.open(table_data.value[index].attachment_url)
+    }
+
 
     return {
       table_data,
@@ -242,7 +260,8 @@ export default {
       addRow,
       hwURL,
       upload,
-      submitEdit
+      submitEdit,
+      openUrl
     }
   }
 }
