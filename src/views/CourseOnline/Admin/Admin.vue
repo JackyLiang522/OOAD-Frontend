@@ -46,27 +46,27 @@ export default {
     }
   },
   methods: {
-    handlePass(row) {
-      axios.post(`http://${store.state.host}/api/course/update_status?courseId=${row.id}&status=1`).then((response) => {
+    async handlePass(row) {
+      await axios.post(`http://${store.state.host}/api/course/update_status?courseId=${row.id}&status=1`).then((response) => {
         ElMessage.success({
           message: '操作成功',
           type: 'success',
           duration: 2000,
         })
       })
-      axios.get(`http://${store.state.host}/api/course/list_under_review`).then((response) => {
+      await axios.get(`http://${store.state.host}/api/course/list_under_review`).then((response) => {
         this.table_data = response.data
       })
     },
-    handleReject(row) {
-      axios.post(`http://${store.state.host}/api/course/update_status?courseId=${row.id}&status=2`).then((response) => {
+    async handleReject(row) {
+      await axios.post(`http://${store.state.host}/api/course/update_status?courseId=${row.id}&status=2`).then((response) => {
         ElMessage.success({
           message: '操作成功',
           type: 'success',
           duration: 2000,
         })
       })
-      axios.get(`http://${store.state.host}/api/course/list_under_review`).then((response) => {
+      await axios.get(`http://${store.state.host}/api/course/list_under_review`).then((response) => {
         this.table_data = response.data
       })
     }
