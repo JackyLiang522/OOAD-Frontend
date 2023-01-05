@@ -73,7 +73,10 @@
               </el-descriptions-item>
             </el-descriptions>
           </div>
-          <div>
+          <div v-if="hasExceedDDL">
+            <p style="color:red;">截止日期已过，无法提交</p>
+          </div>
+          <div v-else>
             <el-upload
                 ref="upload"
                 class="upload-demo"
@@ -135,6 +138,7 @@ let homeWork = reactive({
     name: ''
   }
 })
+const hasExceedDDL = ref(false)
 
 
 onBeforeMount(async () => {
@@ -154,9 +158,9 @@ onBeforeMount(async () => {
 
     homeWork.attachment.url = `http://${store.state.host}/api/upload/pdf/${courseId}.pdf`
     homeWork.attachment.name = `${courseName.value}_${chapterId}.pdf`
-
-    console.log(homeWork.attachment.url)
-    console.log(homeWork.attachment.name)
+    
+    hasExceedDDL.value = new Date(homeWork.deadline) < new Date()
+    console.log(hasExceedDDL.value)
   })
 
 })

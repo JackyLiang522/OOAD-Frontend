@@ -66,9 +66,7 @@
       <el-button @click="releaseComment" type="primary" style="height: 100%;width: max(100%,50px);">发布</el-button>
     </el-col>
   </el-row>
-
-  <el-button @click="test">111</el-button>
-
+  
   <Comment
       v-for="comment in comments"
       :username="comment.nickname"
@@ -209,11 +207,33 @@ export default {
       video.currentTime(lastTime.value)
       hasJump.value = true
     }
-
-    function test() {
+    
+    function checkNetworkSpeed() {
       lastTime.value = time.value
-      videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\3_240.mp4`)
+      const speed = getNetworkSpeed()
+      let name
+      if(speed === 1){
+        // 240
+        name = `${chapter.value.id}_240.mp4`
+      }else if (speed === 2){
+        // 360
+        name = `${chapter.value.id}_360.mp4`
+      }else if(speed === 3){
+        // 480
+        name = `${chapter.value.id}_480.mp4`
+      }else if (speed === 4){
+        // 720
+        name = `${chapter.value.id}_720.mp4`
+      }else{
+        // 原画
+        name = `${chapter.value.id}.mp4`
+      }
+      videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\${name}`)
       hasJump.value = false
+    }
+    
+    function getNetworkSpeed(){
+      return 1
     }
 
     return {
@@ -229,7 +249,6 @@ export default {
       releaseComment,
       videoSrc,
       changeChapter,
-      test,
       handleTimeUpdate,
       handleCanPlay
     }
