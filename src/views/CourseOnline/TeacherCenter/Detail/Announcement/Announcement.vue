@@ -25,10 +25,10 @@
       <div style="display: flex;justify-content: center;">
         <el-form :model="form" label-width="120px">
           <el-form-item label="标题">
-            <el-input v-model="form.title"/>
+            <el-input v-model="form.title" placeholder="请输入标题"/>
           </el-form-item>
           <el-form-item label="通知内容">
-            <el-input v-model="form.content" type="textarea"/>
+            <el-input v-model="form.content" type="textarea" placeholder="请输入通知"/>
           </el-form-item>
           <el-form-item label="同时发送邮件">
             <el-radio-group v-model="form.email">
@@ -91,8 +91,8 @@ export default {
     const courseName = ref('')
 
     const form = reactive({
-      title: '样例标题',
-      content: '信息内容',
+      title: '',
+      content: '',
       // TODO: 实现发邮件功能
       email: false,
     })

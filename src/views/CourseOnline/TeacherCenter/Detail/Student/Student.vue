@@ -95,18 +95,6 @@ export default {
           })
 
       // TODO: 获取stuData
-      stuData.value = [
-        // @ts-ignore
-        {
-          name: 'ksco',
-          email: 90
-        },
-        // @ts-ignore
-        {
-          name: 'tsuki',
-          email: '-'
-        }
-      ]
       await axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`)
           .then(response => {
             courseName.value = response.data.courseName
