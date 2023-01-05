@@ -123,7 +123,6 @@ export default {
         console.log(response.data)
       })
     }
-
     async function exportData() {
       // TODO 这里需要chapterId
       window.location.href = `http://${store.state.host}/api/export?chapterId=${chapterId.value}`;

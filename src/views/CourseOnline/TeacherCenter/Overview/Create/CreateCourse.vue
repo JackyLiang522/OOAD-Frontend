@@ -20,7 +20,7 @@
 
       <el-form-item label="封面图">
         <el-upload
-            v-model="file"
+            ref="upload"
             :action="hwURL"
             list-type="picture-card"
             :before-upload="beforeUpload"
@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts">
-import {reactive, ref} from "vue";
+import {computed, reactive, ref} from "vue";
 import type {UploadFile, UploadFiles, UploadProps, UploadUserFile} from 'element-plus'
 import {ElMessage, UploadInstance} from "element-plus";
 import axios from "axios";
@@ -61,8 +61,8 @@ export default {
 
   setup() {
     const upload = ref<UploadInstance>()
-    let hwURL = "http://" + store.state.host + "/api/upload/image"
-    const courseID = 0
+    let courseID = ref(0)
+    const hwURL = computed(()=>`http://${store.state.host}/api/upload/image?courseId=${courseID.value}`)
     const course_info = reactive({
       name: '',
       introduction: '',
@@ -80,9 +80,9 @@ export default {
     })
 
     const beforeUpload = (file: any) => {
-      console.log("before upload")
-      console.log(file.name)
-      if (!file.name.includes('.jpg')||!file.name.includes('.png')) {
+      // console.log("before upload")
+      // console.log(file.name)
+      if (!file.name.includes('.jpg')&&!file.name.includes('.png')) {
         ElMessage.warning('只能上传图片文件')
         return false
       } else {
@@ -122,10 +122,11 @@ export default {
       const teacher = JSON.parse(localStorage.getItem('user_info')!)
       await axios.post(`http://${store.state.host}/api/course/add?teacher=${teacher.id}&&name=${course_info.name}&&introduction=${course_info.introduction}&&price=${course_info.price}`).then(
         response => {
+          courseID.value = response.data
+          console.log(hwURL.value)
           // courseID = 0
           // create course success
         })
-      hwURL += "?courseID=" + courseID
       upload.value!.submit()
     }
 
