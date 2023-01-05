@@ -72,18 +72,6 @@ import axios from "axios";
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
 
-// const announcementList = ref([{
-//   title: '后端作业已发布',
-//   content: '                    同学们好，\n' +
-//       '                    后端作业已发布，线下检查安排如下：\n' +
-//       '\n' +
-//       '                    对于第二次后端作业，我们只支持在上机课时间线下检查，如果提前做好了，可找老师或SA现场检查并记分数。为了平衡检查资源，我们给同学们两次检查机会：\n' +
-//       '                    第一次线下检查后会给个分数并记录，如果觉得不是很理想，可以回去修改\n' +
-//       '                    第二次线下检查就确定了本次作业的最终分数。\n' +
-//       '                    提交安排：\n' +
-//       '                    第二次作业检查之后，需要将源代码提交sakai，但是对于检查环节，我们只支持上机课时间线下检查。',
-//   time:new Date()
-// }])
 export default {
   name: "Announcement",
   data() {

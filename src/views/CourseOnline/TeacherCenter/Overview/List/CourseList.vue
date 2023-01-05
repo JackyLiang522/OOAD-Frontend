@@ -38,7 +38,7 @@
 
   <div>
     <el-row v-for="cls in shownClasses" style="margin: 0 0 0 0" align="middle">
-      <el-col :span="3" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
+      <el-col :span="4" :offset="6" style="text-align: center;margin-top:20px;vertical-align: center">
         <div class="grid-content bg-purple-light">
           <router-link
               :to="{
@@ -52,7 +52,7 @@
           </router-link>
         </div>
       </el-col>
-      <el-col :span="9" style="text-align: center;margin-top:20px;vertical-align: center;">
+      <el-col :span="8" style="text-align: center;margin-top:20px;vertical-align: center;">
         <div class="grid-content bg-purple">
           <div>
             <router-link :to="{

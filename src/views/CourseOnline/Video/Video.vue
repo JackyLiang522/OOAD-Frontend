@@ -35,11 +35,12 @@
       <el-scrollbar height="340px" style="border: 3px solid gray">
         <div style="margin:10px 20px 0 20px;word-break: break-word;" v-for="chapter in chapters">
           <el-link
-              style="margin: 5px 0 5px 0;"
+              type="primary"
               :underline="false"
-              @click="changeChapter(chapter.id)"
-          > {{ chapter.chapterNumber }}.
-            {{ chapter.name }}
+              @click="changeChapter(chapter.id)">
+            <h3>第{{ chapter.chapterNumber }}章 </h3>
+            <h3>{{ chapter.name }}</h3>
+<!--            <el-divider></el-divider>-->
           </el-link>
           <br>
         </div>
