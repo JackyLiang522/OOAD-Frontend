@@ -12,7 +12,6 @@
       <video-player
           class="video-player vjs-big-play-centered"
           :src="videoSrc"
-          poster="https://vjs.zencdn.net/v/oceans.png"
           crossorigin="anonymous"
           playsinline
           controls
@@ -34,15 +33,15 @@
     </el-col>
     <el-col :span="8">
       <el-scrollbar height="340px" style="border: 3px solid gray">
-        <div style="margin:10px 20px 0 20px;word-break: break-word;">
+        <div style="margin:10px 20px 0 20px;word-break: break-word;" v-for="chapter in chapters">
           <el-link
-              v-for="chapter in chapters"
               style="margin: 5px 0 5px 0;"
               :underline="false"
               @click="changeChapter(chapter.id)"
           > {{ chapter.chapterNumber }}.
             {{ chapter.name }}
           </el-link>
+          <br>
         </div>
       </el-scrollbar>
     </el-col>
@@ -67,7 +66,12 @@
     </el-col>
   </el-row>
 
-  <Comment v-for="comment in comments" :username="comment.nickname" :content="comment.contents" :date="comment.createTime"/>
+  <Comment
+      v-for="comment in comments"
+      :username="comment.nickname"
+      :content="comment.contents"
+      :date="comment.createTime"
+  />
 
 
   <el-divider/>
