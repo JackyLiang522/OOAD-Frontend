@@ -107,6 +107,7 @@ export default {
     const store = useStore()
     const userId = store.state.userInfo.id
 
+    // TODO 应该添加课程审核的状态 已通过 待审核 被拒绝
     onBeforeMount(async () => {
       await axios.get(`http://${store.state.host}/api/course/list_by_teacher?teacherId=${userId}`)
           .then(response => allClasses.value = response.data)

@@ -100,6 +100,7 @@ export default {
       title: '',
     })
 
+    // 在后端做更新
     async function changeTitle(number: number, newTitle: string) {
       for (let i = 0; i < chapters.value.length; i++) {
         if (i + 1 === number) {

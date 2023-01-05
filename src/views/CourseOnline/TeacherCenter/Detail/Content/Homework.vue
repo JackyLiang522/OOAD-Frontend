@@ -44,7 +44,7 @@
     <el-button type="primary" @click="addRow" v-show="table_data.length === 0">
       增加新作业
     </el-button>
-    <el-button type="primary">
+    <el-button type="primary" @click="submitEdit">
       提交作业变更
     </el-button>
   </div>
@@ -92,7 +92,7 @@
       <template #footer style="padding: 0 0 0 0">
       <span>
         <el-button @click="dialog_visible = false">取消</el-button>
-        <el-button type="primary" @click="submitEdit">
+        <el-button type="primary" @click="finishEdit">
           确认
         </el-button>
       </span>
@@ -134,8 +134,14 @@ export default {
         }
     )
     const refreshTable = async () => {
-      // TODO: 后端获取数据
       // table_data.value
+      await axios.get(`http://${store.state.host}/api/assignment/list?chapterId=${chapterId.value}`).then((response) => {
+        // teacher.value = response.data.name;
+        const row = table_data[edited_index.value]
+        row.deadline = response.data.deadline
+        row.title = response.data.title
+        // TODO 这里应该是要传一个URL做预览
+      })
 
     }
 
@@ -156,21 +162,21 @@ export default {
       new_title.value = table_data[index].title
     }
 
-    async function submitEdit() {
+    function finishEdit() {
       if (upload.value === undefined)
         return
       console.log(courseId)
-      await submitUpload()
+
       dialog_visible.value = false
       const row = table_data[edited_index.value]
       row.deadline = new_deadline.value
       row.title = new_title.value
       row.attachment_name = upload.value.name
-      //  TODO: 这里把后端得到的文件下载地址传进去
-      //   row.attachment_url = 'xxx/xxx/xxx'
+    }
 
-      await axios.post(`http://${store.state.host}/api/assignment/add?chapterId=${chapterId.value}&&title=${row.title}&&deadline=${row.deadline}`)
-      
+    async function submitEdit() {
+      await axios.post(`http://${store.state.host}/api/assignment/add?chapterId=${chapterId.value}&&title=${new_title.value}&&deadline=${new_deadline.value}`)
+      await submitUpload()
     }
 
     function removeRow(index: number) {
@@ -224,7 +230,7 @@ export default {
     return {
       table_data,
       editRow: editRow,
-      submitEdit: submitEdit,
+      finishEdit: finishEdit,
       dialog_visible,
       date_time: new_deadline,
       edited_index,
@@ -236,7 +242,8 @@ export default {
       submitUpload,
       addRow,
       hwURL,
-      upload
+      upload,
+      submitEdit
     }
   }
 }

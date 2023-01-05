@@ -72,6 +72,7 @@ import 'video.js/dist/video-js.css'
 import {ElMessage, genFileId, ElMessageBox} from 'element-plus'
 import store from '@/store'
 import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
+import axios from "axios/index";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -114,14 +115,16 @@ export default {
       return true
     }
 
-    // TODO: 向后端发送章节标题变动请求
+    // 这里只做前端的展示 Content/Content.vue 才是在后端做更新
     function handleEditTitle() {
+
       ElMessageBox.prompt('请输入新标题', '编辑标题', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
       })
-          .then(({value}) => {
+          .then(async ({value}) => {
             context.emit('changeTitle', props.chapterInfo.number, value)
+
           })
           .catch(() => {
           })

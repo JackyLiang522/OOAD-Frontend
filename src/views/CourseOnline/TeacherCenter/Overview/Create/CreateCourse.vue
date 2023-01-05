@@ -91,9 +91,10 @@ export default {
       ElMessage.error('只能上传一个封面')
     }
 
+    // TODO 上传封面图
     async function submit() {
       const teacher = JSON.parse(localStorage.getItem('user_info')!)
-      await axios.post(`http://${store.state.host}/api/course/add?teacher=${teacher.user_name}&name=${course_info.name}&introduction=${course_info.introduction}&price=${course_info.price}`).then(
+      await axios.post(`http://${store.state.host}/api/course/add?teacher=${teacher.id}&&name=${course_info.name}&&introduction=${course_info.introduction}&&price=${course_info.price}`).then(
         response => {
           // create course success
           ElMessage.success('创建成功');
