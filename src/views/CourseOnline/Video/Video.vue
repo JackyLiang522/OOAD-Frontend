@@ -76,7 +76,7 @@
   <el-divider/>
 
 
-  <testSpeed @sendDelay/>
+<!--  <testSpeed @sendDelay/>-->
 </template>
 
 <script lang="ts">

@@ -41,16 +41,6 @@
           :volume="0.6"
           :playback-rates="[0.5, 1.0, 1.5, 2.0]"
           @mounted="handleMounted"
-          @ready="handleEvent($event)"
-          @play="handleEvent($event)"
-          @pause="handleEvent($event)"
-          @ended="handleEvent($event)"
-          @loadeddata="handleEvent($event)"
-          @waiting="handleEvent($event)"
-          @playing="handleEvent($event)"
-          @canplay="handleEvent($event)"
-          @canplaythrough="handleEvent($event)"
-          @timeupdate="handleEvent(player?.currentTime())"
           :fluid="false"
           preload="metadata"
           style="max-height: 100%"
@@ -84,9 +74,6 @@ export default {
     const handleMounted = (payload: any) => {
       player.value = payload.player
       console.log('Basic player mounted', payload)
-    }
-    const handleEvent = (log: any) => {
-      console.log('Basic player event', log)
     }
 
     const store = useStore()
@@ -150,7 +137,6 @@ export default {
       host,
       player,
       handleMounted,
-      handleEvent,
       has_video,
       handleExceed,
       submitUpload,

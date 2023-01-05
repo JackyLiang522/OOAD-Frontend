@@ -68,7 +68,12 @@ export default {
       await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${chapterId.value}`, addQuestionList.value)
 
       await axios.get(`http://${store.state.host}/api/quiz/listQuizProblems?chapterId=${chapterId.value}`).then((response) => {
-        allQuestionList.value = response.data;
+        console.log("allQuestionList----")
+        if (response.data) {
+          allQuestionList.value = response.data;
+        }else {
+          allQuestionList.value = []
+        }
         addQuestionList.value = [];
       })
 
@@ -88,7 +93,13 @@ export default {
       if (chapterId.value === -1)
         return
       await axios.get(`http://${store.state.host}/api/quiz/listQuizProblems?chapterId=${chapterId.value}`).then((response) => {
-        allQuestionList.value = response.data;
+        console.log("watch  allQuestionList----")
+        console.log(response.data)
+        if (response.data) {
+          allQuestionList.value = response.data;
+        }else {
+          allQuestionList.value = []
+        }
       })
     })
 

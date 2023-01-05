@@ -35,6 +35,7 @@
             <el-descriptions
                 class="margin-top"
                 :column="3"
+                size="large"
                 border
             >
               <el-descriptions-item>
