@@ -15,16 +15,16 @@
 
 <script>
 
-import {onBeforeMount, onBeforeUnmount, onMounted} from "vue";
+import {onBeforeUnmount, onMounted} from "vue";
 
 export default {
-  emits:['sendDelay'],
-  setup() {
+  emits: ['sendDelay'],
+  setup(props, context) {
     let timer
-    
-    onMounted(() => {
+
+    onMounted(function () {
       timer = setInterval(() => {
-        this.handStart()
+        handStart()
         console.log("New test")
       }, 10000)
     })
@@ -33,47 +33,37 @@ export default {
       clearInterval(timer)
       timer = null
     })
+    
+    let strURL = 'https://i2.hdslb.com/bfs/face/2aa2978da31cc5e8d026224e049b13bd20379ab6.jpg@240w_240h_1c_1s.webp'
+    let bolIsRunning = false
+    let arrDelays = []
+    let intSent = 0
+    let intLost = 0
+    let intTimerID = null
+    let bolIsTimeout = false
+    let objIMG = {}
+    let title = ''
+    let intRecv = 0
+    let intTimeout = 0
+    let intStartTime
 
-    return {
-      speedOpen: true,
-      nowTime: null,
-      // strURL: 'http://localhost:8081/api/upload/image/1.png',
-      // strURL:'https://developers.facebook.com/favicon.ico',
-      strURL: 'https://i2.hdslb.com/bfs/face/2aa2978da31cc5e8d026224e049b13bd20379ab6.jpg@240w_240h_1c_1s.webp',
-      bolIsRunning: false,
-      arrDelays: [],
-      intSent: 0,
-      intLost: 0,
-      intTimerID: null,
-      bolIsTimeout: false,
-      objIMG: {},
-      title: '',
-    }
-  },
-  methods: {
-
-    // changeVisible(visible = false) {
-    //   this.speedOpen = visible
-    // },
-    handEnd() {
-      this.intRecv = this.arrDelays.length;
-      this.intLost = this.intSent - this.intRecv;
-      var sum = 0;
-      for (var i = 0; i < this.intRecv; i++)
-        sum += this.arrDelays[i];
-      this.bolIsRunning = false;
+    function handEnd() {
+      intRecv = arrDelays.length;
+      intLost = intSent - intRecv;
+      let sum = 0;
+      for (let i = 0; i < intRecv; i++)
+        sum += arrDelays[i];
+      bolIsRunning = false;
 
       /*  * 统计结果  */
-      console.log("Ping的统计信息 for " + this.strURL + ":");
-      console.log("包:发送=" + this.intSent + ",接收=" + this.intRecv + ",丢包=" + this.intLost + "(" + Math.floor(this.intLost / this.intSent * 100) + "% 丢包率),");
-      console.log("最小速度=" + Math.min.apply(this, this.arrDelays) + "ms, 最大速度 = " + Math.max.apply(this, this.arrDelays) + "ms, 平均速度 = " + Math.floor(sum / this.intRecv) + "ms");
-      this.$emit('sendDelay', Math.floor(sum / this.intRecv))
+      console.log("Ping的统计信息 for " + strURL + ":");
+      console.log("包:发送=" + intSent + ",接收=" + intRecv + ",丢包=" + intLost + "(" + Math.floor(intLost / intSent * 100) + "% 丢包率),");
+      console.log("最小速度=" + Math.min.apply(this, arrDelays) + "ms, 最大速度 = " + Math.max.apply(this, arrDelays) + "ms, 平均速度 = " + Math.floor(sum / intRecv) + "ms");
+      context.emit('sendDelay', Math.floor(sum / intRecv))
 
-      // document.querySelector('.test-speed1').innerText = `发送:${this.intSent},接收:${this.intRecv},丢包:${this.intLost},丢包率:${Math.floor(this.intLost/this.intSent*100)} %`
-      // document.querySelector('.test-speed2').innerText = `最小速度:${Math.min.apply(this, this.arrDelays)}ms,最大速度:${Math.max.apply(this, this.arrDelays)}ms,平均速度:${Math.floor(sum / this.intRecv)}ms`
       let title = "Test Speed"
-      let avg = Math.floor(sum / this.intRecv)
-      if (this.intLost > 0) {
+      let avg = Math.floor(sum / intRecv)
+      if (intLost > 0) {
         title = "网络环境不稳定"
       } else if (avg > 0 && avg <= 30) {
         title = "网络环境非常好"
@@ -84,62 +74,65 @@ export default {
       } else if (avg > 100) {
         title = "网络环境差"
       }
-      // document.querySelector('.test-speed3').innerText = this.title
-      if (this.intRecv == 0) return;
+      // document.querySelector('.test-speed3').innerText = title
+      if (intRecv === 0) return;
       console.log(title)
-    },
-    handStart() {
-      this.title = '测速过程大概需要10秒,请耐心等待!'
-      console.log(this.title)
-      console.log(this.strURL)
-      // this.strURL = window.location.href
-      if (this.strURL.length === 0)
+    }
+
+    function handStart() {
+      title = '测速过程大概需要10秒,请耐心等待!'
+      console.log(title)
+      console.log(strURL)
+      // strURL = window.location.href
+      if (strURL.length === 0)
         return;
-      // if (this.strURL.substring(0, 7).toLowerCase() != "http://")
-      //   this.strURL = "http://" + this.strURL;
-      this.intTimeout = 1000;
-      this.bolIsRunning = true;
-      this.arrDelays = [];
-      this.intSent = 0;
-      this.ping();
-      this.setStart();
+      intTimeout = 1000;
+      bolIsRunning = true;
+      arrDelays = [];
+      intSent = 0;
+      ping();
+      setStart();
       setTimeout(() => {
-        this.handEnd()
+        handEnd()
       }, 9000)
-    },
-    setStart() {
-      this.objIMG = new Image()
-      this.objIMG.onload = this.objIMG.onerror = () => {
+    }
+
+    function setStart() {
+      objIMG = new Image()
+      objIMG.onload = objIMG.onerror = () => {
         /* * 有回应,取消超时计时 */
-        clearTimeout(this.intTimerID)
-        if (!this.bolIsRunning || this.bolIsTimeout) return
-        var delay = new Date() - this.intStartTime
-        window.console.log('连接成功 ' + this.strURL + ' time' + (delay < 1 ? '<1' : '=' + delay) + 'ms')
-        this.arrDelays.push(delay)
+        clearTimeout(intTimerID)
+        if (!bolIsRunning || bolIsTimeout) return
+        const delay = new Date() - intStartTime;
+        window.console.log('连接成功 ' + strURL + ' time' + (delay < 1 ? '<1' : '=' + delay) + 'ms')
+        arrDelays.push(delay)
         /* * 每次请求间隔限制在1秒以上 */
         setTimeout(() => {
-          this.ping()
+          ping()
         }, delay < 1000 ? (1000 - delay) : 1000)
       }
-    },
-    ping() {
-      this.intStartTime = +new Date()
-      this.intSent++
-      this.objIMG.src = this.strURL
-      // this.objIMG.src = 'https://i2.hdslb.com/bfs/face/2aa2978da31cc5e8d026224e049b13bd20379ab6.jpg@240w_240h_1c_1s.webp'
-      // this.objIMG.src = 'https://developers.facebook.com/favicon.ico'
-      /* * 超时计时 */
-      this.intTimerID = setTimeout(() => {
-        this.timeout
-      }, this.intTimeout)
-    },
-    timeout() {
-      if (!this.bolIsRunning) return
-      this.bolIsTimeout = true
-      this.objIMG.src = 'X:\\'
-      window.console.log('请求超时.')
-      this.ping()
     }
+
+    function ping() {
+      intStartTime = +new Date()
+      intSent++
+      objIMG.src = strURL
+      // objIMG.src = 'https://i2.hdslb.com/bfs/face/2aa2978da31cc5e8d026224e049b13bd20379ab6.jpg@240w_240h_1c_1s.webp'
+      // objIMG.src = 'https://developers.facebook.com/favicon.ico'
+      /* * 超时计时 */
+      intTimerID = setTimeout(() => {
+        timeout()
+      }, intTimeout)
+    }
+
+    function timeout() {
+      if (!bolIsRunning) return
+      bolIsTimeout = true
+      objIMG.src = 'X:\\'
+      window.console.log('请求超时.')
+      ping()
+    }
+
   },
 }
 </script>
