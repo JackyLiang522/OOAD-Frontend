@@ -87,7 +87,7 @@
           </el-table-column>
         </el-table>
       </div>
-      <el-button style="float: right; margin: 40px  3% 20px 0" type="danger" round>退课</el-button>
+<!--      <el-button style="float: right; margin: 40px  3% 20px 0" type="danger" round>退课</el-button>-->
 
 
     </el-card>
@@ -98,6 +98,9 @@
 import {onBeforeMount, ref} from "vue";
 import courseInfoCard from "../../../Home/CourseInfoCard.vue";
 import {useRoute} from "vue-router";
+import axios from "axios";
+import store from "@/store";
+import {useStore} from "vuex";
 
 export default {
   name: "CourseDetail",
@@ -109,14 +112,15 @@ export default {
   setup() {
     const route = useRoute()
     const courseId = route.query.courseId
-
+    const store = useStore()
+    const userID = store.state.userInfo.id
     const hwData = ref()
     const pgData = ref()
     const courseName = ref()
 
 
-    onBeforeMount(() => {
-      // TODO: 从后端更新两个data变量
+    onBeforeMount(async () => {
+      // TODO: 从后端更新两个data变量/listHwData
       hwData.value = [{
         title: '作业1',
         state: '完成',
@@ -144,6 +148,19 @@ export default {
 
       // TODO: 根据courseId获取课程名
       courseName.value = 'Java'
+      await axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`).then((response) => {
+        courseName.value = response.data.courseName
+      })
+
+      await axios.get(`http://${store.state.host}/api/course/listHwData?courseId=${courseId}&&studentId=${userID}`).then((response) => {
+        hwData.value = response.data
+      })
+
+
+      await axios.get(`http://${store.state.host}/api/course/listPgData?courseId=${courseId}&&studentId=${userID}`).then((response) => {
+        pgData.value = response.data
+      })
+
     })
 
     return {
