@@ -33,16 +33,15 @@
     </el-col>
     <el-col :span="8">
       <el-scrollbar height="340px" style="border: 3px solid gray">
-        <div style="margin:10px 20px 0 20px;word-break: break-word;" v-for="chapter in chapters">
+        <div style="word-break: break-word;" v-for="chapter in chapters" >
           <el-link
+              style="margin:0px 0px 0px 50px;"
               type="primary"
               :underline="false"
               @click="changeChapter(chapter.id)">
-            <h3>第{{ chapter.chapterNumber }}章 </h3>
-            <h3>{{ chapter.name }}</h3>
-<!--            <el-divider></el-divider>-->
+            <h3>第{{ chapter.chapterNumber }}章 {{ chapter.name }}</h3>
           </el-link>
-          <br>
+          <el-divider style="margin:0px 30px 0px 30px;width: 350px"></el-divider>
         </div>
       </el-scrollbar>
     </el-col>
@@ -169,8 +168,8 @@ export default {
         localStorage.setItem('has_open_video_page', 'true')
       }
     })
-    
-    onBeforeUnmount(()=>{
+
+    onBeforeUnmount(() => {
       localStorage.setItem("has_open_video_page", 'false')
     })
 
