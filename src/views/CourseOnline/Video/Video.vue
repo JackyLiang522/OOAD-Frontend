@@ -48,7 +48,7 @@
     </el-col>
   </el-row>
   <el-row style="margin-top: 30px;" :gutter="30" justify="center">
-    <test-speed></test-speed>
+    <test-speed ></test-speed>
   </el-row>
 
   <el-row style="margin-top: 30px;" :gutter="30" justify="center">
@@ -80,7 +80,7 @@
 </template>
 
 <script lang="ts">
-import {onBeforeMount, onBeforeUnmount, onMounted, ref, shallowRef} from 'vue'
+import {onBeforeMount, onBeforeUnmount, onMounted, reactive, ref, shallowRef} from 'vue'
 import videojs, {VideoJsPlayer} from "video.js"
 import {VideoPlayer} from '@videojs-player/vue'
 import 'video.js/dist/video-js.css'
@@ -104,6 +104,7 @@ export default {
   },
   emits: ['changeChapter'],
   setup() {
+    const delay = ref(0)
     const player = shallowRef<VideoJsPlayer>()
     const handleMounted = (payload: any) => {
       player.value = payload.player
@@ -250,7 +251,8 @@ export default {
       videoSrc,
       changeChapter,
       handleTimeUpdate,
-      handleCanPlay
+      handleCanPlay,
+      delay
     }
   }
 }
