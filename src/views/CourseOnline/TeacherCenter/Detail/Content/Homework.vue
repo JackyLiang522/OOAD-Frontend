@@ -118,7 +118,7 @@ export default {
     const courseId = useRoute().query.courseId
     const hwURL = "http://" + store.state.host + "/api/upload/pdf?chapterId=" + chapterId.value
     const upload = ref<UploadInstance>()
-    const table_data = reactive([
+    const table_data = ref([
       {
         title: '标题1',
         deadline: '这里表示DDL',
@@ -126,17 +126,16 @@ export default {
         attachment_name: 'name1'
       }
     ])
-    watch(
-        chapterId,
-        (newValue, oldValue) => {
-          refreshTable()
-        }
-    )
+
+    watch(chapterId, () => refreshTable())
     const refreshTable = async () => {
+      if(chapterId.value === -1)
+        return
+      
       // table_data.value
       await axios.get(`http://${store.state.host}/api/assignment/list?chapterId=${chapterId.value}`).then((response) => {
         // teacher.value = response.data.name;
-        const row = table_data[edited_index.value]
+        const row = table_data.value[edited_index.value]
         row.deadline = response.data.deadline
         row.title = response.data.title
         // TODO 这里应该是要传一个URL做预览
@@ -157,8 +156,8 @@ export default {
     function editRow(index: number) {
       edited_index.value = index
       dialog_visible.value = true
-      new_deadline.value = table_data[index].deadline
-      new_title.value = table_data[index].title
+      new_deadline.value = table_data.value[index].deadline
+      new_title.value = table_data.value[index].title
     }
 
     function finishEdit() {
@@ -167,7 +166,7 @@ export default {
       console.log(courseId)
 
       dialog_visible.value = false
-      const row = table_data[edited_index.value]
+      const row = table_data.value[edited_index.value]
       row.deadline = new_deadline.value
       row.title = new_title.value
       row.attachment_name = upload.value.name
@@ -179,7 +178,7 @@ export default {
     }
 
     function removeRow(index: number) {
-      table_data.splice(index, 1)
+      table_data.value.splice(index, 1)
     }
 
 
@@ -217,7 +216,7 @@ export default {
     }
 
     function addRow() {
-      table_data.push({
+      table_data.value.push({
         title: '',
         deadline: '',
         attachment_url: '',

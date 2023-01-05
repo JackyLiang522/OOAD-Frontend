@@ -114,9 +114,11 @@ export default {
       refreshTable();
     })
 
-    watch(chapterId, () => refreshTable())
+    watch(props.chapterInfo, () => refreshTable())
 
     const refreshTable = async () => {
+      if(chapterId.value === -1)
+        return
       // table_data.value
       // console.log(chapterId.value)
       await axios.get(`http://${store.state.host}/api/export/list?chapterId=${chapterId.value}`).then((response) => {
