@@ -129,6 +129,9 @@ export default {
 
     watch(chapterId, () => refreshTable())
     const refreshTable = async () => {
+      if(chapterId.value === -1)
+        return
+      
       // table_data.value
       await axios.get(`http://${store.state.host}/api/assignment/list?chapterId=${chapterId.value}`).then((response) => {
         // teacher.value = response.data.name;
