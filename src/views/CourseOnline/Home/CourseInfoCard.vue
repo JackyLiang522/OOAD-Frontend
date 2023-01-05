@@ -8,7 +8,7 @@
 
     <el-image
         style="width: 120px; margin: 20px 60px 0 60px;"
-        src="https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg"
+        :src="`http://${host}/api/upload/image/${courseId}.png`"
         fit="contain"/>
 
     <p style="font-size: 20px;font-weight: bold;color: #397ce2;text-align: center;margin: 15px 0 15px 0">
@@ -42,8 +42,26 @@
 
 <script>
 
+import {useStore} from "vuex";
+
 export default {
-  props: ['courseId', 'courseName', 'teacher', 'chapterCount', 'price', 'introduction', 'hasPurchased', 'purchaseCourse'],
+  props: [
+    'courseId',
+    'courseName',
+    'teacher',
+    'chapterCount',
+    'price',
+    'introduction',
+    'hasPurchased',
+    'purchaseCourse'
+  ],
+  setup(){
+    const host = useStore().state.host
+    
+    return{
+      host
+    }
+  }
 }
 </script>
 
