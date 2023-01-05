@@ -66,6 +66,12 @@ export default {
     async function submitQuestion() {
       console.log(addQuestionList.value)
       await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${chapterId.value}`, addQuestionList.value)
+
+      await axios.get(`http://${store.state.host}/api/quiz/listQuizProblems?chapterId=${chapterId.value}`).then((response) => {
+        allQuestionList.value = response.data;
+        addQuestionList.value = [];
+      })
+
       /*return axios({
         headers:{
           "Content-Type": "application/json"
@@ -83,8 +89,6 @@ export default {
         return
       await axios.get(`http://${store.state.host}/api/quiz/listQuizProblems?chapterId=${chapterId.value}`).then((response) => {
         allQuestionList.value = response.data;
-        console.log('addQuestionList.value')
-        console.log(addQuestionList.value)
       })
     })
 
