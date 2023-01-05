@@ -212,7 +212,7 @@ export default {
 
     function test() {
       lastTime.value = time.value
-      videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\3_240.mp4`)
+      // videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\3_240.mp4`)
       hasJump.value = false
     }
 

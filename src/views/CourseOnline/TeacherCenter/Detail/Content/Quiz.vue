@@ -60,7 +60,7 @@ export default {
       addQuestionList.value.push(newQuestion);
       allQuestionList.value.push(newQuestion);
 
-      console.log(allQuestionList.value)
+      // console.log(allQuestionList.value)
     }
 
     async function submitQuestion() {
@@ -82,7 +82,9 @@ export default {
       if (chapterId.value === -1)
         return
       await axios.get(`http://${store.state.host}/api/quiz/listQuizProblems?chapterId=${chapterId.value}`).then((response) => {
-        addQuestionList.value = response.data;
+        allQuestionList.value = response.data;
+        console.log('addQuestionList.value')
+        console.log(addQuestionList.value)
       })
     })
 
