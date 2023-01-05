@@ -41,7 +41,7 @@
               @click="changeChapter(chapter.id)">
             <h3>第{{ chapter.chapterNumber }}章 {{ chapter.name }}</h3>
           </el-link>
-          <el-divider style="margin:0px 30px 0px 30px;width: 350px"></el-divider>
+          <el-divider style="margin:0 10% 0 10%;width: 80%"></el-divider>
         </div>
       </el-scrollbar>
     </el-col>
