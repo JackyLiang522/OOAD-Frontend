@@ -99,6 +99,7 @@ export default {
     const courseId = useRoute().query.courseId
     let table_data = ref([
       {
+        id: 0,
         name: 'Stu 1',
         homework_score: 10,
         quiz_score: 10,
@@ -115,8 +116,7 @@ export default {
 
     const refreshTable = async () => {
       // table_data.value
-      console.log(chapterId.value)
-      // TODO 这里需要chapterId
+      // console.log(chapterId.value)
       await axios.get(`http://${store.state.host}/api/export/list?chapterId=${chapterId.value}`).then((response) => {
         // TODO 这里应该是要传一个URL做预览
         table_data.value = response.data;
@@ -125,7 +125,6 @@ export default {
       })
     }
     async function exportData() {
-      // TODO 这里需要chapterId
       window.location.href = `http://${store.state.host}/api/export?chapterId=${chapterId.value}`;
     }
 
