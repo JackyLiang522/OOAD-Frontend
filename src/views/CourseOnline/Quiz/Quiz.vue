@@ -92,43 +92,12 @@ export default {
           err => {
             console.log(err)
           })
-      // 在这里更新问题列表
-      /*questions.value = [
-        {
-          description: '单选题的题目站在这里',
-          type: '单选',
-          answers: ['选项2'],
-          options: [
-            '选项1的文本',
-            '选项2的文本',
-            '选项3的文本'
-          ],
-        }, {
-          description: '多选题的题目在这里',
-          type: '多选',
-          answers: ['选项1', '选项2'],
-          options: [
-            '选项1的文本',
-            '选项2的文本',
-            '选项3的文本'
-          ],
-        }, {
-          description: '判断题目站在这里',
-          type: '判断',
-          answers: ['选项2'],
-          options: [
-            '选项1的文本',
-            '选项2的文本',
-          ],
-        }
-      ]*/
-
       student_answers.value = []
       for (let i = 0; i < questions.value.length; i++) {
         student_answers.value.push(undefined)
       }
       timer = setInterval(() => {
-        if (total_seconds.value === 0) {
+        if (total_seconds.value <= 0) {
           submitAnswers()
         }
         total_seconds.value--
@@ -178,22 +147,6 @@ export default {
           } else {
             is_correct = false;
           }
-          /*
-          for (let j = 0; j < answer.length; j++) {
-            const cur_answer = questions.value[i].options[answer[j]]
-            let cur_correct = false
-            for (let k = 0; k < student_answer.length; k++) {
-              let cur_student_answer = student_answer[k]
-              if (cur_answer === cur_student_answer) {
-                cur_correct = true
-                break
-              }
-            }
-            if (!cur_correct) {
-              is_correct = false
-              break
-            }
-          }*/
           if (is_correct)
               // total_score += 100 / total_parts * parts[i]
             total_score += parts[i];
@@ -214,7 +167,7 @@ export default {
         type: 'success',
       })
       const router = useRouter()
-      setTimeout(()=>router.push('/#/home'),3000)
+      setTimeout(() => router.push('/home'), 3000)
     }
 
     return {

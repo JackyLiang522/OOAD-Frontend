@@ -48,7 +48,6 @@
     </el-col>
   </el-row>
   <el-row style="margin-top: 30px;" :gutter="30" justify="center">
-    <test-speed ></test-speed>
   </el-row>
 
   <el-row style="margin-top: 30px;" :gutter="30" justify="center">
@@ -66,7 +65,7 @@
       <el-button @click="releaseComment" type="primary" style="height: 100%;width: max(100%,50px);">发布</el-button>
     </el-col>
   </el-row>
-  
+
   <Comment
       v-for="comment in comments"
       :username="comment.nickname"
@@ -77,6 +76,7 @@
   <el-divider/>
 
 
+  <testSpeed @sendDelay/>
 </template>
 
 <script lang="ts">
@@ -208,32 +208,32 @@ export default {
       video.currentTime(lastTime.value)
       hasJump.value = true
     }
-    
+
     function checkNetworkSpeed() {
       lastTime.value = time.value
       const speed = getNetworkSpeed()
       let name
-      if(speed === 1){
+      if (speed === 1) {
         // 240
         name = `${chapter.value.id}_240.mp4`
-      }else if (speed === 2){
+      } else if (speed === 2) {
         // 360
         name = `${chapter.value.id}_360.mp4`
-      }else if(speed === 3){
+      } else if (speed === 3) {
         // 480
         name = `${chapter.value.id}_480.mp4`
-      }else if (speed === 4){
+      } else if (speed === 4) {
         // 720
         name = `${chapter.value.id}_720.mp4`
-      }else{
+      } else {
         // 原画
         name = `${chapter.value.id}.mp4`
       }
       videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\${name}`)
       hasJump.value = false
     }
-    
-    function getNetworkSpeed(){
+
+    function getNetworkSpeed() {
       return 1
     }
 
