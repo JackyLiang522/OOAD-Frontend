@@ -4,7 +4,7 @@
   <el-scrollbar max-height="400px" style="margin-top: 10px;margin-bottom: 30px">
     <div>
       <DisplayQuestion
-          v-for="(question, index) in questionList"
+          v-for="(question, index) in allQuestionList"
           :key="question.id"
           :title="'第 ' + (index+1)+' 题'"
           :description="question.description"
@@ -40,7 +40,8 @@ export default {
   // eslint-disable-next-line vue/no-unused-components
   components: {StudentQuiz, Question, DisplayQuestion},
   setup(props) {
-    const questionList = ref([])
+    const addQuestionList = ref([])
+    const allQuestionList = ref([])
     const courseId = useRoute().query.courseId
     const chapterId = computed(() => props.chapterInfo.id)
 
@@ -56,12 +57,15 @@ export default {
         answers: answers,
         options: options,
       }
-      questionList.value.push(newQuestion);
-      console.log(questionList.value)
+      addQuestionList.value.push(newQuestion);
+      allQuestionList.value.push(newQuestion);
+
+      console.log(allQuestionList.value)
     }
 
     async function submitQuestion() {
-      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${chapterId.value}`, questionList.value)
+      console.log(addQuestionList.value)
+      await axios.post(`http://${store.state.host}/api/quiz/add?chapterId=${chapterId.value}`, addQuestionList.value)
       /*return axios({
         headers:{
           "Content-Type": "application/json"
@@ -73,16 +77,19 @@ export default {
       })*/
     }
 
-    onBeforeMount(() => {
-      //todo:获取已有quiz并赋值给questionList.value
-
+    onBeforeMount(async () => {
+      // todo:获取已有quiz并赋值给addQuestionList.value
+      await axios.get(`http://${store.state.host}/api/quiz/listQuizProblems?chapterId=${chapterId.value}`).then((response) => {
+        addQuestionList.value = response.data;
+      })
     })
 
     return {
       addQuestion,
       submitQuestion,
-      questionList,
+      questionList: addQuestionList,
       courseId,
+      allQuestionList
     }
   },
 }
