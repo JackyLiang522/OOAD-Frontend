@@ -102,6 +102,7 @@ import type {UploadInstance, UploadProps, UploadRawFile} from 'element-plus'
 import {$ref} from "vue/macros";
 import {useStore} from "vuex";
 import {useRoute} from "vue-router";
+import axios from "axios";
 
 const upload = ref<UploadInstance>()
 const store = useStore()
@@ -111,24 +112,40 @@ const courseId = route.query.courseId
 const courseName = ref()
 const chapterId = route.query.chapterId
 const hwURL = "http://" + store.state.host + "/api/upload/studentAssignment?chapterId="+chapterId+"&studentId="+store.state.userInfo.id
-let homeWork = reactive({})
+const studentId = store.state.userInfo.id
+let homeWork = reactive({
+  title: "标题",
+  deadline: "2022/12/31",
+  state: '未提交',
+  score: 0,
+  attachment: {
+    url: '',
+    name: ''}
+})
 
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
+
   // TODO: 获取课程名字
   courseName.value = 'Java'
+  await axios.get(`http://${store.state.host}/api/course/list_by_id?courseId=${courseId}`).then((response) => {
+    courseName.value = response.data.courseName
+  })  // http://localhost:8081/api/upload/pdf/1.pdf
 
-  // TODO: 初始化作业信息
-  homeWork = {
-    title: "标题",
-    deadline: "2022/12/31",
-    state: '未提交',
-    score: 0,
-    attachment: {
-      url: 'https://sakai.sustech.edu.cn/access/content/attachment/85c9d4ad-5ce9-4059-b7b4-b775bd75494d/%E4%BD%9C%E4%B8%9A/615a2f50-d4c7-4a0c-9e25-5f6ba700196b/cs305_homework2.pdf',
-      name: 'CS042_第一次作业.pdf'
-    }
-  }
+
+  await axios.get(`http://${store.state.host}/api/assignment/showHomeWork?chapterId=${chapterId}&&studentId=${studentId}`).then((response) => {
+    homeWork.title = response.data.title
+    homeWork.deadline = response.data.deadline
+    homeWork.state = response.data.state
+    homeWork.score = response.data.score
+
+    homeWork.attachment.url = `http://${store.state.host}/api/upload/pdf/${courseId}.pdf`
+    homeWork.attachment.name = `${courseName.value}_${chapterId}.pdf`
+
+    console.log(homeWork.attachment.url)
+    console.log(homeWork.attachment.name)
+  })
+
 })
 
 // const fileList = ref([])
