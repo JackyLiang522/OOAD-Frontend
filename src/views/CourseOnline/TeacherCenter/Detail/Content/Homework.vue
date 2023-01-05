@@ -14,7 +14,7 @@
       <el-table-column prop="deadline" label="截止日期" width="200px"/>
       <el-table-column prop="attachment_url" label="附件" width="200px">
         <template v-slot="scope">
-          <el-link
+          <el-link type="primary"
               @click="openUrl(scope.$index)">
             {{ table_data[scope.$index].attachment_name }}
 <!--            {{table_data[scope.$index].attachment_url}}-->
