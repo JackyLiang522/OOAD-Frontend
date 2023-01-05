@@ -21,13 +21,15 @@
       <el-form-item label="封面图">
         <el-upload
             v-model="file"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
+            :action="hwURL"
             list-type="picture-card"
+            :before-upload="beforeUpload"
             :on-preview="handlePictureCardPreview"
             :on-remove="handleRemove"
             :on-success="handleSuccess"
             :limit="1"
             :on-exceed="handleExceed"
+            :auto-upload="false"
         >
           <el-icon>
             <Plus/>
@@ -35,7 +37,7 @@
         </el-upload>
         <Teleport to="html">
           <el-dialog v-model="dialog.visible">
-            <img w-full :src="dialog.imageUrl" alt="Preview Image"/>
+            <img  :src="dialog.imageUrl" alt="Preview Image"/>
           </el-dialog>
         </Teleport>
       </el-form-item>
@@ -48,9 +50,9 @@
 </template>
 
 <script lang="ts">
-import {reactive} from "vue";
+import {reactive, ref} from "vue";
 import type {UploadFile, UploadFiles, UploadProps, UploadUserFile} from 'element-plus'
-import {ElMessage} from "element-plus";
+import {ElMessage, UploadInstance} from "element-plus";
 import axios from "axios";
 import store from "@/store";
 
@@ -58,6 +60,9 @@ export default {
   name: "CreateCourse",
 
   setup() {
+    const upload = ref<UploadInstance>()
+    let hwURL = "http://" + store.state.host + "/api/upload/image"
+    const courseID = 0
     const course_info = reactive({
       name: '',
       introduction: '',
@@ -74,6 +79,17 @@ export default {
       visible: false
     })
 
+    const beforeUpload = (file: any) => {
+      console.log("before upload")
+      console.log(file.name)
+      if (!file.name.includes('.jpg')||!file.name.includes('.png')) {
+        ElMessage.warning('只能上传图片文件')
+        return false
+      } else {
+        return true
+      }
+    }
+
     const handleRemove: UploadProps['onRemove'] = (uploadFile, uploadFiles) => {
       console.log(uploadFile, uploadFiles)
     }
@@ -85,6 +101,8 @@ export default {
 
     const handleSuccess = (response: any, uploadFile: UploadFile) => {
       file.url = uploadFile.url
+      console.log(file.url)
+      ElMessage.success('创建成功');
     }
 
     const handleExceed = (files: File[]) => {
@@ -93,12 +111,22 @@ export default {
 
     // TODO 上传封面图
     async function submit() {
+      console.log("submit")
+      console.log(file.name)
+      // if (!file.name.includes('.jpg')&&!file.name.includes('.png')) {
+      //   ElMessage.warning('只能上传图片文件')
+      //   // return false
+      // } else {
+      //   // return true
+      // }
       const teacher = JSON.parse(localStorage.getItem('user_info')!)
       await axios.post(`http://${store.state.host}/api/course/add?teacher=${teacher.id}&&name=${course_info.name}&&introduction=${course_info.introduction}&&price=${course_info.price}`).then(
         response => {
+          // courseID = 0
           // create course success
-          ElMessage.success('创建成功');
         })
+      hwURL += "?courseID=" + courseID
+      upload.value!.submit()
     }
 
 
@@ -110,7 +138,10 @@ export default {
       handlePictureCardPreview,
       handleSuccess,
       handleExceed,
-      submit
+      submit,
+      hwURL,
+      upload,
+      beforeUpload
     }
   }
 }
