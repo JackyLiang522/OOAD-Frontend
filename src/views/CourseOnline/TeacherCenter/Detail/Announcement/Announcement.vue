@@ -110,8 +110,13 @@ export default {
     })
 
     const onSubmit = async () => {
-      await axios.get(`http://${store.state.host}/api/announcement/add?courseId=${courseId}&&title=${form.title}&&content=${form.content}`)
+      await axios.post(`http://${store.state.host}/api/announcement/add?courseId=${courseId}&&title=${form.title}&&content=${form.content}`)
       console.log('submit!')
+
+      // send email
+      if (form.email) {
+        await axios.post(`http://${store.state.host}/api/announcement/send_email?courseId=${courseId}&&title=${form.title}&&content=${form.content}`)
+      }
     }
 
     onBeforeMount(async () => {
