@@ -19,14 +19,6 @@
           :volume="0.6"
           :playback-rates="[0.5, 1.0, 1.5, 2.0]"
           @mounted="handleMounted"
-          @ready="handleEvent($event)"
-          @play="handleEvent($event)"
-          @pause="handleEvent($event)"
-          @ended="handleEvent($event)"
-          @loadeddata="handleEvent($event)"
-          @waiting="handleEvent($event)"
-          @playing="handleEvent($event)"
-          @canplay="handleEvent($event)"
           @canplaythrough="handleCanPlay"
           @timeupdate="handleTimeUpdate(player?.currentTime())"
           style="height: 100%;margin-top: 3px"
@@ -76,7 +68,7 @@
   <el-divider/>
 
 
-  <testSpeed @sendDelay/>
+  <testSpeed @sendDelay="checkNetworkSpeed"/>
 </template>
 
 <script lang="ts">
@@ -102,16 +94,12 @@ export default {
     VideoPlayer,
     testSpeed
   },
-  emits: ['changeChapter'],
   setup() {
     const delay = ref(0)
     const player = shallowRef<VideoJsPlayer>()
     const handleMounted = (payload: any) => {
       player.value = payload.player
-      console.log('Basic player mounted', payload)
-    }
-    const handleEvent = (log: any) => {
-      console.log('Basic player event', log)
+      // console.log('Basic player mounted', payload)
     }
 
     let comment_input = ref('')
@@ -209,38 +197,34 @@ export default {
       hasJump.value = true
     }
 
-    function checkNetworkSpeed() {
-      lastTime.value = time.value
-      const speed = getNetworkSpeed()
-      let name
-      if (speed === 1) {
-        // 240
-        name = `${chapter.value.id}_240.mp4`
-      } else if (speed === 2) {
-        // 360
-        name = `${chapter.value.id}_360.mp4`
-      } else if (speed === 3) {
-        // 480
-        name = `${chapter.value.id}_480.mp4`
-      } else if (speed === 4) {
-        // 720
-        name = `${chapter.value.id}_720.mp4`
-      } else {
-        // 原画
-        name = `${chapter.value.id}.mp4`
-      }
-      videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\${name}`)
-      hasJump.value = false
+    function checkNetworkSpeed(speed:number) {
+      console.log(speed)
+      // lastTime.value = time.value
+      // let name
+      // if (speed === 1) {
+      //   // 240
+      //   name = `${chapter.value.id}_240.mp4`
+      // } else if (speed === 2) {
+      //   // 360
+      //   name = `${chapter.value.id}_360.mp4`
+      // } else if (speed === 3) {
+      //   // 480
+      //   name = `${chapter.value.id}_480.mp4`
+      // } else if (speed === 4) {
+      //   // 720
+      //   name = `${chapter.value.id}_720.mp4`
+      // } else {
+      //   // 原画
+      //   name = `${chapter.value.id}.mp4`
+      // }
+      // videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\${name}`)
+      // hasJump.value = false
     }
 
-    function getNetworkSpeed() {
-      return 1
-    }
 
     return {
       player,
       handleMounted,
-      handleEvent,
       comment_input,
       courseId,
       teacher,
@@ -252,7 +236,7 @@ export default {
       changeChapter,
       handleTimeUpdate,
       handleCanPlay,
-      delay
+      checkNetworkSpeed
     }
   }
 }

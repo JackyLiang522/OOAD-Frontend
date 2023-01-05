@@ -39,6 +39,8 @@
         }}</p>
     </div>
   </div>
+
+  <el-button @click="test">111</el-button>
 </template>
 
 <script lang="ts">
@@ -131,15 +133,16 @@ export default {
           total_parts++
         }
       }
-      // alert("student_answers.value.length" + student_answers.value.length)
       for (let i = 0; i < student_answers.value.length; i++) {
         const answer = questions.value[i].answers
         const student_answer = student_answers.value[i]
         if (questions.value[i].type === '多选') {
           let is_correct = true
+          const temp: any[] = []
+          student_answer.forEach((ans: any) => temp.push(ans))
           if (answer.length == student_answer.length) {
             for (let j = 0; j < answer.length; j++) {
-              if (!(questions.value[i].options[answer[j] - 1] === student_answer[j])) {
+              if (!temp.some(ele => ele === questions.value[i].options[parseInt(answer[j]) - 1])) {
                 is_correct = false;
                 break;
               }
@@ -151,7 +154,7 @@ export default {
               // total_score += 100 / total_parts * parts[i]
             total_score += parts[i];
         } else {
-          if (student_answer.length == 1 && questions.value[i].options[answer[0] - 1] === student_answer[0])
+          if (student_answer != undefined && questions.value[i].options[(answer[0]) - 1] === student_answer)
               // total_score += 100 / total_parts * parts[i]
             total_score += parts[i];
         }
@@ -167,7 +170,12 @@ export default {
         type: 'success',
       })
       const router = useRouter()
-      setTimeout(() => router.push('/home'), 3000)
+      await router.push('/home')
+    }
+
+    function test() {
+      console.log(questions.value)
+      console.log(student_answers.value)
     }
 
     return {
@@ -176,7 +184,8 @@ export default {
       hour,
       questions,
       student_answers,
-      submitAnswers
+      submitAnswers,
+      test
     }
   }
 }

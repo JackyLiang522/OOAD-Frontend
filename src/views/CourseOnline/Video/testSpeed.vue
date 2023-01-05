@@ -15,14 +15,31 @@
 
 <script>
 
+import {onBeforeMount, onBeforeUnmount, onMounted} from "vue";
+
 export default {
-  data() {
+  emits:['sendDelay'],
+  setup() {
+    let timer
+    
+    onMounted(() => {
+      timer = setInterval(() => {
+        this.handStart()
+        console.log("New test")
+      }, 10000)
+    })
+
+    onBeforeUnmount(() => {
+      clearInterval(timer)
+      timer = null
+    })
+
     return {
       speedOpen: true,
       nowTime: null,
       // strURL: 'http://localhost:8081/api/upload/image/1.png',
       // strURL:'https://developers.facebook.com/favicon.ico',
-      strURL:'https://i2.hdslb.com/bfs/face/2aa2978da31cc5e8d026224e049b13bd20379ab6.jpg@240w_240h_1c_1s.webp',
+      strURL: 'https://i2.hdslb.com/bfs/face/2aa2978da31cc5e8d026224e049b13bd20379ab6.jpg@240w_240h_1c_1s.webp',
       bolIsRunning: false,
       arrDelays: [],
       intSent: 0,
@@ -31,20 +48,8 @@ export default {
       bolIsTimeout: false,
       objIMG: {},
       title: '',
-      timer: {}
     }
   },
-  // watch: {
-  //   speedOpen: {
-  //     immediate: true,
-  //     handler: function(newVal) {
-  //       if (newVal) {
-  //         this.setStart()
-  //         this.title = '请点击下方按钮开始测试!'
-  //       }
-  //     }
-  //   }
-  // },
   methods: {
 
     // changeVisible(visible = false) {
@@ -136,16 +141,6 @@ export default {
       this.ping()
     }
   },
-  mounted() {
-    this.timer = setInterval(() => {
-      this.handStart()
-      console.log("New test")
-    }, 10000)
-  },
-  beforeDestroy() {
-    clearInterval(this.timer)
-    this.timer = null
-  }
 }
 </script>
 
