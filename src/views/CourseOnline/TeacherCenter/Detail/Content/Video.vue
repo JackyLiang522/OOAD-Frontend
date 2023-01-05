@@ -30,7 +30,7 @@
       </el-upload>
     </el-col>
 
-    <el-col :offset="1" :span="18">
+    <el-col :offset="1" :span="18" style="height: 400px">
       <video-player
           v-show="has_video"
           class="video-player vjs-big-play-centered"
@@ -51,8 +51,9 @@
           @canplay="handleEvent($event)"
           @canplaythrough="handleEvent($event)"
           @timeupdate="handleEvent(player?.currentTime())"
-          :fluid="true"
+          :fluid="false"
           preload="metadata"
+          style="max-height: 100%"
       />
     </el-col>
   </el-row>
