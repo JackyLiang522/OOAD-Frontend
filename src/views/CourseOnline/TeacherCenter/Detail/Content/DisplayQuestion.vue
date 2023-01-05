@@ -8,7 +8,7 @@
   >
     <el-descriptions-item>
       <template #label>
-        <div class="cell-item">
+        <div class="cell-item" style="width: 80px">
           <el-icon :style="iconStyle">
             <tickets />
           </el-icon>
@@ -46,7 +46,7 @@
         {{ tag }}
       </el-tag>
     </el-descriptions-item>
-    <el-descriptions-item
+    <el-descriptions-item min-width="25%"
         v-for= "(option, index) in options">
       <template #label>
         <div class="cell-item">
@@ -56,7 +56,8 @@
          选项 {{index+1}}
         </div>
       </template>
-      {{option.value}}
+      <div style="width: 120px">{{option.value}}</div>
+
     </el-descriptions-item>
   </el-descriptions>
 
@@ -78,7 +79,7 @@ const prop = defineProps(['title','description','type','answers','options'])
 //   { name: '选项 2' },
 //   { name: '选项 3' },
 // ])
-const size = ref('')
+const size = ref('default')
 const iconStyle = computed(() => {
   const marginMap = {
     large: '8px',
@@ -98,6 +99,7 @@ const iconStyle = computed(() => {
 .cell-item {
   display: flex;
   align-items: center;
+  width: 80px
 }
 .margin-top {
   margin-top: 20px;

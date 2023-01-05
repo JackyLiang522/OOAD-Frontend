@@ -19,9 +19,9 @@
       <el-table-column prop="quiz_score" label="测验分数" width="100px"/>
       <el-table-column label="学生作答" width="150px">
         <template v-slot="scope">
-          <a v-if="table_data[scope.$index]?.attachment_url !== ''" :href="table_data[scope.$index]?.attachment_url">
+          <el-link type="primary" v-if="table_data[scope.$index]?.attachment_url !== ''" @click="openUrl(table_data[scope.$index]?.attachment_url)">
             {{ table_data[scope.$index]?.attachment_name }}
-          </a>
+          </el-link>
           <a v-else style="color: gray">
             学生暂未提交
           </a>
@@ -170,6 +170,10 @@ export default {
       }
     }
 
+    function openUrl(url) {
+      window.open(url)
+    }
+
     return {
       table_data,
       editScore,
@@ -180,6 +184,7 @@ export default {
       new_quiz_score,
       submitEdit,
       exportData,
+      openUrl
     }
   }
 }
