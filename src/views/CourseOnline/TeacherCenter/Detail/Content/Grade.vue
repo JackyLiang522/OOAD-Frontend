@@ -96,7 +96,7 @@ export default {
   setup(props) {
     const chapterId = computed(() => props.chapterInfo.id)
     const courseId = useRoute().query.courseId
-    const table_data = reactive([
+    let table_data = ref([
       {
         name: 'Stu 1',
         homework_score: 10,
@@ -117,13 +117,11 @@ export default {
       console.log(chapterId.value)
       // TODO 这里需要chapterId
       await axios.get(`http://${store.state.host}/api/export/list?chapterId=${chapterId.value}`).then((response) => {
-        // teacher.value = response.data.name;
-        // const row = table_data[edited_index.value]
-        // row.deadline = response.data.deadline
-        // row.title = response.data.title
         // TODO 这里应该是要传一个URL做预览
+        table_data.value = response.data;
+        console.log(table_data)
+        console.log(response.data)
       })
-
     }
 
     async function exportData() {
@@ -137,7 +135,7 @@ export default {
     }
 
     function removeRow(index) {
-      table_data.splice(index, 1)
+      table_data.value.splice(index, 1)
     }
 
     const dialog_visible = ref(false)
