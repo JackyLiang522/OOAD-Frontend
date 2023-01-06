@@ -204,20 +204,20 @@ export default {
         return
 
       lastTime.value = time.value
-      if (speed > 5000) {
-        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_240.mp4')
-        console.log(240)
-      } else if(3000 < speed && speed <= 5000) {
-        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_360.mp4')
-        console.log(360)
-      }else if(1000 < speed && speed<= 3000){
-        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_480.mp4')
+      if (speed > 1000) {
+      //   videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_240.mp4')
+      //   console.log(240)
+      // } else if(3000 < speed && speed <= 5000) {
+      //   videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_360.mp4')
+      //   console.log(360)
+      // }else if(1000 < speed && speed<= 3000){
+        videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_240.mp4')
         console.log(480)
       }else if(300 < speed && speed<= 1000){
-        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_240.mp4')
+        videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_360.mp4')
         console.log(240)
       }else{
-        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2.mp4')
+        videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2.mp4')
         console.log(1080)
       }
       hasJump.value = false

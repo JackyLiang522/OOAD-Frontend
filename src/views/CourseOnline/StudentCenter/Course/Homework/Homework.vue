@@ -157,7 +157,7 @@ onBeforeMount(async () => {
     homeWork.state = response.data.state
     homeWork.score = response.data.score
 
-    homeWork.attachment.url = `http://${store.state.host}/api/upload/pdf/${courseId}.pdf`
+    homeWork.attachment.url = `http://${store.state.host}/api/upload/pdf/${chapterId}.pdf`
     homeWork.attachment.name = `${courseName.value}_${chapterId}.pdf`
     
     hasExceedDDL.value = new Date(homeWork.deadline) < new Date()

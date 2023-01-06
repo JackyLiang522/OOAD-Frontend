@@ -40,7 +40,7 @@
     </div>
   </div>
 
-  <el-button @click="test">111</el-button>
+<!--  <el-button @click="test">111</el-button>-->
 </template>
 
 <script lang="ts">
