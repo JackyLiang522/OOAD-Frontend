@@ -66,8 +66,6 @@
   />
 
   <el-divider/>
-
-
   <testSpeed @sendDelay="checkNetworkSpeed"/>
 </template>
 
@@ -197,28 +195,32 @@ export default {
       hasJump.value = true
     }
 
-    function checkNetworkSpeed(speed:number) {
+    function checkNetworkSpeed(speed: number) {
       console.log(speed)
-      // lastTime.value = time.value
-      // let name
-      // if (speed === 1) {
-      //   // 240
-      //   name = `${chapter.value.id}_240.mp4`
-      // } else if (speed === 2) {
-      //   // 360
-      //   name = `${chapter.value.id}_360.mp4`
-      // } else if (speed === 3) {
-      //   // 480
-      //   name = `${chapter.value.id}_480.mp4`
-      // } else if (speed === 4) {
-      //   // 720
-      //   name = `${chapter.value.id}_720.mp4`
-      // } else {
-      //   // 原画
-      //   name = `${chapter.value.id}.mp4`
-      // }
-      // videoSrc.value = require(`D:\\Program\\Idea\\OOAD-Backend\\files\\video\\${name}`)
-      // hasJump.value = false
+      console.log(chapter.value.id)
+      if (chapter.value.id !== 2)
+        return;
+      if (isNaN(speed))
+        return
+
+      lastTime.value = time.value
+      if (speed > 5000) {
+        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_240.mp4')
+        console.log(240)
+      } else if(3000 < speed && speed <= 5000) {
+        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_360.mp4')
+        console.log(360)
+      }else if(1000 < speed && speed<= 3000){
+        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_480.mp4')
+        console.log(480)
+      }else if(300 < speed && speed<= 1000){
+        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_240.mp4')
+        console.log(240)
+      }else{
+        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2.mp4')
+        console.log(1080)
+      }
+      hasJump.value = false
     }
 
 

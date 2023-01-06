@@ -25,7 +25,6 @@ export default {
     onMounted(function () {
       timer = setInterval(() => {
         handStart()
-        console.log("New test")
       }, 10000)
     })
 
@@ -83,7 +82,6 @@ export default {
       title = '测速过程大概需要10秒,请耐心等待!'
       console.log(title)
       console.log(strURL)
-      // strURL = window.location.href
       if (strURL.length === 0)
         return;
       intTimeout = 1000;
@@ -104,7 +102,7 @@ export default {
         clearTimeout(intTimerID)
         if (!bolIsRunning || bolIsTimeout) return
         const delay = new Date() - intStartTime;
-        window.console.log('连接成功 ' + strURL + ' time' + (delay < 1 ? '<1' : '=' + delay) + 'ms')
+        console.log('连接成功 ' + strURL + ' time' + (delay < 1 ? '<1' : '=' + delay) + 'ms')
         arrDelays.push(delay)
         /* * 每次请求间隔限制在1秒以上 */
         setTimeout(() => {
@@ -120,18 +118,18 @@ export default {
       // objIMG.src = 'https://i2.hdslb.com/bfs/face/2aa2978da31cc5e8d026224e049b13bd20379ab6.jpg@240w_240h_1c_1s.webp'
       // objIMG.src = 'https://developers.facebook.com/favicon.ico'
       /* * 超时计时 */
-      intTimerID = setTimeout(() => {
-        timeout()
-      }, intTimeout)
+      // intTimerID = setTimeout(() => {
+      //   timeout()
+      // }, intTimeout)
     }
 
-    function timeout() {
-      if (!bolIsRunning) return
-      bolIsTimeout = true
-      objIMG.src = 'X:\\'
-      window.console.log('请求超时.')
-      ping()
-    }
+    // function timeout() {
+    //   if (!bolIsRunning) return
+    //   bolIsTimeout = true
+    //   objIMG.src = 'X:\\'
+    //   console.log('请求超时.')
+    //   ping()
+    // }
 
   },
 }
