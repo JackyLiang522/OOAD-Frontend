@@ -80,7 +80,7 @@ import testSpeed from "@/views/CourseOnline/Video/testSpeed.vue";
 import axios from 'axios';
 import {useStore} from "vuex";
 import {ElMessageBox} from 'element-plus'
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 
 export default {
   name: 'vue-basic-player-example',
@@ -138,22 +138,21 @@ export default {
       comment_input.value = ''
     }
 
-    onBeforeMount(async () => {
+    let notChange = false
+    onBeforeMount(() => {
       const has_open_video_page = localStorage.getItem('has_open_video_page')
       console.log(has_open_video_page)
       if (has_open_video_page === 'true') {
-        await ElMessageBox.alert('您已打开一个视频界面', '警告', {
-          confirmButtonText: 'OK',
-          callback: () => {
-            window.close();
-          },
-        })
+        notChange = true
+        useRouter().push('/home')
       } else {
         localStorage.setItem('has_open_video_page', 'true')
       }
     })
 
     onBeforeUnmount(() => {
+      if (notChange)
+        return
       localStorage.setItem("has_open_video_page", 'false')
     })
 
@@ -205,19 +204,19 @@ export default {
 
       lastTime.value = time.value
       if (speed > 1000) {
-      //   videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_240.mp4')
-      //   console.log(240)
-      // } else if(3000 < speed && speed <= 5000) {
-      //   videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_360.mp4')
-      //   console.log(360)
-      // }else if(1000 < speed && speed<= 3000){
-        videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_240.mp4')
+        //   videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_240.mp4')
+        //   console.log(240)
+        // } else if(3000 < speed && speed <= 5000) {
+        //   videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_360.mp4')
+        //   console.log(360)
+        // }else if(1000 < speed && speed<= 3000){
+        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_240.mp4')
         console.log(480)
-      }else if(300 < speed && speed<= 1000){
-        videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2_360.mp4')
+      } else if (300 < speed && speed <= 1000) {
+        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2_360.mp4')
         console.log(240)
-      }else{
-        videoSrc.value = require('C:\\Users\\Ksco\\ProgramProjects\\GithubRepos\\OOAD-Backend\\files\\video\\2.mp4')
+      } else {
+        videoSrc.value = require('D:\\Program\\Idea\\OOAD-Backend\\files\\video\\2.mp4')
         console.log(1080)
       }
       hasJump.value = false
