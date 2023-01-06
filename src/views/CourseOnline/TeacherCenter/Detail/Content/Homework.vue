@@ -15,9 +15,9 @@
       <el-table-column prop="attachment_url" label="附件" width="200px">
         <template v-slot="scope">
           <el-link type="primary"
-              @click="openUrl(scope.$index)">
+                   @click="openUrl(scope.$index)">
             {{ table_data[scope.$index].attachment_name }}
-<!--            {{table_data[scope.$index].attachment_url}}-->
+            <!--            {{table_data[scope.$index].attachment_url}}-->
           </el-link>
         </template>
       </el-table-column>
@@ -30,13 +30,13 @@
               round>
             编辑
           </el-button>
-<!--          <el-button
-              type="danger"
-              size="small"
-              @click="removeRow(scope.$index)"
-              round>
-            删除
-          </el-button>-->
+          <!--          <el-button
+                        type="danger"
+                        size="small"
+                        @click="removeRow(scope.$index)"
+                        round>
+                      删除
+                    </el-button>-->
         </template>
       </el-table-column>
     </el-table>
@@ -114,6 +114,7 @@ export default {
   name: "Homework",
   props: ['chapterInfo'],
   setup(props: any) {
+    let isPDF = false
     const store = useStore()
     const chapterId = computed(() => props.chapterInfo.id)
     const courseId = useRoute().query.courseId
@@ -136,7 +137,7 @@ export default {
       // table_data.value
       await axios.get(`http://${store.state.host}/api/assignment/list?chapterId=${chapterId.value}`).then((response) => {
         // teacher.value = response.data.name;
-        if (response.data){
+        if (response.data) {
           const row = table_data.value[edited_index.value]
           row.deadline = response.data.deadline
           row.title = response.data.title
@@ -170,7 +171,7 @@ export default {
     function finishEdit() {
       if (upload.value === undefined)
         return
-      console.log(courseId)
+      // console.log(courseId)
 
       dialog_visible.value = false
       const row = table_data.value[edited_index.value]
@@ -184,8 +185,13 @@ export default {
     }
 
     async function submitEdit() {
-      await axios.post(`http://${store.state.host}/api/assignment/add?chapterId=${chapterId.value}&&title=${new_title.value}&&deadline=${new_deadline.value}`)
       await submitUpload()
+      // console.log("beforePost")
+      // console.log(isPDF)
+      if (isPDF) {
+        setTimeout(await axios.post(`http://${store.state.host}/api/assignment/add?chapterId=${chapterId.value}&&title=${new_title.value}&&deadline=${new_deadline.value}`), 1000)
+        // console.log("afterPost")
+      }
       await refreshTable()
     }
 
@@ -195,10 +201,13 @@ export default {
 
 
     const beforeUpload = (file: any) => {
+      // console.log("beforeUpload")
       if (!file.name.includes('.pdf')) {
         ElMessage.warning('只能上传pdf文件')
+        isPDF = false
         return false
       } else {
+        isPDF = true
         return true
       }
     }
@@ -223,8 +232,8 @@ export default {
     }
 
     const submitUpload = () => {
+      // console.log("submitUpload")
       upload.value!.submit()
-      console.log("submit")
     }
 
     function addRow() {
@@ -236,8 +245,8 @@ export default {
       })
     }
 
-    function openUrl(index:number) {
-      if (table_data.value[index].attachment_url === ''){
+    function openUrl(index: number) {
+      if (table_data.value[index].attachment_url === '') {
         return
       }
       window.open(table_data.value[index].attachment_url)

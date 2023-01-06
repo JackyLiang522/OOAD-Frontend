@@ -49,12 +49,12 @@
           <el-table-column
               prop="date"
               label="截止日期"
-              min-width="150">
+              min-width="200">
           </el-table-column>
           <el-table-column
               prop="score"
               label="分数"
-              min-width="150">
+              min-width="100">
           </el-table-column>
         </el-table>
       </div>
